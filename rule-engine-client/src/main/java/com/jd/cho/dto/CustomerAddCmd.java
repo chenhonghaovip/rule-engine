@@ -1,0 +1,11 @@
+package com.jd.cho.dto;
+
+import com.jd.cho.dto.data.CustomerDTO;
+import lombok.Data;
+
+@Data
+public class CustomerAddCmd{
+
+    private CustomerDTO customerDTO;
+
+}
