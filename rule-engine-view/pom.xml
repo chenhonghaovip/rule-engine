@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.jd.cho</groupId>
+        <artifactId>rule-engine</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <artifactId>rule-engine-view</artifactId>
+    <name>rule-engine-view</name>
+    <description>用于编写对外提供的接口，以及对页面提供的后端服务等</description>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.jd.cho</groupId>
+            <artifactId>rule-engine-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jd.cho</groupId>
+            <artifactId>rule-engine-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jd.cho</groupId>
+            <artifactId>rule-engine-domain</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jd.cho</groupId>
+            <artifactId>rule-engine-manager</artifactId>
+        </dependency>
+
+    </dependencies>
+
+
+</project>
