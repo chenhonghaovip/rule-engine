@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
 
+/**
+ * @author chenhonghao12
+ */
 @Service
 public class CustomerServiceImpl implements CustomerServiceI {
 

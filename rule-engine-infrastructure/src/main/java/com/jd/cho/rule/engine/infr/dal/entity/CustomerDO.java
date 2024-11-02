@@ -1,4 +1,4 @@
-package com.jd.cho.rule.engine.infr.customer;
+package com.jd.cho.rule.engine.infr.dal.entity;
 
 import lombok.Data;
 
