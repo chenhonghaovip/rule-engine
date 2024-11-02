@@ -1,9 +1,8 @@
 package com.jd.cho.dto;
 
-import com.alibaba.cola.dto.Query;
 import lombok.Data;
 
 @Data
-public class CustomerListByNameQry extends Query{
+public class CustomerListByNameQry {
    private String name;
 }
