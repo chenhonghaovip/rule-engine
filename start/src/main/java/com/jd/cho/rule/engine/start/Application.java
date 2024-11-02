@@ -1,5 +1,6 @@
 package com.jd.cho.rule.engine.start;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -8,7 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *
  * @author Frank Zhang
  */
-@SpringBootApplication(scanBasePackages = {"com.jd.cho"})
+@SpringBootApplication(scanBasePackages = {"com.jd.cho.rule.engine"})
+@MapperScan({"com.jd.cho.rule.engine.infr.customer"})
 public class Application {
 
     public static void main(String[] args) {

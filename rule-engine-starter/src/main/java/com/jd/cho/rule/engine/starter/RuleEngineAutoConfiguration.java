@@ -1,7 +1,8 @@
-package com.jd.cho.rule.engine.infr.starter;
+package com.jd.cho.rule.engine.starter;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,8 +14,17 @@ import javax.sql.DataSource;
  */
 @Configuration
 @ConditionalOnClass(DataSource.class)
-@ComponentScan("com.jd.cho")
-@MapperScan("com.jd.cho.customer")
+@ComponentScan("com.jd.cho.rule.engine")
+@MapperScan({"com.jd.cho.rule.engine.infr.customer"})
 public class RuleEngineAutoConfiguration {
 
+
+    @Bean
+    public Test test() {
+        return new Test();
+    }
+
+
+    public static class Test {
+    }
 }

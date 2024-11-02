@@ -17,16 +17,5 @@
             <groupId>com.jd.cho</groupId>
             <artifactId>rule-engine-client</artifactId>
         </dependency>
-
-        <!-- COLA components -->
-<!--        <dependency>-->
-<!--            <groupId>com.alibaba.cola</groupId>-->
-<!--            <artifactId>cola-component-domain-starter</artifactId>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>com.alibaba.cola</groupId>-->
-<!--            <artifactId>cola-component-exception</artifactId>-->
-<!--        </dependency>-->
-        <!-- COLA components End-->
     </dependencies>
 </project>
