@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jd.cho.rule.engine.infr.dal.mapper.RuleDefMapper">
+
+    <resultMap id="BaseResultMap" type="com.jd.cho.rule.engine.infr.dal.DO.RuleDefDO">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="ruleCode" column="rule_code" jdbcType="VARCHAR"/>
+        <result property="ruleName" column="rule_name" jdbcType="VARCHAR"/>
+        <result property="ruleCondition" column="rule_condition" jdbcType="VARCHAR"/>
+        <result property="ruleAction" column="rule_action" jdbcType="VARCHAR"/>
+        <result property="version" column="version" jdbcType="INTEGER"/>
+        <result property="latest" column="latest" jdbcType="INTEGER"/>
+        <result property="priority" column="priority" jdbcType="INTEGER"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+        <result property="yn" column="yn" jdbcType="TINYINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+        <result property="creator" column="creator" jdbcType="VARCHAR"/>
+        <result property="modifier" column="modifier" jdbcType="VARCHAR"/>
+        <result property="tenant" column="tenant" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,rule_code,rule_name,
+        rule_condition,rule_action,version,
+        latest,priority,remark,
+        status,yn,create_time,
+        modify_time,creator,modifier,
+        tenant
+    </sql>
+</mapper>

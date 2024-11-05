@@ -3,7 +3,7 @@ package com.jd.cho.rule.engine.app.group;
 import com.jd.cho.rule.engine.client.dto.RuleDefDTO;
 import com.jd.cho.rule.engine.client.extend.AbstractRuleGroup;
 import com.jd.cho.rule.engine.domain.model.RuleDef;
-import com.jd.cho.rule.engine.domain.rule.RuleDomainService;
+import com.jd.cho.rule.engine.domain.gateway.RuleDomainGateway;
 import com.jd.cho.rule.engine.infr.common.ApplicationUtils;
 import org.springframework.beans.BeanUtils;
 
@@ -26,7 +26,7 @@ public abstract class AbstractStandardRuleGroup extends AbstractRuleGroup {
      * @return 规则定义信息
      */
     protected List<RuleDefDTO> getRuleDefEntities() {
-        RuleDomainService ruleDomainService = ApplicationUtils.getBeans(RuleDomainService.class);
+        RuleDomainGateway ruleDomainService = ApplicationUtils.getBeans(RuleDomainGateway.class);
         List<RuleDef> ruleDefs = ruleDomainService.ruleDefQuery(ruleCodes);
         return ruleDefs.stream().map(each -> {
             RuleDefDTO ruleDefDTO = new RuleDefDTO();

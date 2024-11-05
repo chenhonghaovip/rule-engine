@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jd.cho.rule.engine.infr.dal.mapper.RuleSceneMapper">
+
+    <resultMap id="BaseResultMap" type="com.jd.cho.rule.engine.infr.dal.DO.RuleSceneDO">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="sceneCode" column="scene_code" jdbcType="VARCHAR"/>
+        <result property="sceneName" column="scene_name" jdbcType="VARCHAR"/>
+        <result property="sceneDesc" column="scene_desc" jdbcType="VARCHAR"/>
+        <result property="groupCode" column="group_code" jdbcType="VARCHAR"/>
+        <result property="yn" column="yn" jdbcType="TINYINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="modifyTime" column="modify_time" jdbcType="TIMESTAMP"/>
+        <result property="creator" column="creator" jdbcType="VARCHAR"/>
+        <result property="modifier" column="modifier" jdbcType="VARCHAR"/>
+        <result property="tenant" column="tenant" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,scene_code,scene_name,
+        scene_desc,group_code,yn,
+        create_time,modify_time,creator,
+        modifier,tenant
+    </sql>
+</mapper>
