@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @ComponentScan("com.jd.cho.rule.engine")
-
 @MapperScan({"com.jd.cho.rule.engine.infr.customer"})
 public class RuleEngineAutoConfiguration {
 
