@@ -1,4 +1,4 @@
-package com.jd.cho.rule.engine.infr.dal.DO;
+package com.jd.cho.rule.engine.infr.gateway.impl.dal.DO;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -10,13 +10,13 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 规则场景表
+ * 规则因子分组表
  *
- * @TableName rule_scene
+ * @TableName rule_factor_group
  */
-@TableName(value = "rule_scene")
+@TableName(value = "rule_factor_group")
 @Data
-public class RuleSceneDO implements Serializable {
+public class RuleFactorGroupDO implements Serializable {
     /**
      * 主键
      */
@@ -24,24 +24,14 @@ public class RuleSceneDO implements Serializable {
     private Long id;
 
     /**
-     * 场景编码
-     */
-    private String sceneCode;
-
-    /**
-     * 场景名称
-     */
-    private String sceneName;
-
-    /**
-     * 场景描述
-     */
-    private String sceneDesc;
-
-    /**
      * 分组编码
      */
     private String groupCode;
+
+    /**
+     * 分组名称
+     */
+    private String groupName;
 
     /**
      * 是否删除 1-否，0-是
@@ -87,12 +77,10 @@ public class RuleSceneDO implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        RuleSceneDO other = (RuleSceneDO) that;
+        RuleFactorGroupDO other = (RuleFactorGroupDO) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-                && (this.getSceneCode() == null ? other.getSceneCode() == null : this.getSceneCode().equals(other.getSceneCode()))
-                && (this.getSceneName() == null ? other.getSceneName() == null : this.getSceneName().equals(other.getSceneName()))
-                && (this.getSceneDesc() == null ? other.getSceneDesc() == null : this.getSceneDesc().equals(other.getSceneDesc()))
                 && (this.getGroupCode() == null ? other.getGroupCode() == null : this.getGroupCode().equals(other.getGroupCode()))
+                && (this.getGroupName() == null ? other.getGroupName() == null : this.getGroupName().equals(other.getGroupName()))
                 && (this.getYn() == null ? other.getYn() == null : this.getYn().equals(other.getYn()))
                 && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
                 && (this.getModifyTime() == null ? other.getModifyTime() == null : this.getModifyTime().equals(other.getModifyTime()))
@@ -106,10 +94,8 @@ public class RuleSceneDO implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getSceneCode() == null) ? 0 : getSceneCode().hashCode());
-        result = prime * result + ((getSceneName() == null) ? 0 : getSceneName().hashCode());
-        result = prime * result + ((getSceneDesc() == null) ? 0 : getSceneDesc().hashCode());
         result = prime * result + ((getGroupCode() == null) ? 0 : getGroupCode().hashCode());
+        result = prime * result + ((getGroupName() == null) ? 0 : getGroupName().hashCode());
         result = prime * result + ((getYn() == null) ? 0 : getYn().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         result = prime * result + ((getModifyTime() == null) ? 0 : getModifyTime().hashCode());
@@ -126,10 +112,8 @@ public class RuleSceneDO implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", sceneCode=").append(sceneCode);
-        sb.append(", sceneName=").append(sceneName);
-        sb.append(", sceneDesc=").append(sceneDesc);
         sb.append(", groupCode=").append(groupCode);
+        sb.append(", groupName=").append(groupName);
         sb.append(", yn=").append(yn);
         sb.append(", createTime=").append(createTime);
         sb.append(", modifyTime=").append(modifyTime);

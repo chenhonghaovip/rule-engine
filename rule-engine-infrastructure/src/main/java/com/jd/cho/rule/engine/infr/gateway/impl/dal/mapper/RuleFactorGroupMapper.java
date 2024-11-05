@@ -1,7 +1,7 @@
-package com.jd.cho.rule.engine.infr.dal.mapper;
+package com.jd.cho.rule.engine.infr.gateway.impl.dal.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.jd.cho.rule.engine.infr.dal.DO.RuleFactorGroupDO;
+import com.jd.cho.rule.engine.infr.gateway.impl.dal.DO.RuleFactorGroupDO;
 
 /**
  * @author chenhonghao12

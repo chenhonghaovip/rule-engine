@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author Frank Zhang
  */
 @SpringBootApplication(scanBasePackages = {"com.jd.cho.rule.engine"})
-@MapperScan({"com.jd.cho.rule.engine.infr.dal.mapper"})
+@MapperScan({"com.jd.cho.rule.engine.infr.gateway.impl.dal.mapper"})
 public class Application {
 
     public static void main(String[] args) {

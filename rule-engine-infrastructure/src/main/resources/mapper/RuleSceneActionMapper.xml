@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jd.cho.rule.engine.infr.dal.mapper.RuleSceneActionMapper">
+<mapper namespace="com.jd.cho.rule.engine.infr.gateway.impl.dal.mapper.RuleSceneActionMapper">
 
-    <resultMap id="BaseResultMap" type="com.jd.cho.rule.engine.infr.dal.DO.RuleSceneActionDO">
+    <resultMap id="BaseResultMap" type="com.jd.cho.rule.engine.infr.gateway.impl.dal.DO.RuleSceneActionDO">
         <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="sceneCode" column="scene_code" jdbcType="VARCHAR"/>
         <result property="actionCode" column="action_code" jdbcType="VARCHAR"/>

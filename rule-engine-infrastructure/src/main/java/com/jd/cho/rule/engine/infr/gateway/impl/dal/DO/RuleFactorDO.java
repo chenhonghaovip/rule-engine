@@ -1,4 +1,4 @@
-package com.jd.cho.rule.engine.infr.dal.DO;
+package com.jd.cho.rule.engine.infr.gateway.impl.dal.DO;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;

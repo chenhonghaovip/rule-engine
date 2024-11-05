@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jd.cho.rule.engine.infr.dal.mapper.RuleFactorMapper">
+<mapper namespace="com.jd.cho.rule.engine.infr.gateway.impl.dal.mapper.RuleFactorMapper">
 
-    <resultMap id="BaseResultMap" type="com.jd.cho.rule.engine.infr.dal.DO.RuleFactorDO">
+    <resultMap id="BaseResultMap" type="com.jd.cho.rule.engine.infr.gateway.impl.dal.DO.RuleFactorDO">
         <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="factorCode" column="factor_code" jdbcType="VARCHAR"/>
         <result property="factorFullCode" column="factor_full_code" jdbcType="VARCHAR"/>

@@ -1,4 +1,4 @@
-package com.jd.cho.rule.engine.infr.dal.DO;
+package com.jd.cho.rule.engine.infr.gateway.impl.dal.DO;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -10,13 +10,13 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 规则场景行为表
+ * 规则场景表
  *
- * @TableName rule_scene_action
+ * @TableName rule_scene
  */
-@TableName(value = "rule_scene_action")
+@TableName(value = "rule_scene")
 @Data
-public class RuleSceneActionDO implements Serializable {
+public class RuleSceneDO implements Serializable {
     /**
      * 主键
      */
@@ -29,19 +29,19 @@ public class RuleSceneActionDO implements Serializable {
     private String sceneCode;
 
     /**
-     * 行为编码
+     * 场景名称
      */
-    private String actionCode;
+    private String sceneName;
 
     /**
-     * 行为类型
+     * 场景描述
      */
-    private String actionType;
+    private String sceneDesc;
 
     /**
-     * 行为内容
+     * 分组编码
      */
-    private String action;
+    private String groupCode;
 
     /**
      * 是否删除 1-否，0-是
@@ -87,12 +87,12 @@ public class RuleSceneActionDO implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        RuleSceneActionDO other = (RuleSceneActionDO) that;
+        RuleSceneDO other = (RuleSceneDO) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
                 && (this.getSceneCode() == null ? other.getSceneCode() == null : this.getSceneCode().equals(other.getSceneCode()))
-                && (this.getActionCode() == null ? other.getActionCode() == null : this.getActionCode().equals(other.getActionCode()))
-                && (this.getActionType() == null ? other.getActionType() == null : this.getActionType().equals(other.getActionType()))
-                && (this.getAction() == null ? other.getAction() == null : this.getAction().equals(other.getAction()))
+                && (this.getSceneName() == null ? other.getSceneName() == null : this.getSceneName().equals(other.getSceneName()))
+                && (this.getSceneDesc() == null ? other.getSceneDesc() == null : this.getSceneDesc().equals(other.getSceneDesc()))
+                && (this.getGroupCode() == null ? other.getGroupCode() == null : this.getGroupCode().equals(other.getGroupCode()))
                 && (this.getYn() == null ? other.getYn() == null : this.getYn().equals(other.getYn()))
                 && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
                 && (this.getModifyTime() == null ? other.getModifyTime() == null : this.getModifyTime().equals(other.getModifyTime()))
@@ -107,9 +107,9 @@ public class RuleSceneActionDO implements Serializable {
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getSceneCode() == null) ? 0 : getSceneCode().hashCode());
-        result = prime * result + ((getActionCode() == null) ? 0 : getActionCode().hashCode());
-        result = prime * result + ((getActionType() == null) ? 0 : getActionType().hashCode());
-        result = prime * result + ((getAction() == null) ? 0 : getAction().hashCode());
+        result = prime * result + ((getSceneName() == null) ? 0 : getSceneName().hashCode());
+        result = prime * result + ((getSceneDesc() == null) ? 0 : getSceneDesc().hashCode());
+        result = prime * result + ((getGroupCode() == null) ? 0 : getGroupCode().hashCode());
         result = prime * result + ((getYn() == null) ? 0 : getYn().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         result = prime * result + ((getModifyTime() == null) ? 0 : getModifyTime().hashCode());
@@ -127,9 +127,9 @@ public class RuleSceneActionDO implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
         sb.append(", sceneCode=").append(sceneCode);
-        sb.append(", actionCode=").append(actionCode);
-        sb.append(", actionType=").append(actionType);
-        sb.append(", action=").append(action);
+        sb.append(", sceneName=").append(sceneName);
+        sb.append(", sceneDesc=").append(sceneDesc);
+        sb.append(", groupCode=").append(groupCode);
         sb.append(", yn=").append(yn);
         sb.append(", createTime=").append(createTime);
         sb.append(", modifyTime=").append(modifyTime);

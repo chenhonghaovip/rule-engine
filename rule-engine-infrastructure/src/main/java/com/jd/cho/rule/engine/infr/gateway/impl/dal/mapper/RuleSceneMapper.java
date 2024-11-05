@@ -1,7 +1,7 @@
-package com.jd.cho.rule.engine.infr.dal.mapper;
+package com.jd.cho.rule.engine.infr.gateway.impl.dal.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.jd.cho.rule.engine.infr.dal.DO.RuleSceneDO;
+import com.jd.cho.rule.engine.infr.gateway.impl.dal.DO.RuleSceneDO;
 
 /**
  * @author chenhonghao12

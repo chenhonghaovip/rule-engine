@@ -1,14 +1,13 @@
-package com.jd.cho.rule.engine.infr.dal.DO;
+package com.jd.cho.rule.engine.infr.gateway.impl.dal.DO;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
-
-import lombok.Data;
 
 /**
  * 规则定义表

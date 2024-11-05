@@ -1,4 +1,4 @@
-package com.jd.cho.rule.engine.infr.dal.DO;
+package com.jd.cho.rule.engine.infr.gateway.impl.dal.DO;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -10,13 +10,13 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 规则因子分组表
+ * 规则场景行为表
  *
- * @TableName rule_factor_group
+ * @TableName rule_scene_action
  */
-@TableName(value = "rule_factor_group")
+@TableName(value = "rule_scene_action")
 @Data
-public class RuleFactorGroupDO implements Serializable {
+public class RuleSceneActionDO implements Serializable {
     /**
      * 主键
      */
@@ -24,14 +24,24 @@ public class RuleFactorGroupDO implements Serializable {
     private Long id;
 
     /**
-     * 分组编码
+     * 场景编码
      */
-    private String groupCode;
+    private String sceneCode;
 
     /**
-     * 分组名称
+     * 行为编码
      */
-    private String groupName;
+    private String actionCode;
+
+    /**
+     * 行为类型
+     */
+    private String actionType;
+
+    /**
+     * 行为内容
+     */
+    private String action;
 
     /**
      * 是否删除 1-否，0-是
@@ -77,10 +87,12 @@ public class RuleFactorGroupDO implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        RuleFactorGroupDO other = (RuleFactorGroupDO) that;
+        RuleSceneActionDO other = (RuleSceneActionDO) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-                && (this.getGroupCode() == null ? other.getGroupCode() == null : this.getGroupCode().equals(other.getGroupCode()))
-                && (this.getGroupName() == null ? other.getGroupName() == null : this.getGroupName().equals(other.getGroupName()))
+                && (this.getSceneCode() == null ? other.getSceneCode() == null : this.getSceneCode().equals(other.getSceneCode()))
+                && (this.getActionCode() == null ? other.getActionCode() == null : this.getActionCode().equals(other.getActionCode()))
+                && (this.getActionType() == null ? other.getActionType() == null : this.getActionType().equals(other.getActionType()))
+                && (this.getAction() == null ? other.getAction() == null : this.getAction().equals(other.getAction()))
                 && (this.getYn() == null ? other.getYn() == null : this.getYn().equals(other.getYn()))
                 && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
                 && (this.getModifyTime() == null ? other.getModifyTime() == null : this.getModifyTime().equals(other.getModifyTime()))
@@ -94,8 +106,10 @@ public class RuleFactorGroupDO implements Serializable {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getGroupCode() == null) ? 0 : getGroupCode().hashCode());
-        result = prime * result + ((getGroupName() == null) ? 0 : getGroupName().hashCode());
+        result = prime * result + ((getSceneCode() == null) ? 0 : getSceneCode().hashCode());
+        result = prime * result + ((getActionCode() == null) ? 0 : getActionCode().hashCode());
+        result = prime * result + ((getActionType() == null) ? 0 : getActionType().hashCode());
+        result = prime * result + ((getAction() == null) ? 0 : getAction().hashCode());
         result = prime * result + ((getYn() == null) ? 0 : getYn().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         result = prime * result + ((getModifyTime() == null) ? 0 : getModifyTime().hashCode());
@@ -112,8 +126,10 @@ public class RuleFactorGroupDO implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", groupCode=").append(groupCode);
-        sb.append(", groupName=").append(groupName);
+        sb.append(", sceneCode=").append(sceneCode);
+        sb.append(", actionCode=").append(actionCode);
+        sb.append(", actionType=").append(actionType);
+        sb.append(", action=").append(action);
         sb.append(", yn=").append(yn);
         sb.append(", createTime=").append(createTime);
         sb.append(", modifyTime=").append(modifyTime);
