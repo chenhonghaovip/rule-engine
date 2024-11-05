@@ -1,5 +1,6 @@
 package com.jd.cho.rule.engine.infr.domain.rule;
 
+import com.jd.cho.rule.engine.domain.model.RuleDef;
 import com.jd.cho.rule.engine.domain.rule.RuleDomainService;
 import com.jd.cho.rule.engine.infr.dal.mapper.CustomerMapper;
 import org.springframework.stereotype.Service;
@@ -26,5 +27,10 @@ public class RuleDomainServiceImpl implements RuleDomainService {
     @Override
     public long addScene() {
         return 0;
+    }
+
+    @Override
+    public List<RuleDef> ruleDefQuery(List<String> ruleCodes) {
+        return null;
     }
 }

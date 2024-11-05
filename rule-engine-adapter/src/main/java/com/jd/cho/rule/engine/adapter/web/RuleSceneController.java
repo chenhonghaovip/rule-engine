@@ -1,11 +1,8 @@
 package com.jd.cho.rule.engine.adapter.web;
 
-import com.jd.cho.rule.engine.client.api.CustomerServiceI;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.annotation.Resource;
 
 /**
  * 规则引擎规则场景控制中心
@@ -16,8 +13,6 @@ import javax.annotation.Resource;
 @RequestMapping("/rule/scene")
 public class RuleSceneController {
 
-    @Resource
-    private CustomerServiceI customerService;
 
     @GetMapping(value = "/helloworld")
     public String helloWorld() {

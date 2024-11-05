@@ -1,5 +1,7 @@
 package com.jd.cho.rule.engine.domain.rule;
 
+import com.jd.cho.rule.engine.domain.model.RuleDef;
+
 import java.util.List;
 
 /**
@@ -21,5 +23,14 @@ public interface RuleDomainService {
      * @return 规则场景id
      */
     long addScene();
+
+
+    /**
+     * 查询规则定义
+     *
+     * @param ruleCodes 规则编码
+     * @return 规则定义信息
+     */
+    List<RuleDef> ruleDefQuery(List<String> ruleCodes);
 
 }
