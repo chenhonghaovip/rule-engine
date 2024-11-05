@@ -106,7 +106,21 @@
                 <artifactId>fastjson</artifactId>
                 <version>1.2.83</version>
             </dependency>
-            <!-- Misc End -->
+
+            <!-- Mybatis-Plus 增强CRUD -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>3.5.1</version>
+            </dependency>
+
+            <!-- Mybatis-Plus 扩展插件 -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-extension</artifactId>
+                <version>3.5.1</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

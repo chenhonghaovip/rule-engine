@@ -8,7 +8,7 @@ import java.util.List;
  * @author chenhonghao12
  * @version 1.0
  */
-public interface RuleDomainGateway {
+public interface RuleConfigGateway {
 
     /**
      * 查询规则定义
