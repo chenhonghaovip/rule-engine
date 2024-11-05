@@ -1,4 +1,4 @@
-package com.jd.cho.rule.engine.infr.domain;
+package com.jd.cho.rule.engine.infr.gateway;
 
 /**
  * @author chenhonghao12

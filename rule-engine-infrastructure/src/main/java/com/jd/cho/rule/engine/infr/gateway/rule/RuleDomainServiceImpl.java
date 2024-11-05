@@ -1,4 +1,4 @@
-package com.jd.cho.rule.engine.infr.domain.rule;
+package com.jd.cho.rule.engine.infr.gateway.rule;
 
 import com.jd.cho.rule.engine.domain.model.RuleDef;
 import com.jd.cho.rule.engine.domain.rule.RuleDomainService;
