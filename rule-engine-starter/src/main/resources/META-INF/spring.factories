@@ -1,2 +1,3 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration = \
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.jd.cho.rule.engine.starter.RuleEngineAutoConfiguration
+org.springframework.context.ApplicationContextInitializer=com.jd.cho.rule.engine.infr.common.ApplicationUtils

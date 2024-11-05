@@ -1,4 +1,4 @@
-package com.jd.cho.rule.engine.infr.dal.entity;
+package com.jd.cho.rule.engine.infr.dal.DO;
 
 import lombok.Data;
 
