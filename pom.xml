@@ -27,6 +27,7 @@
         <module>rule-engine-domain</module>
         <module>rule-engine-infrastructure</module>
         <module>start</module>
+        <module>rule-engine-common</module>
     </modules>
 
     <dependencies>
