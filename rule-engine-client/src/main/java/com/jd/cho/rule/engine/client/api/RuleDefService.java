@@ -54,4 +54,13 @@ public interface RuleDefService {
      */
     List<RuleDefDTO> queryByRuleCodes(List<String> ruleCodes);
 
+
+    /**
+     * 查询这些规则中需要的参数
+     *
+     * @param ruleCodes 规则code
+     * @return 参数集合
+     */
+    List<String> queryParams(List<String> ruleCodes);
+
 }
