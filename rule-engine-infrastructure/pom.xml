@@ -54,6 +54,11 @@
             <groupId>com.alibaba</groupId>
             <artifactId>QLExpress</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.mybatis.dynamic-sql</groupId>
+            <artifactId>mybatis-dynamic-sql</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

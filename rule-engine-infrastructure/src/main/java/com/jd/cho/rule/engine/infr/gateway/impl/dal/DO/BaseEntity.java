@@ -1,6 +1,10 @@
 package com.jd.cho.rule.engine.infr.gateway.impl.dal.DO;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 import java.util.Date;
 
@@ -9,13 +13,17 @@ import java.util.Date;
  * @version 1.0
  */
 @Data
+@ToString(callSuper = true)
+@NoArgsConstructor
+@SuperBuilder
+@AllArgsConstructor
 public class BaseEntity {
 
 
     /**
      * 是否删除 1-否，0-是
      */
-    private Integer yn;
+    private Boolean yn;
 
     /**
      * 创建时间

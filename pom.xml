@@ -151,6 +151,12 @@
                 <version>32.0.0-android</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.mybatis.dynamic-sql</groupId>
+                <artifactId>mybatis-dynamic-sql</artifactId>
+                <version>${mybatis.dynamic.sql.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

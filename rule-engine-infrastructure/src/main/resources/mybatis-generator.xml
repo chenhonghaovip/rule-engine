@@ -64,9 +64,21 @@
             <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
 
+        <javaClientGenerator targetPackage="com.jd.cho.rule.engine.infr.gateway.impl.dal.mapper"
+                             targetProject="src/main/java"
+                             type="ANNOTATEDMAPPER">
+        </javaClientGenerator>
 
         <!-- 数据库表 -->
         <table tableName="rule_factor" modelType="conditional">
+        </table>
+        <table tableName="rule_def" modelType="conditional">
+        </table>
+        <table tableName="rule_factor_group" modelType="conditional">
+        </table>
+        <table tableName="rule_scene" modelType="conditional">
+        </table>
+        <table tableName="rule_scene_action" modelType="conditional">
         </table>
 
 
