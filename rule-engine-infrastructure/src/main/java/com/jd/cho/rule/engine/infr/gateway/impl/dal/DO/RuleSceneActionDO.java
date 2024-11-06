@@ -1,5 +1,6 @@
 package com.jd.cho.rule.engine.infr.gateway.impl.dal.DO;
 
+import com.jd.cho.rule.engine.common.base.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,6 +1,7 @@
 package com.jd.cho.rule.engine.client.api;
 
 import com.jd.cho.rule.engine.client.dto.RuleDefDTO;
+import com.jd.cho.rule.engine.client.dto.RuleDefQueryDTO;
 
 import java.util.List;
 
@@ -52,7 +53,16 @@ public interface RuleDefService {
      * @param ruleCodes 规则code集合
      * @return 规则列表
      */
-    List<RuleDefDTO> queryByRuleCodes(List<String> ruleCodes);
+    List<RuleDefQueryDTO> queryByRuleCodes(List<String> ruleCodes);
+
+
+    /**
+     * 查询当前规则的历史信息
+     *
+     * @param ruleCode ruleCode
+     * @return 规则列表
+     */
+    List<RuleDefQueryDTO> queryByRuleCodes(String ruleCode);
 
 
     /**

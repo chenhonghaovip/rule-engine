@@ -15,6 +15,7 @@ import java.util.List;
  */
 @Service
 public class RuleFactorServiceImpl implements RuleFactorService {
+
     @Resource
     private RuleConfigGateway ruleConfigGateway;
 
