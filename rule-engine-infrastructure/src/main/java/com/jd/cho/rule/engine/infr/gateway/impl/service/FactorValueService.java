@@ -6,7 +6,7 @@ import java.util.Map;
  * @author chenhonghao12
  * @version 1.0
  */
-public interface FieldValueStrategyContext {
+public interface FactorValueService {
 
     /**
      * 通过字段脚本获取当前字段对应的值

@@ -1,7 +1,7 @@
 package com.jd.cho.rule.engine.infr.common;
 
 import com.jd.cho.rule.engine.common.exceptions.BusinessException;
-import com.jd.cho.rule.engine.infr.gateway.impl.service.FieldValueStrategyContext;
+import com.jd.cho.rule.engine.infr.gateway.impl.service.FactorValueService;
 import com.ql.util.express.IExpressContext;
 import org.springframework.context.ApplicationContext;
 
@@ -17,12 +17,12 @@ public class QLExpressContext extends HashMap<String, Object> implements IExpres
 
     private final ApplicationContext context;
 
-    private final FieldValueStrategyContext fieldValueStrategyContext;
+    private final FactorValueService factorValueService;
 
     public QLExpressContext(Map<String, Object> map) {
         super(map);
         this.context = ApplicationUtils.getApplicationContext();
-        this.fieldValueStrategyContext = ApplicationUtils.getBeans(FieldValueStrategyContext.class);
+        this.factorValueService = ApplicationUtils.getBeans(FactorValueService.class);
     }
 
     /**
@@ -36,8 +36,8 @@ public class QLExpressContext extends HashMap<String, Object> implements IExpres
             // 如果在Spring容器中包含bean，则返回String的Bean
             result = context.getBean((String) name);
         }
-        if (result == null && Objects.nonNull(fieldValueStrategyContext)) {
-            return fieldValueStrategyContext.getFieldValue(name, this);
+        if (result == null && Objects.nonNull(factorValueService)) {
+            return factorValueService.getFieldValue(name, this);
         }
         if (Objects.isNull(result)) {
             throw new BusinessException(String.format("未找到属性[%s]", name));

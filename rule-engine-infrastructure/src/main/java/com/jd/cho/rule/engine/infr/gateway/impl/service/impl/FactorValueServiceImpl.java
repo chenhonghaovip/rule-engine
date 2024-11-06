@@ -1,13 +1,16 @@
-package com.jd.cho.rule.engine.infr.gateway.impl.service;
+package com.jd.cho.rule.engine.infr.gateway.impl.service.impl;
 
 import com.google.common.collect.Lists;
 import com.jd.cho.rule.engine.infr.common.QlExpressUtil;
+import com.jd.cho.rule.engine.infr.gateway.impl.dal.mapper.RuleFactorMapper;
+import com.jd.cho.rule.engine.infr.gateway.impl.service.FactorValueService;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Map;
 
 /**
@@ -15,8 +18,13 @@ import java.util.Map;
  * @version 1.0
  */
 @Slf4j
-@Component
-public class FieldValueStrategyContextHandler implements FieldValueStrategyContext {
+@Service
+public class FactorValueServiceImpl implements FactorValueService {
+
+    @Resource
+    private RuleFactorMapper ruleFactorMapper;
+
+
     @Override
     public Object getFieldValue(Object fieldName, Map<String, Object> param) {
         String fieldNames = (String) fieldName;

@@ -183,13 +183,13 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
         Object execute = QlExpressUtil.execute(stringBuilder.toString(), context, rightValues);
         if (Objects.nonNull(execute)) {
             Map<String, Object> executeMaps = (Map<String, Object>) execute;
-            Object result = context.get("result");
+            Object result = context.get(FactDict.RESULT_ALIAS);
             Map result1;
             if (Objects.nonNull(result)) {
                 result1 = (Map) result;
             } else {
                 result1 = Maps.newHashMap();
-                context.put("result", result1);
+                context.put(FactDict.RESULT_ALIAS, result1);
             }
             result1.putAll(executeMaps);
         }
