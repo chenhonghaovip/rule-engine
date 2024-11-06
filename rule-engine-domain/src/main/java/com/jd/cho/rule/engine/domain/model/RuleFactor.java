@@ -33,68 +33,59 @@ public class RuleFactor {
      */
     private String groupName;
 
+
     /**
-     * 分组下规则因子集合
+     * Database Column Remarks:
+     * 主键
      */
-    private List<RuleFactorBean> ruleFactorBeans;
+    private Long id;
 
+    /**
+     * Database Column Remarks:
+     * 因子编码
+     */
+    private String factorCode;
 
-    @Data
-    public static class RuleFactorBean {
-        /**
-         * Database Column Remarks:
-         * 主键
-         */
-        private Long id;
+    /**
+     * Database Column Remarks:
+     * 因子全编码
+     */
+    private String factorFullCode;
 
-        /**
-         * Database Column Remarks:
-         * 因子编码
-         */
-        private String factorCode;
+    /**
+     * Database Column Remarks:
+     * 因子名称
+     */
+    private String factorName;
 
-        /**
-         * Database Column Remarks:
-         * 因子全编码
-         */
-        private String factorFullCode;
+    /**
+     * Database Column Remarks:
+     * 因子类型（日期、数值、集合、布尔、文本）
+     */
+    private String factorType;
 
-        /**
-         * Database Column Remarks:
-         * 因子名称
-         */
-        private String factorName;
+    /**
+     * 支持的操作符
+     */
+    private List<ExpressOperationEnum> expressOperationList;
 
-        /**
-         * Database Column Remarks:
-         * 因子类型（日期、数值、集合、布尔、文本）
-         */
-        private String factorType;
+    /**
+     * Database Column Remarks:
+     * 常量类型（Input:输入，Enum:枚举，Script:脚本）
+     */
+    private String constantType;
 
-        /**
-         * 支持的操作符
-         */
-        private List<ExpressOperationEnum> expressOperationList;
+    /**
+     * Database Column Remarks:
+     * 常量值
+     */
+    private List<CommonDict> constantValues;
 
-        /**
-         * Database Column Remarks:
-         * 常量类型（Input:输入，Enum:枚举，Script:脚本）
-         */
-        private String constantType;
-
-        /**
-         * Database Column Remarks:
-         * 常量值
-         */
-        private List<CommonDict> constantValues;
-
-        /**
-         * Database Column Remarks:
-         * 备注
-         */
-        private String remark;
-
-    }
+    /**
+     * Database Column Remarks:
+     * 备注
+     */
+    private String remark;
 
 
 }

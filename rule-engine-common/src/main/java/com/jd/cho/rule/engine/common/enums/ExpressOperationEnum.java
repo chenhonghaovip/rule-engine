@@ -1,5 +1,10 @@
 package com.jd.cho.rule.engine.common.enums;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 /**
  * @author chenhonghao12
  * @version 1.0
@@ -63,8 +68,10 @@ public enum ExpressOperationEnum {
         this.remark = remark;
     }
 
+    public static final Map<String, List<ExpressOperationEnum>> MAP = Arrays.stream(ExpressOperationEnum.values()).collect(Collectors.groupingBy(ExpressOperationEnum::getGroup));
 
     public static ExpressOperationEnum getOperationByOperator(String operator) {
+
         ExpressOperationEnum[] list = ExpressOperationEnum.values();
         for (ExpressOperationEnum item : list) {
             String compareOperator = item.getOperator();

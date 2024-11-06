@@ -157,6 +157,12 @@
                 <version>${mybatis.dynamic.sql.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>1.6.0</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

@@ -2,12 +2,14 @@ package com.jd.cho.rule.engine.infr.gateway.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
-import com.jd.cho.rule.engine.client.dto.RuleDefDTO;
-import com.jd.cho.rule.engine.client.extend.AbstractRuleGroup;
 import com.jd.cho.rule.engine.common.dict.FactDict;
 import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
 import com.jd.cho.rule.engine.domain.gateway.RuleEngineGateway;
+import com.jd.cho.rule.engine.domain.model.RuleAction;
+import com.jd.cho.rule.engine.domain.model.RuleCondition;
+import com.jd.cho.rule.engine.domain.model.RuleDef;
 import com.jd.cho.rule.engine.infr.common.QlExpressUtil;
+import com.jd.cho.rule.engine.infr.convert.RuleDefConvert;
 import com.jd.cho.rule.engine.infr.gateway.impl.dal.DO.RuleDefDO;
 import com.jd.cho.rule.engine.infr.gateway.impl.dal.mapper.RuleDefDynamicSqlSupport;
 import com.jd.cho.rule.engine.infr.gateway.impl.dal.mapper.RuleDefMapper;
@@ -38,12 +40,12 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
 
 
     @Override
-    public boolean execute(RuleDefDTO ruleDefDTO, Map<String, Object> context) {
-        RuleDefDTO.RuleConditionBean ruleConditionBean = JSON.parseObject(JSON.toJSONString(ruleDefDTO.getRuleCondition()), RuleDefDTO.RuleConditionBean.class);
+    public boolean execute(RuleDef ruleDef, Map<String, Object> context) {
+        RuleCondition ruleConditionBean = JSON.parseObject(JSON.toJSONString(ruleDef.getRuleCondition()), RuleCondition.class);
         Map<String, Object> rightValues = Maps.newHashMap();
         String statement = this.buildWhenExpression(ruleConditionBean, rightValues);
         if (this.executeCondition(statement, context, rightValues)) {
-            this.executeAction(JSON.toJSONString(ruleDefDTO.getRuleAction()), context, null);
+            this.executeAction(JSON.toJSONString(ruleDef.getRuleAction()), context, null);
             return true;
         }
         return false;
@@ -58,21 +60,8 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
         if (!optional.isPresent()) {
             throw new RuntimeException("规则不存在" + ruleCode);
         }
-
-        RuleDefDO ruleDefDO = optional.get();
-        RuleDefDTO.RuleConditionBean ruleConditionBean = JSON.parseObject(ruleDefDO.getRuleCondition(), RuleDefDTO.RuleConditionBean.class);
-        Map<String, Object> rightValues = Maps.newHashMap();
-        String statement = this.buildWhenExpression(ruleConditionBean, rightValues);
-        if (this.executeCondition(statement, context, rightValues)) {
-            this.executeAction(ruleDefDO.getRuleAction(), context, null);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean execute(AbstractRuleGroup abstractRuleGroup, Map<String, Object> context) {
-        return abstractRuleGroup.execute(context);
+        RuleDef ruleDef = RuleDefConvert.INSTANCE.doToEntity(optional.get());
+        return this.execute(ruleDef, context);
     }
 
 
@@ -89,7 +78,7 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
      * @param logicalExpression 逻辑表达式对象，包含构建当表达式所需的信息
      * @return 返回构建好的当表达式字符串
      */
-    public String buildWhenExpression(RuleDefDTO.RuleConditionBean logicalExpression, Map<String, Object> rightValues) {
+    public String buildWhenExpression(RuleCondition logicalExpression, Map<String, Object> rightValues) {
         if (Objects.isNull(logicalExpression)) {
             return "";
         }
@@ -105,13 +94,13 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
                 mvelExpression.append(buildOperatorExpress(compareOperation, fieldName, fieldValue, rightValues));
                 break;
             case FactDict.RELATION_TYPE:
-                List<RuleDefDTO.RuleConditionBean> children = logicalExpression.getChildren();
+                List<RuleCondition> children = logicalExpression.getChildren();
                 if (CollectionUtils.isEmpty(children)) {
                     return FactDict.SYMBOL_EMPTY;
                 }
                 String logicOperator = this.convertRelationExpress(logicalExpression.getLogicOperation());
                 StringBuilder childrenExpression = new StringBuilder();
-                for (RuleDefDTO.RuleConditionBean child : children) {
+                for (RuleCondition child : children) {
                     // 递归构建单个规则条件
                     String childExpression = buildWhenExpression(child, rightValues);
                     if (!childExpression.isEmpty()) {
@@ -167,7 +156,7 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
     }
 
     public void executeAction(String actionExpression, Map<String, Object> context, Map<String, Object> rightValues) {
-        List<RuleDefDTO.RuleActionBean> ruleActionBeans = JSON.parseArray(actionExpression, RuleDefDTO.RuleActionBean.class);
+        List<RuleAction> ruleActionBeans = JSON.parseArray(actionExpression, RuleAction.class);
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Map maps = new HashMap();");
