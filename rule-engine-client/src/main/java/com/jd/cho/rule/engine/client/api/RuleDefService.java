@@ -24,10 +24,10 @@ public interface RuleDefService {
     /**
      * 批量插入规则信息
      *
-     * @param ruleDefDTOs 规则集合
+     * @param list 规则集合
      * @return 规则码集合
      */
-    List<RuleDefDTO> batchCreateRule(List<RuleDefDTO> ruleDefDTOs);
+    List<RuleDefDTO> batchCreateRule(List<RuleDefDTO> list);
 
 
     /**
@@ -41,9 +41,9 @@ public interface RuleDefService {
     /**
      * 批量更新规则信息
      *
-     * @param ruleDefDTOs 规则集合
+     * @param list 规则集合
      */
-    void batchUpdateRule(List<RuleDefDTO> ruleDefDTOs);
+    void batchUpdateRule(List<RuleDefDTO> list);
 
 
     /**
