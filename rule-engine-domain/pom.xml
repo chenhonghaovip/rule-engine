@@ -17,5 +17,9 @@
             <groupId>com.jd.cho</groupId>
             <artifactId>rule-engine-client</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.jd.cho</groupId>
+            <artifactId>rule-engine-common</artifactId>
+        </dependency>
     </dependencies>
 </project>

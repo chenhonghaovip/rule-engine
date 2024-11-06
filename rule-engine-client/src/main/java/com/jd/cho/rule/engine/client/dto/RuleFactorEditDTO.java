@@ -3,7 +3,6 @@ package com.jd.cho.rule.engine.client.dto;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * 规则因子表
@@ -12,7 +11,7 @@ import java.util.Date;
  * @TableName rule_factor
  */
 @Data
-public class RuleFactorDTO implements Serializable {
+public class RuleFactorEditDTO implements Serializable {
 
 
     /**
@@ -70,33 +69,5 @@ public class RuleFactorDTO implements Serializable {
      */
     private Integer status;
 
-    /**
-     * 是否删除 1-否，0-是
-     */
-    private Integer yn;
 
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-
-    /**
-     * 更新时间
-     */
-    private Date modifyTime;
-
-    /**
-     * 创建人
-     */
-    private String creator;
-
-    /**
-     * 修改人
-     */
-    private String modifier;
-
-    /**
-     * 租户
-     */
-    private String tenant;
 }

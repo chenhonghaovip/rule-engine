@@ -23,5 +23,9 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.jd.cho</groupId>
+            <artifactId>rule-engine-common</artifactId>
+        </dependency>
     </dependencies>
 </project>

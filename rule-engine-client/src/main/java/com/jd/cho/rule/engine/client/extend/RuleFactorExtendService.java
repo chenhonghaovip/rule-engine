@@ -1,6 +1,6 @@
 package com.jd.cho.rule.engine.client.extend;
 
-import com.jd.cho.rule.engine.client.dto.RuleFactorDTO;
+import com.jd.cho.rule.engine.client.dto.RuleFactorEditDTO;
 
 import java.util.List;
 
@@ -16,5 +16,5 @@ public interface RuleFactorExtendService {
      * @param ruleFactors 原始规则因子
      * @return 增强后的规则因子
      */
-    List<RuleFactorDTO> extendFactors(List<RuleFactorDTO> ruleFactors);
+    List<RuleFactorEditDTO> extendFactors(List<RuleFactorEditDTO> ruleFactors);
 }

@@ -1,6 +1,7 @@
 package com.jd.cho.rule.engine.client.api;
 
-import com.jd.cho.rule.engine.client.dto.RuleFactorDTO;
+import com.jd.cho.rule.engine.client.dto.RuleFactorEditDTO;
+import com.jd.cho.rule.engine.client.dto.RuleFactorQueryDTO;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface RuleFactorService {
      * @param ruleFactorDTO 规则因子
      * @return 规则因子ID
      */
-    String createRuleFactor(RuleFactorDTO ruleFactorDTO);
+    String createRuleFactor(RuleFactorEditDTO ruleFactorDTO);
 
 
     /**
@@ -26,7 +27,7 @@ public interface RuleFactorService {
      *
      * @param ruleFactorDTO 规则因子
      */
-    void updateRuleFactor(RuleFactorDTO ruleFactorDTO);
+    void updateRuleFactor(RuleFactorEditDTO ruleFactorDTO);
 
 
     /**
@@ -35,25 +36,8 @@ public interface RuleFactorService {
      * @param sceneCode 场景code
      * @return 规则因子集合
      */
-    List<RuleFactorDTO> queryBySceneCode(String sceneCode);
+    List<RuleFactorQueryDTO> queryBySceneCode(String sceneCode);
 
-
-    /**
-     * 根据规则编码批量查询规则因子
-     *
-     * @param ruleCodes 规则编码
-     * @return 规则因子列表
-     */
-    List<RuleFactorDTO> queryByRuleCodes(List<String> ruleCodes);
-
-
-    /**
-     * 根据规则因子编码批量查询规则因子
-     *
-     * @param factorCodes 规则因子编码
-     * @return 规则因子列表
-     */
-    List<RuleFactorDTO> queryByFactorCodes(List<String> factorCodes);
 
 
 }
