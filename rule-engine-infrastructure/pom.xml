@@ -45,5 +45,63 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.jd.cho</groupId>
+            <artifactId>rule-engine-common</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>QLExpress</artifactId>
+        </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>org.mybatis.generator</groupId>
+                <artifactId>mybatis-generator-maven-plugin</artifactId>
+                <version>${mybatis.generator.maven.plugin.version}</version>
+                <configuration>
+                    <!-- 配置文件 -->
+                    <configurationFile>src/main/resources/mybatis-generator.xml</configurationFile>
+                    <!-- 允许移动和修改 -->
+                    <verbose>true</verbose>
+                    <overwrite>true</overwrite>
+                </configuration>
+                <dependencies>
+                    <!-- jdbc 依赖 -->
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>${mysql.driver.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.mybatis.dynamic-sql</groupId>
+                        <artifactId>mybatis-dynamic-sql</artifactId>
+                        <version>${mybatis.dynamic.sql.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.jd.onej</groupId>
+                        <artifactId>webmvc-sso2</artifactId>
+                        <version>2.1-SNAPSHOT</version>
+                    </dependency>
+                    <!--lombok-->
+                    <dependency>
+                        <groupId>com.jd</groupId>
+                        <artifactId>mybatis-generator-lombok-plugin</artifactId>
+                        <version>1.0-SNAPSHOT</version>
+                    </dependency>
+                    <!--审计日志 -->
+                    <dependency>
+                        <groupId>com.jd.group</groupId>
+                        <artifactId>audit-log-client</artifactId>
+                        <version>1.0-SNAPSHOT</version>
+                    </dependency>
+
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
 </project>

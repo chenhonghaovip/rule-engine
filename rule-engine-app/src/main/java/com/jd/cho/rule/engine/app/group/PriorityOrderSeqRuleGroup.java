@@ -1,7 +1,7 @@
 package com.jd.cho.rule.engine.app.group;
 
-import com.jd.cho.rule.engine.client.api.RuleEngineService;
 import com.jd.cho.rule.engine.client.dto.RuleDefDTO;
+import com.jd.cho.rule.engine.domain.gateway.RuleEngineGateway;
 import com.jd.cho.rule.engine.infr.common.ApplicationUtils;
 
 import java.util.List;
@@ -18,10 +18,10 @@ public class PriorityOrderSeqRuleGroup extends AbstractStandardRuleGroup {
 
     @Override
     public boolean execute(Map<String, Object> context) {
-        RuleEngineService beans = ApplicationUtils.getBeans(RuleEngineService.class);
+        RuleEngineGateway ruleEngineGateway = ApplicationUtils.getBeans(RuleEngineGateway.class);
         List<RuleDefDTO> ruleDefEntities = getRuleDefEntities();
         for (RuleDefDTO ruleDefDTO : ruleDefEntities) {
-            beans.execute(ruleDefDTO, context);
+            ruleEngineGateway.execute(ruleDefDTO, context);
         }
         return true;
     }

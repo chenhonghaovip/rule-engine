@@ -14,10 +14,16 @@
         <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-<!--        <maven.deploy.skip>true</maven.deploy.skip>-->
+        <!--        <maven.deploy.skip>true</maven.deploy.skip>-->
 
         <spring-boot.version>2.7.2</spring-boot.version>
         <mybatis-starter.version>2.2.2</mybatis-starter.version>
+
+        <mysql.driver.version>8.0.29</mysql.driver.version>
+        <mybatis.dynamic.sql.version>1.1.4</mybatis.dynamic.sql.version>
+        <mybatis.springboot.version>2.1.2</mybatis.springboot.version>
+        <mybatis.springboot.pagehelper.version>1.2.13</mybatis.springboot.pagehelper.version>
+        <mybatis.generator.maven.plugin.version>1.4.0</mybatis.generator.maven.plugin.version>
     </properties>
 
     <modules>
@@ -71,6 +77,12 @@
                 <artifactId>rule-engine-infrastructure</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.jd.cho</groupId>
+                <artifactId>rule-engine-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <!--Project modules End-->
 
             <dependency>
@@ -121,6 +133,24 @@
                 <version>3.5.1</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>QLExpress</artifactId>
+                <version>3.3.3</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>3.6</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>32.0.0-android</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -139,10 +169,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -166,6 +192,7 @@
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
     </build>
 </project>

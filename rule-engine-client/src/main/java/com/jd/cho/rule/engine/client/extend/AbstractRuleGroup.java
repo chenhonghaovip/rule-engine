@@ -16,4 +16,5 @@ public abstract class AbstractRuleGroup {
     }
 
     public abstract boolean execute(Map<String, Object> context);
+
 }
