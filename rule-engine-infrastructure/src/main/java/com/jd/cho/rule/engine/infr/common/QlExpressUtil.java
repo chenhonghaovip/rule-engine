@@ -63,7 +63,6 @@ public class QlExpressUtil {
     @SuppressWarnings("unchecked")
     public static String[] getOutVarNames(String statement) {
         try {
-
             return RUNNER.getOutVarNames(statement);
         } catch (Exception e) {
             log.error("QlExpressUtil::execute error,statement={}", statement);

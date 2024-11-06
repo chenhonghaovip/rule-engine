@@ -14,8 +14,6 @@ import java.util.List;
 public class RuleDefDTO implements Serializable {
 
 
-    @JSONField(name = "id")
-    private String id;
     @JSONField(name = "ruleName")
     private String ruleName;
     @JSONField(name = "ruleCode")

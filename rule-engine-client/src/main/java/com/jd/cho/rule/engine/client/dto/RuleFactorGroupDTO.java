@@ -9,14 +9,11 @@ import java.util.Date;
 /**
  * 规则因子分组表
  *
+ * @author chenhonghao12
  * @TableName rule_factor_group
  */
 @Data
 public class RuleFactorGroupDTO implements Serializable {
-    /**
-     * 主键
-     */
-    private Long id;
 
     /**
      * 分组编码

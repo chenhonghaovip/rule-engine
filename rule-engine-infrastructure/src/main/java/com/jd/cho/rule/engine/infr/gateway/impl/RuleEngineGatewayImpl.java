@@ -1,8 +1,6 @@
 package com.jd.cho.rule.engine.infr.gateway.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.google.common.collect.Maps;
 import com.jd.cho.rule.engine.client.dto.RuleDefDTO;
 import com.jd.cho.rule.engine.client.extend.AbstractRuleGroup;
@@ -11,6 +9,7 @@ import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
 import com.jd.cho.rule.engine.domain.gateway.RuleEngineGateway;
 import com.jd.cho.rule.engine.infr.common.QlExpressUtil;
 import com.jd.cho.rule.engine.infr.gateway.impl.dal.DO.RuleDefDO;
+import com.jd.cho.rule.engine.infr.gateway.impl.dal.mapper.RuleDefDynamicSqlSupport;
 import com.jd.cho.rule.engine.infr.gateway.impl.dal.mapper.RuleDefMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -21,6 +20,9 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
+
+import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
 
 /**
  * @author chenhonghao12
@@ -37,18 +39,28 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
 
     @Override
     public boolean execute(RuleDefDTO ruleDefDTO, Map<String, Object> context) {
-//        RuleDefEntity ruleDefEntity = getRuleDefEntity(Long.valueOf(ruleCode));
-//        return execute(ruleDefEntity, context);
+        RuleDefDTO.RuleConditionBean ruleConditionBean = JSON.parseObject(JSON.toJSONString(ruleDefDTO.getRuleCondition()), RuleDefDTO.RuleConditionBean.class);
+        Map<String, Object> rightValues = Maps.newHashMap();
+        String statement = this.buildWhenExpression(ruleConditionBean, rightValues);
+        if (this.executeCondition(statement, context, rightValues)) {
+            this.executeAction(JSON.toJSONString(ruleDefDTO.getRuleAction()), context, null);
+            return true;
+        }
         return false;
     }
 
     @Override
     public boolean execute(String ruleCode, Map<String, Object> context) {
-//        RuleDefDO ruleDefDO = ruleDefMapper.selectOne(s -> s.where(id, isEqualTo(1L)));
-        RuleDefDO ruleDefDO = null;
-        QueryWrapper<RuleDefDO> queryWrapper = Wrappers.query();
-        RuleDefDTO.RuleConditionBean ruleConditionBean = JSON.parseObject(ruleDefDO.getRuleCondition(), RuleDefDTO.RuleConditionBean.class);
+        Optional<RuleDefDO> optional = ruleDefMapper.selectOne(s -> s.where(RuleDefDynamicSqlSupport.ruleCode, isEqualTo(ruleCode))
+                .and(RuleDefDynamicSqlSupport.yn, isEqualTo(true))
+                .and(RuleDefDynamicSqlSupport.latest, isEqualTo(1))
+        );
+        if (!optional.isPresent()) {
+            throw new RuntimeException("规则不存在" + ruleCode);
+        }
 
+        RuleDefDO ruleDefDO = optional.get();
+        RuleDefDTO.RuleConditionBean ruleConditionBean = JSON.parseObject(ruleDefDO.getRuleCondition(), RuleDefDTO.RuleConditionBean.class);
         Map<String, Object> rightValues = Maps.newHashMap();
         String statement = this.buildWhenExpression(ruleConditionBean, rightValues);
         if (this.executeCondition(statement, context, rightValues)) {

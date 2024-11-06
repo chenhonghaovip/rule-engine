@@ -8,14 +8,12 @@ import java.util.Date;
 /**
  * 规则因子表
  *
+ * @author chenhonghao12
  * @TableName rule_factor
  */
 @Data
 public class RuleFactorDTO implements Serializable {
-    /**
-     * 主键
-     */
-    private Long id;
+
 
     /**
      * 因子编码

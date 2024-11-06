@@ -7,6 +7,8 @@ import java.util.List;
 
 /**
  * 规则场景表
+ *
+ * @author chenhonghao12
  */
 @Data
 public class RuleSceneDTO implements Serializable {

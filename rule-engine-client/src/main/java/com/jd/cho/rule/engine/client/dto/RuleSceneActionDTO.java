@@ -8,14 +8,11 @@ import java.util.Date;
 /**
  * 规则场景行为表
  *
+ * @author chenhonghao12
  * @TableName rule_scene_action
  */
 @Data
 public class RuleSceneActionDTO implements Serializable {
-    /**
-     * 主键
-     */
-    private Long id;
 
     /**
      * 场景编码
