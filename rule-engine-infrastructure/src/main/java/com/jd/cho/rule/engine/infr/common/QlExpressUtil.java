@@ -47,12 +47,27 @@ public class QlExpressUtil {
      * @param context   上下文
      */
     @SuppressWarnings("unchecked")
-    public static Object execute(String statement, Map<String, Object> context, Map<String, Object> rightValues) {
+    public static Object execute(String statement, Map<String, Object> context, Map<String, Object> rightValues, Map<String, String> fieldMapping) {
         try {
             if (Objects.nonNull(rightValues) && !rightValues.isEmpty()) {
                 context.putAll(rightValues);
             }
-            return RUNNER.execute(statement, new QLExpressContext(context), null, false, false);
+            return RUNNER.execute(statement, new QLExpressContext(context, fieldMapping), null, false, false);
+        } catch (Exception e) {
+            log.error("QlExpressUtil::execute error,statement={},context:{}", statement, JSON.toJSONString(context));
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    /**
+     * @param statement 执行语句
+     * @param context   上下文
+     */
+    @SuppressWarnings("unchecked")
+    public static Object execute(String statement, Map<String, Object> context) {
+        try {
+            return RUNNER.execute(statement, new QLExpressContext(context, null), null, false, false);
         } catch (Exception e) {
             log.error("QlExpressUtil::execute error,statement={},context:{}", statement, JSON.toJSONString(context));
             throw new RuntimeException(e);

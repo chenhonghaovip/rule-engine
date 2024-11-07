@@ -15,5 +15,5 @@ public interface FactorValueService {
      * @param param     请求参数
      * @return 字段值
      */
-    Object getFieldValue(Object fieldName, Map<String, Object> param);
+    Object getFieldValue(Object fieldName, Map<String, Object> param, Map<String, String> fieldMapping);
 }

@@ -43,9 +43,10 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
     public boolean execute(RuleDef ruleDef, Map<String, Object> context) {
         RuleCondition ruleConditionBean = JSON.parseObject(JSON.toJSONString(ruleDef.getRuleCondition()), RuleCondition.class);
         Map<String, Object> rightValues = Maps.newHashMap();
-        String statement = this.buildWhenExpression(ruleConditionBean, rightValues);
-        if (this.executeCondition(statement, context, rightValues)) {
-            this.executeAction(JSON.toJSONString(ruleDef.getRuleAction()), context, null);
+        Map<String, String> fieldMapping = Maps.newHashMap();
+        String statement = this.buildWhenExpression(ruleConditionBean, rightValues, fieldMapping);
+        if (this.executeCondition(statement, context, rightValues, fieldMapping)) {
+            this.executeAction(JSON.toJSONString(ruleDef.getRuleAction()), context);
             return true;
         }
         return false;
@@ -65,8 +66,8 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
     }
 
 
-    private boolean executeCondition(String expression, Map<String, Object> context, Map<String, Object> rightValues) {
-        return (Boolean) QlExpressUtil.execute(expression, context, rightValues);
+    private boolean executeCondition(String expression, Map<String, Object> context, Map<String, Object> rightValues, Map<String, String> fieldMapping) {
+        return (Boolean) QlExpressUtil.execute(expression, context, rightValues, fieldMapping);
     }
 
 
@@ -75,34 +76,38 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
      * 该方法用于根据逻辑表达式对象构建相应的当表达式（用于规则引擎等场景）
      * 当表达式可以是简单的比较表达式，也可以是复合的逻辑表达式
      *
-     * @param logicalExpression 逻辑表达式对象，包含构建当表达式所需的信息
+     * @param ruleCondition 逻辑表达式对象，包含构建当表达式所需的信息
      * @return 返回构建好的当表达式字符串
      */
-    public String buildWhenExpression(RuleCondition logicalExpression, Map<String, Object> rightValues) {
-        if (Objects.isNull(logicalExpression)) {
+    public String buildWhenExpression(RuleCondition ruleCondition, Map<String, Object> rightValues, Map<String, String> fieldMapping) {
+        if (Objects.isNull(ruleCondition)) {
             return "";
         }
 
         StringBuilder mvelExpression = new StringBuilder();
-        String type = StringUtils.isNotBlank(logicalExpression.getLogicOperation()) ? FactDict.RELATION_TYPE : FactDict.EXPRESSION_TYPE;
+        String type = StringUtils.isNotBlank(ruleCondition.getLogicOperation()) ? FactDict.RELATION_TYPE : FactDict.EXPRESSION_TYPE;
 
         switch (type) {
             case FactDict.EXPRESSION_TYPE:
-                String fieldName = logicalExpression.getFieldCode();
-                Object fieldValue = logicalExpression.getValue();
-                String compareOperation = logicalExpression.getCompareOperation();
-                mvelExpression.append(buildOperatorExpress(compareOperation, fieldName, fieldValue, rightValues));
+                String factorCode = ruleCondition.getFactorCode();
+                String originalFactorCode = ruleCondition.getOriginalFactorCode();
+                if (!Objects.equals(originalFactorCode, factorCode)) {
+                    fieldMapping.put(factorCode, originalFactorCode);
+                }
+                Object fieldValue = ruleCondition.getValue();
+                String compareOperation = ruleCondition.getCompareOperation();
+                mvelExpression.append(buildOperatorExpress(compareOperation, factorCode, fieldValue, rightValues));
                 break;
             case FactDict.RELATION_TYPE:
-                List<RuleCondition> children = logicalExpression.getChildren();
+                List<RuleCondition> children = ruleCondition.getChildren();
                 if (CollectionUtils.isEmpty(children)) {
                     return FactDict.SYMBOL_EMPTY;
                 }
-                String logicOperator = this.convertRelationExpress(logicalExpression.getLogicOperation());
+                String logicOperator = this.convertRelationExpress(ruleCondition.getLogicOperation());
                 StringBuilder childrenExpression = new StringBuilder();
                 for (RuleCondition child : children) {
                     // 递归构建单个规则条件
-                    String childExpression = buildWhenExpression(child, rightValues);
+                    String childExpression = buildWhenExpression(child, rightValues, fieldMapping);
                     if (!childExpression.isEmpty()) {
                         if (childrenExpression.length() > 0) {
                             childrenExpression.append(FactDict.SYMBOL_SPACE).append(logicOperator).append(FactDict.SYMBOL_SPACE);
@@ -155,7 +160,7 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
         return String.format("%s_%s", entityName, fieldName);
     }
 
-    public void executeAction(String actionExpression, Map<String, Object> context, Map<String, Object> rightValues) {
+    public void executeAction(String actionExpression, Map<String, Object> context) {
         List<RuleAction> ruleActionBeans = JSON.parseArray(actionExpression, RuleAction.class);
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -169,7 +174,7 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
             stringBuilder.append("maps.put(\"").append(each.getFieldCode()).append("\",").append(values).append(");");
         });
         stringBuilder.append("return maps;");
-        Object execute = QlExpressUtil.execute(stringBuilder.toString(), context, rightValues);
+        Object execute = QlExpressUtil.execute(stringBuilder.toString(), context);
         if (Objects.nonNull(execute)) {
             Map<String, Object> executeMaps = (Map<String, Object>) execute;
             Object result = context.get(FactDict.RESULT_ALIAS);

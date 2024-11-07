@@ -1,7 +1,8 @@
 package com.jd.cho.rule.engine.infr.gateway.impl.service.impl;
 
-import com.google.common.collect.Lists;
 import com.jd.cho.rule.engine.infr.common.QlExpressUtil;
+import com.jd.cho.rule.engine.infr.gateway.impl.dal.DO.RuleFactorDO;
+import com.jd.cho.rule.engine.infr.gateway.impl.dal.mapper.RuleFactorDynamicSqlSupport;
 import com.jd.cho.rule.engine.infr.gateway.impl.dal.mapper.RuleFactorMapper;
 import com.jd.cho.rule.engine.infr.gateway.impl.service.FactorValueService;
 import lombok.AllArgsConstructor;
@@ -11,7 +12,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
+import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
 
 /**
  * @author chenhonghao12
@@ -26,26 +31,24 @@ public class FactorValueServiceImpl implements FactorValueService {
 
 
     @Override
-    public Object getFieldValue(Object fieldName, Map<String, Object> param) {
-        String fieldNames = (String) fieldName;
-        String[] splits = fieldNames.split("_");
-        String node = null;
-        String realFieldName = null;
-        if (splits.length == 2) {
-            node = splits[0];
-            param.put(node, node);
-            realFieldName = splits[1];
-        } else {
-            realFieldName = fieldNames;
+    public Object getFieldValue(Object fieldName, Map<String, Object> param, Map<String, String> fieldMapping) {
+        log.info("FactorValueService::getFieldValue,fieldName:{},param:{},fieldMapping:{}", fieldName, param, fieldMapping);
+        String factorName = (String) fieldName;
+        if (fieldMapping.containsKey(factorName)) {
+            factorName = fieldMapping.get(factorName);
+        }
+        String realFactorName = factorName;
+
+        List<RuleFactorDO> ruleFactors = ruleFactorMapper.select(s -> s.where(RuleFactorDynamicSqlSupport.factorCode, isEqualTo(realFactorName)));
+        RuleFactorDO ruleFactorDO = ruleFactors.stream().findFirst().orElse(null);
+
+        if (Objects.nonNull(ruleFactorDO)) {
+//            String script = "signDomainService.doSomeThing();" + "return NewList(\"11aa\", \"23\", \"3\");";
+//            FieldConfig build = FieldConfig.builder().fieldFullCode(String.valueOf(fieldName)).script(script).build();
+            return QlExpressUtil.execute(ruleFactorDO.getFactorScript(), param);
         }
 
-        // 通过fieldName的全路径获取字段配置信息
-        if (!Lists.newArrayList("a", "b").contains(realFieldName)) {
-            return null;
-        }
-        String script = "signDomainService.doSomeThing();" + "return NewList(\"11aa\", \"23\", \"3\");";
-        FieldConfig build = FieldConfig.builder().fieldFullCode(String.valueOf(fieldName)).script(script).build();
-        return QlExpressUtil.execute(build.getScript(), param, null);
+        return null;
     }
 
 

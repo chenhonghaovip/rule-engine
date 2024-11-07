@@ -41,10 +41,15 @@ public class RuleDefDTO implements Serializable {
         private String compareOperation;
 
         /**
-         * 字段code
+         * 因子code
          */
-        @JSONField(name = "fieldCode")
-        private String fieldCode;
+        private String factorCode;
+
+
+        /**
+         * 原始因子code
+         */
+        private String originalFactorCode;
 
         /**
          * 字段类型

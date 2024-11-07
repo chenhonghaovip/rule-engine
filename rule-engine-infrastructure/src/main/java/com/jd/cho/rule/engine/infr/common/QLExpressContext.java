@@ -17,10 +17,13 @@ public class QLExpressContext extends HashMap<String, Object> implements IExpres
 
     private final ApplicationContext context;
 
+    private Map<String, String> fieldMapping;
+
     private final FactorValueService factorValueService;
 
-    public QLExpressContext(Map<String, Object> map) {
+    public QLExpressContext(Map<String, Object> map, Map<String, String> fieldMapping) {
         super(map);
+        this.fieldMapping = fieldMapping;
         this.context = ApplicationUtils.getApplicationContext();
         this.factorValueService = ApplicationUtils.getBeans(FactorValueService.class);
     }
@@ -37,7 +40,7 @@ public class QLExpressContext extends HashMap<String, Object> implements IExpres
             result = context.getBean((String) name);
         }
         if (result == null && Objects.nonNull(factorValueService)) {
-            return factorValueService.getFieldValue(name, this);
+            return factorValueService.getFieldValue(name, this, fieldMapping);
         }
         if (Objects.isNull(result)) {
             throw new BusinessException(String.format("未找到属性[%s]", name));
