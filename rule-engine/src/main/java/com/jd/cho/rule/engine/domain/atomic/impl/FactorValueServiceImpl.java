@@ -1,10 +1,10 @@
-package com.jd.cho.rule.engine.domain.service.impl;
+package com.jd.cho.rule.engine.domain.atomic.impl;
 
 import com.jd.cho.rule.engine.common.util.QlExpressUtil;
 import com.jd.cho.rule.engine.dal.DO.RuleFactorDO;
 import com.jd.cho.rule.engine.dal.mapper.RuleFactorDynamicSqlSupport;
 import com.jd.cho.rule.engine.dal.mapper.RuleFactorMapper;
-import com.jd.cho.rule.engine.domain.service.FactorValueService;
+import com.jd.cho.rule.engine.domain.atomic.FactorValueService;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

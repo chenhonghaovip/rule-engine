@@ -40,15 +40,16 @@ public class RuleDefDTO implements Serializable {
          */
         private String compareOperation;
 
+
         /**
          * 因子code
          */
         private String factorCode;
 
         /**
-         * 字段类型
+         * 原始因子code
          */
-        private String fieldType;
+        private String originalFactorCode;
 
         /**
          * 字段值

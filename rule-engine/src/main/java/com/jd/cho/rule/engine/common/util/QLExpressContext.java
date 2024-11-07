@@ -1,7 +1,7 @@
 package com.jd.cho.rule.engine.common.util;
 
 import com.jd.cho.rule.engine.common.exceptions.BusinessException;
-import com.jd.cho.rule.engine.domain.service.FactorValueService;
+import com.jd.cho.rule.engine.domain.atomic.FactorValueService;
 import com.ql.util.express.IExpressContext;
 import org.springframework.context.ApplicationContext;
 

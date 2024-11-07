@@ -46,7 +46,6 @@ public class RuleDefQueryDTO implements Serializable {
          */
         private String factorCode;
 
-
         /**
          * 原始因子code
          */
