@@ -13,6 +13,12 @@ import java.util.List;
  */
 public interface RuleConfigGateway {
 
+    /**
+     * 通过场景code获取规则因子
+     *
+     * @param sceneCode 场景code
+     * @return 规则因子
+     */
     List<RuleFactor> queryBySceneCode(String sceneCode);
 
     /**
@@ -31,14 +37,12 @@ public interface RuleConfigGateway {
      */
     void batchCreateRule(List<RuleDefDTO> list);
 
-
     /**
      * 批量更新规则信息
      *
      * @param list 规则集合
      */
     void batchUpdateRule(List<RuleDefDTO> list);
-
 
     /**
      * 查询全部最新的规则
@@ -47,7 +51,6 @@ public interface RuleConfigGateway {
      * @return 规则列表
      */
     List<RuleDefQueryDTO> queryByRuleCodes(List<String> ruleCodes);
-
 
     /**
      * 查询当前规则的历史信息
@@ -65,6 +68,5 @@ public interface RuleConfigGateway {
      * @return 参数集合
      */
     List<String> queryParams(List<String> ruleCodes);
-
 
 }

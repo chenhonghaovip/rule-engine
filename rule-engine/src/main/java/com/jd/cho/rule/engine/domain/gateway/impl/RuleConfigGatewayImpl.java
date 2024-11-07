@@ -106,7 +106,6 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
             ruleDefDO.setCreator(loginUser);
             return ruleDefDO;
         }).collect(Collectors.toList());
-
         ruleDefMapper.insertMultiple(collect);
     }
 
