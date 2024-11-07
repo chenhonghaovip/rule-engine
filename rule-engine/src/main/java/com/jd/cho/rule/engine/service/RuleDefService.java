@@ -1,7 +1,7 @@
 package com.jd.cho.rule.engine.service;
 
-import com.jd.cho.rule.engine.common.dto.RuleDefDTO;
-import com.jd.cho.rule.engine.common.dto.RuleDefQueryDTO;
+import com.jd.cho.rule.engine.service.dto.RuleDefDTO;
+import com.jd.cho.rule.engine.service.dto.RuleDefQueryDTO;
 
 import java.util.List;
 

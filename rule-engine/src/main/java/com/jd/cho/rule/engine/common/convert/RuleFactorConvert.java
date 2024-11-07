@@ -1,8 +1,8 @@
 package com.jd.cho.rule.engine.common.convert;
 
-import com.jd.cho.rule.engine.common.dto.RuleFactorQueryDTO;
 import com.jd.cho.rule.engine.dal.DO.RuleFactorDO;
 import com.jd.cho.rule.engine.domain.model.RuleFactor;
+import com.jd.cho.rule.engine.service.dto.RuleFactorQueryDTO;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

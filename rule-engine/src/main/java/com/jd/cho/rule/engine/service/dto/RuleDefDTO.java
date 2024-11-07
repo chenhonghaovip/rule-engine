@@ -1,4 +1,4 @@
-package com.jd.cho.rule.engine.common.dto;
+package com.jd.cho.rule.engine.service.dto;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.Data;

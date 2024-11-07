@@ -1,11 +1,11 @@
 package com.jd.cho.rule.engine.service.impl;
 
 import com.jd.cho.rule.engine.common.convert.RuleFactorConvert;
-import com.jd.cho.rule.engine.common.dto.RuleFactorEditDTO;
-import com.jd.cho.rule.engine.common.dto.RuleFactorQueryDTO;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.domain.model.RuleFactor;
 import com.jd.cho.rule.engine.service.RuleFactorService;
+import com.jd.cho.rule.engine.service.dto.RuleFactorEditDTO;
+import com.jd.cho.rule.engine.service.dto.RuleFactorQueryDTO;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

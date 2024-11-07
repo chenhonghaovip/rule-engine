@@ -1,4 +1,4 @@
-package com.jd.cho.rule.engine.common.base;
+package com.jd.cho.rule.engine.dal.DO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

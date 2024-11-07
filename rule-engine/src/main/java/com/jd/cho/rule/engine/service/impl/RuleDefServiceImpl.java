@@ -1,9 +1,9 @@
 package com.jd.cho.rule.engine.service.impl;
 
-import com.jd.cho.rule.engine.common.dto.RuleDefDTO;
-import com.jd.cho.rule.engine.common.dto.RuleDefQueryDTO;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.service.RuleDefService;
+import com.jd.cho.rule.engine.service.dto.RuleDefDTO;
+import com.jd.cho.rule.engine.service.dto.RuleDefQueryDTO;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
