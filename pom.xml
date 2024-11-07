@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.jd.cho</groupId>
@@ -27,13 +27,8 @@
     </properties>
 
     <modules>
-        <module>rule-engine-client</module>
-        <module>rule-engine-adapter</module>
-        <module>rule-engine-app</module>
-        <module>rule-engine-domain</module>
-        <module>rule-engine-infrastructure</module>
-        <module>start</module>
-        <module>rule-engine-common</module>
+        <module>rule-engine</module>
+        <module>rule-engine-starter</module>
     </modules>
 
     <dependencies>
@@ -51,40 +46,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <!--Project modules-->
-            <dependency>
-                <groupId>com.jd.cho</groupId>
-                <artifactId>rule-engine-adapter</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.jd.cho</groupId>
-                <artifactId>rule-engine-client</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.jd.cho</groupId>
-                <artifactId>rule-engine-app</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.jd.cho</groupId>
-                <artifactId>rule-engine-domain</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.jd.cho</groupId>
-                <artifactId>rule-engine-infrastructure</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.jd.cho</groupId>
-                <artifactId>rule-engine-common</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <!--Project modules End-->
-
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
