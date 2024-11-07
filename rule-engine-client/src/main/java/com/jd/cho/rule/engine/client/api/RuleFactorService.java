@@ -1,7 +1,7 @@
 package com.jd.cho.rule.engine.client.api;
 
-import com.jd.cho.rule.engine.client.dto.RuleFactorEditDTO;
-import com.jd.cho.rule.engine.client.dto.RuleFactorQueryDTO;
+import com.jd.cho.rule.engine.common.client.dto.RuleFactorEditDTO;
+import com.jd.cho.rule.engine.common.client.dto.RuleFactorQueryDTO;
 
 import java.util.List;
 

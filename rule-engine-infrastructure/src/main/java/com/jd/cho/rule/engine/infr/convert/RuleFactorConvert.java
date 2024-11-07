@@ -1,5 +1,6 @@
 package com.jd.cho.rule.engine.infr.convert;
 
+import com.jd.cho.rule.engine.common.client.dto.RuleFactorQueryDTO;
 import com.jd.cho.rule.engine.domain.model.RuleFactor;
 import com.jd.cho.rule.engine.infr.gateway.impl.dal.DO.RuleFactorDO;
 import org.mapstruct.BeanMapping;
@@ -16,7 +17,7 @@ public interface RuleFactorConvert {
     @BeanMapping
     RuleFactor doToEntity(RuleFactorDO ruleFactorDO);
 
-//    @BeanMapping
-//    RuleFactorQueryDTO.RuleFactorBean doToDTO(RuleFactor ruleFactor);
+    @BeanMapping
+    RuleFactorQueryDTO.RuleFactorBean doToDTO(RuleFactor ruleFactor);
 
 }

@@ -1,7 +1,7 @@
 package com.jd.cho.rule.engine.client.api;
 
-import com.jd.cho.rule.engine.client.dto.RuleDefDTO;
-import com.jd.cho.rule.engine.client.dto.RuleDefQueryDTO;
+import com.jd.cho.rule.engine.common.client.dto.RuleDefDTO;
+import com.jd.cho.rule.engine.common.client.dto.RuleDefQueryDTO;
 
 import java.util.List;
 

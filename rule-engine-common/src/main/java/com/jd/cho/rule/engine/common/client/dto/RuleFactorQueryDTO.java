@@ -1,4 +1,4 @@
-package com.jd.cho.rule.engine.client.dto;
+package com.jd.cho.rule.engine.common.client.dto;
 
 import com.jd.cho.rule.engine.common.base.CommonDict;
 import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
@@ -58,6 +58,16 @@ public class RuleFactorQueryDTO {
          * 因子全编码
          */
         private String factorFullCode;
+
+        /**
+         * 原始因子编码
+         */
+        private String originalFactorCode;
+
+        /**
+         * 原始因子全编码
+         */
+        private String originalFactorFullCode;
 
         /**
          * Database Column Remarks:

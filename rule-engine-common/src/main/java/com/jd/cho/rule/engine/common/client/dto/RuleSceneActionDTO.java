@@ -1,5 +1,4 @@
-package com.jd.cho.rule.engine.client.dto;
-
+package com.jd.cho.rule.engine.common.client.dto;
 
 import lombok.Data;
 
@@ -7,23 +6,33 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 规则因子分组表
+ * 规则场景行为表
  *
  * @author chenhonghao12
- * @TableName rule_factor_group
+ * @TableName rule_scene_action
  */
 @Data
-public class RuleFactorGroupDTO implements Serializable {
+public class RuleSceneActionDTO implements Serializable {
 
     /**
-     * 分组编码
+     * 场景编码
      */
-    private String groupCode;
+    private String sceneCode;
 
     /**
-     * 分组名称
+     * 行为编码
      */
-    private String groupName;
+    private String actionCode;
+
+    /**
+     * 行为类型
+     */
+    private String actionType;
+
+    /**
+     * 行为内容
+     */
+    private String action;
 
     /**
      * 是否删除 1-否，0-是
