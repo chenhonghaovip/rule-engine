@@ -45,12 +45,6 @@ public class RuleDefDTO implements Serializable {
          */
         private String factorCode;
 
-
-        /**
-         * 原始因子code
-         */
-        private String originalFactorCode;
-
         /**
          * 字段类型
          */

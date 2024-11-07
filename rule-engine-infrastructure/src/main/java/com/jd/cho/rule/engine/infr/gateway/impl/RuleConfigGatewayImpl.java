@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.jd.cho.rule.engine.common.base.CommonDict;
+import com.jd.cho.rule.engine.common.client.dto.RuleDefDTO;
+import com.jd.cho.rule.engine.common.client.dto.RuleDefQueryDTO;
 import com.jd.cho.rule.engine.common.enums.ConstantEnum;
 import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
@@ -12,6 +14,7 @@ import com.jd.cho.rule.engine.domain.model.RuleDef;
 import com.jd.cho.rule.engine.domain.model.RuleFactor;
 import com.jd.cho.rule.engine.infr.common.QlExpressUtil;
 import com.jd.cho.rule.engine.infr.convert.RuleFactorConvert;
+import com.jd.cho.rule.engine.infr.gateway.impl.dal.DO.RuleDefDO;
 import com.jd.cho.rule.engine.infr.gateway.impl.dal.DO.RuleFactorDO;
 import com.jd.cho.rule.engine.infr.gateway.impl.dal.DO.RuleFactorGroupDO;
 import com.jd.cho.rule.engine.infr.gateway.impl.dal.DO.RuleSceneDO;
@@ -32,6 +35,9 @@ import static org.mybatis.dynamic.sql.SqlBuilder.isIn;
  */
 @Service
 public class RuleConfigGatewayImpl implements RuleConfigGateway {
+
+    @Resource
+    private RuleDefMapper ruleDefMapper;
 
     @Resource
     private RuleSceneMapper ruleSceneMapper;
@@ -76,6 +82,36 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
 
     @Override
     public List<RuleDef> ruleDefQuery(List<String> ruleCodes) {
+        List<RuleDefDO> ruleDefs = ruleDefMapper.select(s -> s.where(RuleDefDynamicSqlSupport.ruleCode, isIn(ruleCodes))
+                .and(RuleDefDynamicSqlSupport.yn, isEqualTo(true))
+                .and(RuleDefDynamicSqlSupport.latest, isEqualTo(1))
+                .orderBy(RuleDefDynamicSqlSupport.priority.descending())
+        );
+        return null;
+    }
+
+    @Override
+    public List<RuleDefDTO> batchCreateRule(List<RuleDefDTO> list) {
+        return null;
+    }
+
+    @Override
+    public void batchUpdateRule(List<RuleDefDTO> list) {
+
+    }
+
+    @Override
+    public List<RuleDefQueryDTO> queryByRuleCodes(List<String> ruleCodes) {
+        return null;
+    }
+
+    @Override
+    public List<RuleDefQueryDTO> queryByRuleCodes(String ruleCode) {
+        return null;
+    }
+
+    @Override
+    public List<String> queryParams(List<String> ruleCodes) {
         return null;
     }
 
@@ -84,7 +120,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
         if (ConstantEnum.INPUT.getCode().equals(constantType)) {
             return Lists.newArrayList();
         } else if (ConstantEnum.SCRIPT.getCode().equals(constantType)) {
-            constantValue = JSON.toJSONString(QlExpressUtil.execute(constantValue, Maps.newHashMap(), Maps.newHashMap()));
+            constantValue = JSON.toJSONString(QlExpressUtil.execute(constantValue, Maps.newHashMap()));
         }
         return JSON.parseArray(constantValue, CommonDict.class);
     }

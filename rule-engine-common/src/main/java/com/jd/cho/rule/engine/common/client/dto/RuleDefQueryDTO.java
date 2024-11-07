@@ -1,7 +1,6 @@
 package com.jd.cho.rule.engine.common.client.dto;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.jd.cho.rule.engine.common.base.BaseEntity;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,7 +11,7 @@ import java.util.List;
  * @version 1.0
  */
 @Data
-public class RuleDefQueryDTO extends BaseEntity implements Serializable {
+public class RuleDefQueryDTO implements Serializable {
 
 
     @JSONField(name = "ruleName")
@@ -28,6 +27,7 @@ public class RuleDefQueryDTO extends BaseEntity implements Serializable {
     @JSONField(name = "ruleAction")
     private List<RuleActionBean> ruleAction;
 
+
     @Data
     public static class RuleConditionBean implements Serializable {
 
@@ -42,15 +42,15 @@ public class RuleDefQueryDTO extends BaseEntity implements Serializable {
         private String compareOperation;
 
         /**
-         * 字段code
+         * 因子code
          */
-        @JSONField(name = "fieldCode")
-        private String fieldCode;
+        private String factorCode;
+
 
         /**
-         * 字段类型
+         * 原始因子code
          */
-        private String fieldType;
+        private String originalFactorCode;
 
         /**
          * 字段值
