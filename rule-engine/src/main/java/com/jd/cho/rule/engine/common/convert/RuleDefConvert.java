@@ -2,6 +2,7 @@ package com.jd.cho.rule.engine.common.convert;
 
 import com.jd.cho.rule.engine.dal.DO.RuleDefDO;
 import com.jd.cho.rule.engine.domain.model.RuleDef;
+import com.jd.cho.rule.engine.service.dto.RuleDefDTO;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -16,5 +17,8 @@ public interface RuleDefConvert {
     @BeanMapping
     RuleDef doToEntity(RuleDefDO ruleDefDO);
 
+
+    @BeanMapping
+    RuleDefDO doToEntity(RuleDefDTO ruleDefDTO);
 
 }

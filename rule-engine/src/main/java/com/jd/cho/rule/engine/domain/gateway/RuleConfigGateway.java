@@ -29,7 +29,7 @@ public interface RuleConfigGateway {
      * @param list 规则集合
      * @return 规则码集合
      */
-    List<RuleDefDTO> batchCreateRule(List<RuleDefDTO> list);
+    void batchCreateRule(List<RuleDefDTO> list);
 
 
     /**

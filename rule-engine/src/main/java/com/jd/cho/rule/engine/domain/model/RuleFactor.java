@@ -36,7 +36,7 @@ public class RuleFactor {
 
     /**
      * Database Column Remarks:
-     * 主键
+     * 因子主键
      */
     private Long id;
 

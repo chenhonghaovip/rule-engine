@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.jd.cho.rule.engine.common.base.CommonDict;
+import com.jd.cho.rule.engine.common.convert.RuleDefConvert;
 import com.jd.cho.rule.engine.common.convert.RuleFactorConvert;
 import com.jd.cho.rule.engine.common.enums.ConstantEnum;
 import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
@@ -13,6 +14,7 @@ import com.jd.cho.rule.engine.dal.DO.RuleFactorDO;
 import com.jd.cho.rule.engine.dal.DO.RuleFactorGroupDO;
 import com.jd.cho.rule.engine.dal.DO.RuleSceneDO;
 import com.jd.cho.rule.engine.dal.mapper.*;
+import com.jd.cho.rule.engine.domain.atomic.AtomicLoginUserComponent;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.domain.model.RuleDef;
 import com.jd.cho.rule.engine.domain.model.RuleFactor;
@@ -20,6 +22,7 @@ import com.jd.cho.rule.engine.service.dto.RuleDefDTO;
 import com.jd.cho.rule.engine.service.dto.RuleDefQueryDTO;
 import com.jd.cho.rule.engine.spi.RuleFactorExtendService;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -47,6 +50,9 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
 
     @Resource
     private RuleFactorGroupMapper ruleFactorGroupMapper;
+
+    @Resource
+    private AtomicLoginUserComponent atomicLoginUserComponent;
 
     @Override
     public List<RuleFactor> queryBySceneCode(String sceneCode) {
@@ -91,8 +97,17 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     }
 
     @Override
-    public List<RuleDefDTO> batchCreateRule(List<RuleDefDTO> list) {
-        return null;
+    public void batchCreateRule(List<RuleDefDTO> list) {
+        String loginUser = atomicLoginUserComponent.getLoginUser();
+        List<RuleDefDO> collect = list.stream().map(each -> {
+            String ruleCode = StringUtils.isNotBlank(each.getRuleCode()) ? each.getRuleCode() : UUID.randomUUID().toString();
+            each.setRuleCode(ruleCode);
+            RuleDefDO ruleDefDO = RuleDefConvert.INSTANCE.doToEntity(each);
+            ruleDefDO.setCreator(loginUser);
+            return ruleDefDO;
+        }).collect(Collectors.toList());
+
+        ruleDefMapper.insertMultiple(collect);
     }
 
     @Override

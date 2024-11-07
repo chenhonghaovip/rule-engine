@@ -1,5 +1,6 @@
 package com.jd.cho.rule.engine.service.impl;
 
+import com.google.common.collect.Lists;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.service.RuleDefService;
 import com.jd.cho.rule.engine.service.dto.RuleDefDTO;
@@ -21,6 +22,8 @@ public class RuleDefServiceImpl implements RuleDefService {
 
     @Override
     public String createRule(RuleDefDTO ruleDefDTO) {
+        ruleConfigGateway.batchCreateRule(Lists.newArrayList(ruleDefDTO));
+
         return null;
     }
 
