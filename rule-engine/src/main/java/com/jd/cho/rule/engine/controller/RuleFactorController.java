@@ -2,6 +2,7 @@ package com.jd.cho.rule.engine.controller;
 
 import com.jd.cho.rule.engine.controller.VO.req.RuleFactorReq;
 import com.jd.cho.rule.engine.service.RuleFactorService;
+import com.jd.cho.rule.engine.service.dto.RuleFactorQueryDTO;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -25,19 +26,29 @@ public class RuleFactorController {
      * @return list
      */
     @GetMapping(value = "/list")
-    public List<RuleFactorReq> list(@RequestParam("groupCode") String groupCode) {
+    public List<RuleFactorQueryDTO> list(@RequestParam("groupCode") String groupCode) {
 
         return null;
     }
 
 
+    /**
+     * 创建规则因子
+     *
+     * @param ruleFactorReq ruleFactorReq
+     */
     @PostMapping(value = "/create")
-    public void create(RuleFactorReq ruleFactorReq) {
+    public void create(@RequestBody RuleFactorReq ruleFactorReq) {
     }
 
 
+    /**
+     * 修改规则因子
+     *
+     * @param ruleFactorReq ruleFactorReq
+     */
     @PostMapping(value = "/modify")
-    public void modify(RuleFactorReq ruleFactorReq) {
+    public void modify(@RequestBody RuleFactorReq ruleFactorReq) {
     }
 
 }

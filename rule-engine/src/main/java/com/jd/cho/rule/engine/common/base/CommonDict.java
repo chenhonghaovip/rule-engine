@@ -9,7 +9,13 @@ import lombok.Data;
 @Data
 public class CommonDict {
 
+    /**
+     * code
+     */
     private String code;
 
+    /**
+     * 描述
+     */
     private Object desc;
 }
