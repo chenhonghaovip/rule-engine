@@ -1,4 +1,4 @@
-package com.jd.cho.rule.engine.domain.gateway.impl.service;
+package com.jd.cho.rule.engine.domain.service;
 
 import java.util.Map;
 

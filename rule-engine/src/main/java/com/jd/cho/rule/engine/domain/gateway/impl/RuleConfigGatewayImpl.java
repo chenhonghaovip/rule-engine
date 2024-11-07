@@ -18,7 +18,6 @@ import com.jd.cho.rule.engine.dal.mapper.*;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.domain.model.RuleDef;
 import com.jd.cho.rule.engine.domain.model.RuleFactor;
-
 import com.jd.cho.rule.engine.spi.RuleFactorExtendService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
