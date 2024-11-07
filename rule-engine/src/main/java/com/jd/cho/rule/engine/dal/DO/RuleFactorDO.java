@@ -13,94 +13,80 @@ import javax.annotation.Generated;
  * This class corresponds to the database table rule_factor
  */
 @Data
-@ToString(callSuper = true)
-@NoArgsConstructor
 @SuperBuilder
+@ToString(callSuper = true)
 @AllArgsConstructor
+@NoArgsConstructor
 public class RuleFactorDO extends BaseEntity {
     /**
      * Database Column Remarks:
-     *   主键
+     * 主键
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor.id")
     private Long id;
 
     /**
      * Database Column Remarks:
-     *   因子编码
+     * 因子编码
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor.factor_code")
     private String factorCode;
 
     /**
      * Database Column Remarks:
-     *   因子全编码
-     */
-    @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor.factor_full_code")
-    private String factorFullCode;
-
-    /**
-     * Database Column Remarks:
-     *   因子名称
+     * 因子名称
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor.factor_name")
     private String factorName;
 
     /**
      * Database Column Remarks:
-     *   分组编码
+     * 分组编码
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor.group_code")
     private String groupCode;
 
     /**
      * Database Column Remarks:
-     *   因子类型（日期、数值、集合、布尔、文本）
+     * 因子类型（日期、数值、集合、布尔、文本）
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor.factor_type")
     private String factorType;
 
     /**
      * Database Column Remarks:
-     *   常量类型（Input:输入，Enum:枚举，Script:脚本）
+     * 常量类型（Input:输入，Enum:枚举，Script:脚本）
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor.constant_type")
     private String constantType;
 
     /**
      * Database Column Remarks:
-     *   常量值
+     * 常量值
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor.constant_value")
     private String constantValue;
 
     /**
      * Database Column Remarks:
-     *   脚本参数
+     * 脚本参数
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor.factor_script_param")
     private String factorScriptParam;
 
     /**
      * Database Column Remarks:
-     *   备注
+     * 备注
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor.remark")
     private String remark;
 
     /**
      * Database Column Remarks:
-     *   状态（0:否，1:是）
+     * 状态（0:否，1:是）
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor.status")
     private Boolean status;
-
-    /**
-     * Database Column Remarks:
-     *   是否删除 1-否，0-是
-     */
-    @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor.yn")
-    private Boolean yn;
 
     /**
      * Database Column Remarks:
@@ -118,12 +104,6 @@ public class RuleFactorDO extends BaseEntity {
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_factor")
     public RuleFactorDO withFactorCode(String factorCode) {
         this.setFactorCode(factorCode);
-        return this;
-    }
-
-    @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_factor")
-    public RuleFactorDO withFactorFullCode(String factorFullCode) {
-        this.setFactorFullCode(factorFullCode);
         return this;
     }
 
@@ -172,12 +152,6 @@ public class RuleFactorDO extends BaseEntity {
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_factor")
     public RuleFactorDO withStatus(Boolean status) {
         this.setStatus(status);
-        return this;
-    }
-
-    @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_factor")
-    public RuleFactorDO withYn(Boolean yn) {
-        this.setYn(yn);
         return this;
     }
 

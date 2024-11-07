@@ -29,7 +29,7 @@ import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
 @Mapper
 public interface RuleFactorMapper {
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_factor")
-    BasicColumn[] selectList = BasicColumn.columnList(id, factorCode, factorFullCode, factorName, groupCode, factorType, constantType, constantValue, factorScriptParam, remark, status, yn, createTime, modifyTime, creator, modifier, tenant, factorScript);
+    BasicColumn[] selectList = BasicColumn.columnList(id, factorCode, factorName, groupCode, factorType, constantType, constantValue, factorScriptParam, remark, status, yn, createTime, modifyTime, creator, modifier, tenant, factorScript);
 
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_factor")
     @SelectProvider(type = SqlProviderAdapter.class, method = "select")
@@ -57,7 +57,6 @@ public interface RuleFactorMapper {
     @Results(id = "RuleFactorResult", value = {
             @Result(column = "id", property = "id", jdbcType = JdbcType.BIGINT, id = true),
             @Result(column = "factor_code", property = "factorCode", jdbcType = JdbcType.VARCHAR),
-            @Result(column = "factor_full_code", property = "factorFullCode", jdbcType = JdbcType.VARCHAR),
             @Result(column = "factor_name", property = "factorName", jdbcType = JdbcType.VARCHAR),
             @Result(column = "group_code", property = "groupCode", jdbcType = JdbcType.VARCHAR),
             @Result(column = "factor_type", property = "factorType", jdbcType = JdbcType.VARCHAR),
@@ -102,7 +101,6 @@ public interface RuleFactorMapper {
         return MyBatis3Utils.insert(this::insert, record, ruleFactor, c ->
                 c.map(id).toProperty("id")
                         .map(factorCode).toProperty("factorCode")
-                        .map(factorFullCode).toProperty("factorFullCode")
                         .map(factorName).toProperty("factorName")
                         .map(groupCode).toProperty("groupCode")
                         .map(factorType).toProperty("factorType")
@@ -126,7 +124,6 @@ public interface RuleFactorMapper {
         return MyBatis3Utils.insertMultiple(this::insertMultiple, records, ruleFactor, c ->
                 c.map(id).toProperty("id")
                         .map(factorCode).toProperty("factorCode")
-                        .map(factorFullCode).toProperty("factorFullCode")
                         .map(factorName).toProperty("factorName")
                         .map(groupCode).toProperty("groupCode")
                         .map(factorType).toProperty("factorType")
@@ -150,7 +147,6 @@ public interface RuleFactorMapper {
         return MyBatis3Utils.insert(this::insert, record, ruleFactor, c ->
                 c.map(id).toPropertyWhenPresent("id", record::getId)
                         .map(factorCode).toPropertyWhenPresent("factorCode", record::getFactorCode)
-                        .map(factorFullCode).toPropertyWhenPresent("factorFullCode", record::getFactorFullCode)
                         .map(factorName).toPropertyWhenPresent("factorName", record::getFactorName)
                         .map(groupCode).toPropertyWhenPresent("groupCode", record::getGroupCode)
                         .map(factorType).toPropertyWhenPresent("factorType", record::getFactorType)
@@ -200,7 +196,6 @@ public interface RuleFactorMapper {
     static UpdateDSL<UpdateModel> updateAllColumns(RuleFactorDO record, UpdateDSL<UpdateModel> dsl) {
         return dsl.set(id).equalTo(record::getId)
                 .set(factorCode).equalTo(record::getFactorCode)
-                .set(factorFullCode).equalTo(record::getFactorFullCode)
                 .set(factorName).equalTo(record::getFactorName)
                 .set(groupCode).equalTo(record::getGroupCode)
                 .set(factorType).equalTo(record::getFactorType)
@@ -222,7 +217,6 @@ public interface RuleFactorMapper {
     static UpdateDSL<UpdateModel> updateSelectiveColumns(RuleFactorDO record, UpdateDSL<UpdateModel> dsl) {
         return dsl.set(id).equalToWhenPresent(record::getId)
                 .set(factorCode).equalToWhenPresent(record::getFactorCode)
-                .set(factorFullCode).equalToWhenPresent(record::getFactorFullCode)
                 .set(factorName).equalToWhenPresent(record::getFactorName)
                 .set(groupCode).equalToWhenPresent(record::getGroupCode)
                 .set(factorType).equalToWhenPresent(record::getFactorType)
@@ -244,7 +238,6 @@ public interface RuleFactorMapper {
     default int updateByPrimaryKey(RuleFactorDO record) {
         return update(c ->
                 c.set(factorCode).equalTo(record::getFactorCode)
-                        .set(factorFullCode).equalTo(record::getFactorFullCode)
                         .set(factorName).equalTo(record::getFactorName)
                         .set(groupCode).equalTo(record::getGroupCode)
                         .set(factorType).equalTo(record::getFactorType)
@@ -268,7 +261,6 @@ public interface RuleFactorMapper {
     default int updateByPrimaryKeySelective(RuleFactorDO record) {
         return update(c ->
                 c.set(factorCode).equalToWhenPresent(record::getFactorCode)
-                        .set(factorFullCode).equalToWhenPresent(record::getFactorFullCode)
                         .set(factorName).equalToWhenPresent(record::getFactorName)
                         .set(groupCode).equalToWhenPresent(record::getGroupCode)
                         .set(factorType).equalToWhenPresent(record::getFactorType)

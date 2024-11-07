@@ -20,119 +20,112 @@ public final class RuleFactorDynamicSqlSupport {
 
     /**
      * Database Column Remarks:
-     * 因子编码
+     *   因子编码
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor.factor_code")
     public static final SqlColumn<String> factorCode = ruleFactor.factorCode;
 
     /**
      * Database Column Remarks:
-     * 因子全编码
-     */
-    @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor.factor_full_code")
-    public static final SqlColumn<String> factorFullCode = ruleFactor.factorFullCode;
-
-    /**
-     * Database Column Remarks:
-     * 因子名称
+     *   因子名称
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor.factor_name")
     public static final SqlColumn<String> factorName = ruleFactor.factorName;
 
     /**
      * Database Column Remarks:
-     * 分组编码
+     *   分组编码
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor.group_code")
     public static final SqlColumn<String> groupCode = ruleFactor.groupCode;
 
     /**
      * Database Column Remarks:
-     * 因子类型（日期、数值、集合、布尔、文本）
+     *   因子类型（日期、数值、集合、布尔、文本）
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor.factor_type")
     public static final SqlColumn<String> factorType = ruleFactor.factorType;
 
     /**
      * Database Column Remarks:
-     * 常量类型（Input:输入，Enum:枚举，Script:脚本）
+     *   常量类型（Input:输入，Enum:枚举，Script:脚本）
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor.constant_type")
     public static final SqlColumn<String> constantType = ruleFactor.constantType;
 
     /**
      * Database Column Remarks:
-     * 常量值
+     *   常量值
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor.constant_value")
     public static final SqlColumn<String> constantValue = ruleFactor.constantValue;
 
     /**
      * Database Column Remarks:
-     * 脚本参数
+     *   脚本参数
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor.factor_script_param")
     public static final SqlColumn<String> factorScriptParam = ruleFactor.factorScriptParam;
 
     /**
      * Database Column Remarks:
-     * 备注
+     *   备注
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor.remark")
     public static final SqlColumn<String> remark = ruleFactor.remark;
 
     /**
      * Database Column Remarks:
-     * 状态（0:否，1:是）
+     *   状态（0:否，1:是）
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor.status")
     public static final SqlColumn<Boolean> status = ruleFactor.status;
 
     /**
      * Database Column Remarks:
-     * 是否删除 1-否，0-是
+     *   是否删除 1-否，0-是
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor.yn")
     public static final SqlColumn<Boolean> yn = ruleFactor.yn;
 
     /**
      * Database Column Remarks:
-     * 创建时间
+     *   创建时间
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor.create_time")
     public static final SqlColumn<Date> createTime = ruleFactor.createTime;
 
     /**
      * Database Column Remarks:
-     * 更新时间
+     *   更新时间
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor.modify_time")
     public static final SqlColumn<Date> modifyTime = ruleFactor.modifyTime;
 
     /**
      * Database Column Remarks:
-     * 创建人
+     *   创建人
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor.creator")
     public static final SqlColumn<String> creator = ruleFactor.creator;
 
     /**
      * Database Column Remarks:
-     * 修改人
+     *   修改人
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor.modifier")
     public static final SqlColumn<String> modifier = ruleFactor.modifier;
 
     /**
      * Database Column Remarks:
-     * 租户
+     *   租户
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor.tenant")
     public static final SqlColumn<String> tenant = ruleFactor.tenant;
 
     /**
      * Database Column Remarks:
-     * 脚本代码
+     *   脚本代码
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor.factor_script")
     public static final SqlColumn<String> factorScript = ruleFactor.factorScript;
@@ -142,8 +135,6 @@ public final class RuleFactorDynamicSqlSupport {
         public final SqlColumn<Long> id = column("id", JDBCType.BIGINT);
 
         public final SqlColumn<String> factorCode = column("factor_code", JDBCType.VARCHAR);
-
-        public final SqlColumn<String> factorFullCode = column("factor_full_code", JDBCType.VARCHAR);
 
         public final SqlColumn<String> factorName = column("factor_name", JDBCType.VARCHAR);
 
