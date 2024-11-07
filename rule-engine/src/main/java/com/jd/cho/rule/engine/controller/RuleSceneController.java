@@ -27,19 +27,20 @@ public class RuleSceneController {
      * @return list
      */
     @GetMapping(value = "/list")
-    public List<RuleSceneReq> list(@RequestParam("sceneCode") String sceneCode) {
-        List<RuleFactorQueryDTO> ruleFactorQueryDTOS = ruleFactorService.queryBySceneCode(sceneCode);
+    public List<RuleSceneReq> list() {
+
         return null;
     }
 
     /**
-     * 获取规则场景列表信息
+     * 获取规则场景下的规则因子信息
      *
      * @param sceneCode 场景code
      * @return list
      */
     @GetMapping(value = "/factors")
     public List<RuleFactor> factors(@RequestParam("sceneCode") String sceneCode) {
+        List<RuleFactorQueryDTO> ruleFactorQueryDTOS = ruleFactorService.queryBySceneCode(sceneCode);
         return null;
     }
 
