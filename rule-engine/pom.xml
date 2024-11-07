@@ -97,7 +97,7 @@
                 <version>${mybatis.generator.maven.plugin.version}</version>
                 <configuration>
                     <!-- 配置文件 -->
-                    <configurationFile>src/main/resources/mybatis-generator.xml</configurationFile>
+                    <configurationFile>../start/src/main/resources/mybatis-generator.xml</configurationFile>
                     <!-- 允许移动和修改 -->
                     <verbose>true</verbose>
                     <overwrite>true</overwrite>

@@ -29,6 +29,7 @@
     <modules>
         <module>rule-engine</module>
         <module>rule-engine-starter</module>
+        <module>start</module>
     </modules>
 
     <dependencies>
@@ -46,6 +47,19 @@
 
     <dependencyManagement>
         <dependencies>
+
+            <!--Project modules-->
+            <dependency>
+                <groupId>com.jd.cho</groupId>
+                <artifactId>rule-engine</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jd.cho</groupId>
+                <artifactId>start</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>

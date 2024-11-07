@@ -67,6 +67,12 @@
             <version>1.2.83</version>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.jd.cho</groupId>
+            <artifactId>rule-engine</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <distributionManagement>
