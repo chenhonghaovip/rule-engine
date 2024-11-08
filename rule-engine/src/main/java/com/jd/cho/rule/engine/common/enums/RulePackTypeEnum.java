@@ -2,6 +2,8 @@ package com.jd.cho.rule.engine.common.enums;
 
 import lombok.Getter;
 
+import java.util.Arrays;
+
 /**
  * @author chenhonghao12
  * @version 1.0
@@ -31,5 +33,9 @@ public enum RulePackTypeEnum {
     RulePackTypeEnum(String code, String desc) {
         this.code = code;
         this.desc = desc;
+    }
+
+    public static RulePackTypeEnum getByCode(String code) {
+        return Arrays.stream(RulePackTypeEnum.values()).filter(each -> each.getCode().equals(code)).findFirst().orElse(null);
     }
 }

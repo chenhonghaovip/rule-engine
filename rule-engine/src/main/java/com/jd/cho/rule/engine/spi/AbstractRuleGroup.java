@@ -1,8 +1,6 @@
 package com.jd.cho.rule.engine.spi;
 
 
-import com.jd.cho.rule.engine.common.util.ApplicationUtils;
-import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.domain.model.RuleDef;
 
 import java.util.List;
@@ -13,21 +11,17 @@ import java.util.Map;
  * @version 1.0
  */
 public abstract class AbstractRuleGroup {
-    protected List<String> ruleCodes;
-
-    public AbstractRuleGroup(List<String> ruleCodes) {
-        this.ruleCodes = ruleCodes;
-    }
-
-    public abstract boolean execute(Map<String, Object> context);
 
     /**
-     * 获取规则定义信息
+     * 执行规则组
      *
-     * @return 规则定义信息
+     * @param list    规则定义信息
+     * @param context 规则上下文
+     * @return 是否执行成功
      */
-    protected List<RuleDef> getRuleDefEntities() {
-        RuleConfigGateway ruleDomainService = ApplicationUtils.getBeans(RuleConfigGateway.class);
-        return ruleDomainService.ruleDefQuery(ruleCodes);
-    }
+    public abstract boolean execute(List<RuleDef> list, Map<String, Object> context);
+
+
+    public abstract String getCode();
+
 }

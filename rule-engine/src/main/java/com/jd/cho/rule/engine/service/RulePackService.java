@@ -1,6 +1,5 @@
 package com.jd.cho.rule.engine.service;
 
-import com.jd.cho.rule.engine.service.dto.RuleDefQueryDTO;
 import com.jd.cho.rule.engine.service.dto.RulePackDTO;
 
 import java.util.List;
@@ -44,7 +43,7 @@ public interface RulePackService {
      * @param rulePackCode ruleCode
      * @return 规则列表
      */
-    List<RuleDefQueryDTO> queryByRuleCodes(String rulePackCode);
+    List<RulePackDTO> queryByRuleCodes(String rulePackCode);
 
 
     /**

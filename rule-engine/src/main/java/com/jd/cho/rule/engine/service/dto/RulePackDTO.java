@@ -14,6 +14,8 @@ import java.util.List;
 @Data
 public class RulePackDTO implements Serializable {
 
+    private Long id;
+
     @JSONField(name = "rulePackName")
     private String rulePackName;
     @JSONField(name = "rulePackCode")

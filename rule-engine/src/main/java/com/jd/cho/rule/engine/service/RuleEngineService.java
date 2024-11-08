@@ -1,8 +1,6 @@
 package com.jd.cho.rule.engine.service;
 
 
-import com.jd.cho.rule.engine.spi.AbstractRuleGroup;
-
 import java.util.Map;
 
 /**
@@ -23,13 +21,13 @@ public interface RuleEngineService {
     boolean execute(String ruleCode, Map<String, Object> context);
 
 
-    /**
-     * 执行规则引擎协议
-     *
-     * @param abstractRuleGroup 规则组
-     * @param context           上下文
-     * @return 执行结果
-     */
-    boolean execute(AbstractRuleGroup abstractRuleGroup, Map<String, Object> context);
+//    /**
+//     * 执行规则引擎协议
+//     *
+//     * @param abstractRuleGroup 规则组
+//     * @param context           上下文
+//     * @return 执行结果
+//     */
+//    boolean execute(AbstractRuleGroup abstractRuleGroup, Map<String, Object> context);
 
 }

@@ -13,18 +13,19 @@ import java.util.Map;
  * @version 1.0
  */
 public class PriorityOrderSeqRuleGroup extends AbstractRuleGroup {
-    public PriorityOrderSeqRuleGroup(List<String> ruleCodes) {
-        super(ruleCodes);
-    }
 
     @Override
-    public boolean execute(Map<String, Object> context) {
+    public boolean execute(List<RuleDef> list, Map<String, Object> context) {
         RuleEngineGateway ruleEngineGateway = ApplicationUtils.getBeans(RuleEngineGateway.class);
-        List<RuleDef> ruleDefEntities = getRuleDefEntities();
-        for (RuleDef ruleDef : ruleDefEntities) {
+        for (RuleDef ruleDef : list) {
             ruleEngineGateway.execute(ruleDef, context);
         }
         return true;
     }
 
+
+    @Override
+    public String getCode() {
+        return "2";
+    }
 }

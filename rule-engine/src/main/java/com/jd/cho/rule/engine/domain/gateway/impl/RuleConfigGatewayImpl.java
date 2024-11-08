@@ -6,24 +6,23 @@ import com.google.common.collect.Maps;
 import com.jd.cho.rule.engine.common.base.CommonDict;
 import com.jd.cho.rule.engine.common.convert.RuleDefConvert;
 import com.jd.cho.rule.engine.common.convert.RuleFactorConvert;
+import com.jd.cho.rule.engine.common.convert.RulePackConvert;
 import com.jd.cho.rule.engine.common.enums.ConstantEnum;
 import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
+import com.jd.cho.rule.engine.common.enums.RulePackTypeEnum;
 import com.jd.cho.rule.engine.common.util.QlExpressUtil;
-import com.jd.cho.rule.engine.dal.DO.RuleDefDO;
-import com.jd.cho.rule.engine.dal.DO.RuleFactorDO;
-import com.jd.cho.rule.engine.dal.DO.RuleFactorGroupDO;
-import com.jd.cho.rule.engine.dal.DO.RuleSceneDO;
+import com.jd.cho.rule.engine.dal.DO.*;
 import com.jd.cho.rule.engine.dal.mapper.*;
 import com.jd.cho.rule.engine.domain.atomic.AtomicLoginUserComponent;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
-import com.jd.cho.rule.engine.domain.model.RuleDef;
-import com.jd.cho.rule.engine.domain.model.RuleFactor;
+import com.jd.cho.rule.engine.domain.model.*;
 import com.jd.cho.rule.engine.service.dto.RuleDefDTO;
-import com.jd.cho.rule.engine.service.dto.RuleDefQueryDTO;
+import com.jd.cho.rule.engine.service.dto.RulePackDTO;
 import com.jd.cho.rule.engine.spi.RuleFactorExtendService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -41,6 +40,9 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
 
     @Resource
     private RuleDefMapper ruleDefMapper;
+
+    @Resource
+    private RulePackMapper rulePackMapper;
 
     @Resource
     private RuleSceneMapper ruleSceneMapper;
@@ -87,16 +89,78 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     }
 
     @Override
-    public List<RuleDef> ruleDefQuery(List<String> ruleCodes) {
-        List<RuleDefDO> ruleDefs = ruleDefMapper.select(s -> s.where(RuleDefDynamicSqlSupport.ruleCode, isIn(ruleCodes))
-                .and(RuleDefDynamicSqlSupport.yn, isEqualTo(true))
-                .and(RuleDefDynamicSqlSupport.latest, isEqualTo(1))
-                .orderBy(RuleDefDynamicSqlSupport.priority.descending())
-        );
+    public RulePack rulePackInfo(String rulePackCode) {
+        Optional<RulePackDO> optionalRulePackDO = rulePackMapper.selectOne(s -> s.where(RulePackDynamicSqlSupport.rulePackCode, isEqualTo(rulePackCode))
+                .and(RulePackDynamicSqlSupport.yn, isEqualTo(true))
+                .and(RulePackDynamicSqlSupport.latest, isEqualTo(1)));
+        if (optionalRulePackDO.isPresent()) {
+            RulePackDO rulePackDO = optionalRulePackDO.get();
+            List<Long> ids = Arrays.stream(rulePackDO.getRuleIds().split(",")).map(Long::valueOf).collect(Collectors.toList());
+            List<RuleDefDO> ruleDefs = ruleDefMapper.select(s -> s.where(RuleDefDynamicSqlSupport.id, isIn(ids)));
+            List<RuleDef> rules = ruleDefs.stream().map(each -> {
+                RuleDef rulesBean = new RuleDef();
+                rulesBean.setRuleCondition(JSON.parseObject(each.getRuleCondition(), RuleCondition.class));
+                rulesBean.setRuleActions(JSON.parseArray(each.getRuleAction(), RuleAction.class));
+                rulesBean.setPriority(each.getPriority());
+                return rulesBean;
+            }).collect(Collectors.toList());
+
+            RulePack rulePack = RulePackConvert.INSTANCE.doToEntity(rulePackDO);
+            rulePack.setRulePackType(RulePackTypeEnum.getByCode(rulePackDO.getRulePackType()));
+            rulePack.setRules(rules);
+            return rulePack;
+        }
         return null;
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
+    public String createRule(RulePackDTO rulePackDTO) {
+        if (Objects.nonNull(rulePackDTO)) {
+            String loginUser = atomicLoginUserComponent.getLoginUser();
+            String rulePackCode = StringUtils.isNotBlank(rulePackDTO.getRulePackCode()) ? rulePackDTO.getRulePackCode() : UUID.randomUUID().toString();
+            rulePackDTO.setRulePackCode(rulePackCode);
+
+            List<RuleDefDO> ruleDefs = rulePackDTO.getRules().stream().map(each -> new RuleDefDO().withRuleAction(JSON.toJSONString(each.getRuleAction())).withRuleAction(JSON.toJSONString(each.getRuleCondition())).withPriority(each.getPriority())).collect(Collectors.toList());
+            ruleDefMapper.insertMultiple(ruleDefs);
+
+            String ruleIds = ruleDefs.stream().map(each -> String.valueOf(each.getId())).collect(Collectors.joining(","));
+            RulePackDO rulePackDO = RulePackConvert.INSTANCE.doToDO(rulePackDTO);
+            rulePackDO.setId(null);
+            rulePackDO.setCreator(loginUser);
+            rulePackDO.setRuleIds(ruleIds);
+            rulePackMapper.insert(rulePackDO);
+            return rulePackCode;
+        }
+
+        return null;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void batchUpdateRule(RulePackDTO rulePackDTO) {
+        String loginUser = atomicLoginUserComponent.getLoginUser();
+        if (Objects.nonNull(rulePackDTO)) {
+            // 修改旧版本信息
+            Long id = rulePackDTO.getId();
+            Optional<RulePackDO> optionalRulePackDO = rulePackMapper.selectByPrimaryKey(id);
+            optionalRulePackDO.ifPresent(each -> {
+
+                rulePackMapper.update(s -> s.set(RulePackDynamicSqlSupport.modifyTime).equalTo(new Date())
+                        .set(RulePackDynamicSqlSupport.modifier).equalTo(loginUser)
+                        .set(RulePackDynamicSqlSupport.latest).equalTo(0).where(RulePackDynamicSqlSupport.id, isEqualTo(id)));
+
+                int version = optionalRulePackDO.get().getVersion() + 1;
+                this.createRule(rulePackDTO);
+            });
+
+
+        }
+
+
+    }
+
+
     public void batchCreateRule(List<RuleDefDTO> list) {
         String loginUser = atomicLoginUserComponent.getLoginUser();
         List<RuleDefDO> collect = list.stream().map(each -> {
@@ -107,21 +171,6 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
             return ruleDefDO;
         }).collect(Collectors.toList());
         ruleDefMapper.insertMultiple(collect);
-    }
-
-    @Override
-    public void batchUpdateRule(List<RuleDefDTO> list) {
-
-    }
-
-    @Override
-    public List<RuleDefQueryDTO> queryByRuleCodes(List<String> ruleCodes) {
-        return null;
-    }
-
-    @Override
-    public List<RuleDefQueryDTO> queryByRuleCodes(String ruleCode) {
-        return null;
     }
 
     @Override

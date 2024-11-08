@@ -14,20 +14,23 @@ import java.util.Map;
  * @version 1.0
  */
 public class PriorityOrderMatchRuleGroup extends AbstractRuleGroup {
-    public PriorityOrderMatchRuleGroup(List<String> ruleCodes) {
-        super(ruleCodes);
-    }
 
     @Override
-    public boolean execute(Map<String, Object> context) {
+    public boolean execute(List<RuleDef> list, Map<String, Object> context) {
         RuleEngineGateway ruleEngineGateway = ApplicationUtils.getBeans(RuleEngineGateway.class);
-        List<RuleDef> ruleDefEntities = getRuleDefEntities();
-        for (RuleDef ruleDef : ruleDefEntities) {
+
+        for (RuleDef ruleDef : list) {
             if (ruleEngineGateway.execute(ruleDef, context)) {
                 return true;
             }
         }
         return false;
+    }
+
+
+    @Override
+    public String getCode() {
+        return "1";
     }
 
 

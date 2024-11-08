@@ -1,9 +1,8 @@
 package com.jd.cho.rule.engine.domain.gateway;
 
-import com.jd.cho.rule.engine.domain.model.RuleDef;
 import com.jd.cho.rule.engine.domain.model.RuleFactor;
-import com.jd.cho.rule.engine.service.dto.RuleDefDTO;
-import com.jd.cho.rule.engine.service.dto.RuleDefQueryDTO;
+import com.jd.cho.rule.engine.domain.model.RulePack;
+import com.jd.cho.rule.engine.service.dto.RulePackDTO;
 
 import java.util.List;
 
@@ -22,43 +21,26 @@ public interface RuleConfigGateway {
     List<RuleFactor> queryBySceneCode(String sceneCode);
 
     /**
-     * 查询规则定义
+     * 查询规则包内规则定义
      *
-     * @param ruleCodes 规则编码
+     * @param rulePackCode 规则包编码
      * @return 规则定义信息
      */
-    List<RuleDef> ruleDefQuery(List<String> ruleCodes);
+    RulePack rulePackInfo(String rulePackCode);
 
     /**
-     * 批量插入规则信息
+     * 批量插入规则包信息
      *
-     * @param list 规则集合
-     * @return 规则码集合
+     * @param rulePackDTO 规则集合
      */
-    void batchCreateRule(List<RuleDefDTO> list);
+    String createRule(RulePackDTO rulePackDTO);
 
     /**
-     * 批量更新规则信息
+     * 更新规则包信息
      *
-     * @param list 规则集合
+     * @param rulePackDTO 规则集合
      */
-    void batchUpdateRule(List<RuleDefDTO> list);
-
-    /**
-     * 查询全部最新的规则
-     *
-     * @param ruleCodes 规则code集合
-     * @return 规则列表
-     */
-    List<RuleDefQueryDTO> queryByRuleCodes(List<String> ruleCodes);
-
-    /**
-     * 查询当前规则的历史信息
-     *
-     * @param ruleCode ruleCode
-     * @return 规则列表
-     */
-    List<RuleDefQueryDTO> queryByRuleCodes(String ruleCode);
+    void batchUpdateRule(RulePackDTO rulePackDTO);
 
 
     /**

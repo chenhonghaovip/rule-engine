@@ -1,18 +1,17 @@
 package com.jd.cho.rule.engine.domain.gateway.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
-import com.jd.cho.rule.engine.common.convert.RuleDefConvert;
 import com.jd.cho.rule.engine.common.dict.FactDict;
 import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
 import com.jd.cho.rule.engine.common.util.QlExpressUtil;
-import com.jd.cho.rule.engine.dal.DO.RuleDefDO;
-import com.jd.cho.rule.engine.dal.mapper.RuleDefDynamicSqlSupport;
-import com.jd.cho.rule.engine.dal.mapper.RuleDefMapper;
+import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.domain.gateway.RuleEngineGateway;
 import com.jd.cho.rule.engine.domain.model.RuleAction;
 import com.jd.cho.rule.engine.domain.model.RuleCondition;
 import com.jd.cho.rule.engine.domain.model.RuleDef;
+import com.jd.cho.rule.engine.domain.model.RulePack;
+import com.jd.cho.rule.engine.group.RuleGroupRunStrategy;
+import com.jd.cho.rule.engine.spi.AbstractRuleGroup;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -22,9 +21,6 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
-
-import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
 
 /**
  * @author chenhonghao12
@@ -36,35 +32,35 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
     public static final String ORIGINAL_VALUE = "originalValue";
 
     @Resource
-    private RuleDefMapper ruleDefMapper;
+    private RuleConfigGateway ruleConfigGateway;
 
 
     @Override
     public boolean execute(RuleDef ruleDef, Map<String, Object> context) {
-        RuleCondition ruleConditionBean = JSON.parseObject(JSON.toJSONString(ruleDef.getRuleCondition()), RuleCondition.class);
         Map<String, Object> rightValues = Maps.newHashMap();
         Map<String, String> fieldMapping = Maps.newHashMap();
-        String statement = this.buildWhenExpression(ruleConditionBean, rightValues, fieldMapping);
+        String statement = this.buildWhenExpression(ruleDef.getRuleCondition(), rightValues, fieldMapping);
         if (this.executeCondition(statement, context, rightValues, fieldMapping)) {
-            this.executeAction(JSON.toJSONString(ruleDef.getRuleAction()), context);
+            this.executeAction(ruleDef.getRuleActions(), context);
             return true;
         }
         return false;
     }
 
     @Override
-    public boolean execute(String ruleCode, Map<String, Object> context) {
+    public boolean execute(RulePack rulePack, Map<String, Object> context) {
+        List<RuleDef> rules = rulePack.getRules();
+        AbstractRuleGroup ruleGroup = RuleGroupRunStrategy.getRuleGroup(rulePack.getRuleArrangeStrategy());
+        return ruleGroup.execute(rules, context);
+    }
 
-
-        Optional<RuleDefDO> optional = ruleDefMapper.selectOne(s -> s.where(RuleDefDynamicSqlSupport.ruleCode, isEqualTo(ruleCode))
-                .and(RuleDefDynamicSqlSupport.yn, isEqualTo(true))
-                .and(RuleDefDynamicSqlSupport.latest, isEqualTo(1))
-        );
-        if (!optional.isPresent()) {
-            throw new RuntimeException("规则不存在" + ruleCode);
+    @Override
+    public boolean execute(String rulePackCode, Map<String, Object> context) {
+        RulePack rulePack = ruleConfigGateway.rulePackInfo(rulePackCode);
+        if (Objects.isNull(rulePack)) {
+            return false;
         }
-        RuleDef ruleDef = RuleDefConvert.INSTANCE.doToEntity(optional.get());
-        return this.execute(ruleDef, context);
+        return this.execute(rulePack, context);
     }
 
 
@@ -162,8 +158,8 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
         return String.format("%s_%s", entityName, fieldName);
     }
 
-    public void executeAction(String actionExpression, Map<String, Object> context) {
-        List<RuleAction> ruleActionBeans = JSON.parseArray(actionExpression, RuleAction.class);
+    public void executeAction(List<RuleAction> ruleActionBeans, Map<String, Object> context) {
+//        List<RuleAction> ruleActionBeans = JSON.parseArray(actionExpression, RuleAction.class);
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Map maps = new HashMap();");

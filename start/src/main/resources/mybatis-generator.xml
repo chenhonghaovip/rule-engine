@@ -70,7 +70,11 @@
         </javaClientGenerator>
 
         <!-- 数据库表 -->
-        <table tableName="rule_factor" modelType="conditional">
+        <!--        <table tableName="rule_factor" modelType="conditional">-->
+        <!--        </table>-->
+        <table tableName="rule_def" modelType="conditional">
+        </table>
+        <table tableName="rule_pack" modelType="conditional">
         </table>
 
 

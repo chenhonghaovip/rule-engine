@@ -2,6 +2,8 @@ package com.jd.cho.rule.engine.domain.model;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @author chenhonghao12
  * @version 1.0
@@ -14,34 +16,9 @@ public class RuleDef {
     private Long id;
 
     /**
-     * 规则编码
-     */
-    private String ruleCode;
-
-    /**
-     * 规则名称
-     */
-    private String ruleName;
-
-    /**
      * 规则条件
      */
-    private String ruleCondition;
-
-    /**
-     * 规则行为
-     */
-    private String ruleAction;
-
-    /**
-     * 版本号
-     */
-    private Integer version;
-
-    /**
-     * 是否最新版本（0:否，1:是）
-     */
-    private Integer latest;
+    private RuleCondition ruleCondition;
 
     /**
      * 优先级
@@ -49,13 +26,9 @@ public class RuleDef {
     private Integer priority;
 
     /**
-     * 备注
+     * 规则动作
      */
-    private String remark;
+    private List<RuleAction> ruleActions;
 
-    /**
-     * 状态（0:否，1:是）
-     */
-    private Integer status;
 
 }

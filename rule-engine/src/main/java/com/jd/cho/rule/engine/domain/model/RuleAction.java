@@ -8,7 +8,13 @@ import lombok.Data;
  */
 @Data
 public class RuleAction {
+    /**
+     * 字段code
+     */
     private String fieldCode;
 
+    /**
+     * 字段值
+     */
     private Object values;
 }
