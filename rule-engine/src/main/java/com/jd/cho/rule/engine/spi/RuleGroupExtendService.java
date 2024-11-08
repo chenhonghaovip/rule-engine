@@ -10,7 +10,21 @@ import java.util.Map;
  * @author chenhonghao12
  * @version 1.0
  */
-public abstract class AbstractRuleGroup {
+public interface RuleGroupExtendService {
+
+    /**
+     * 获取规则组编码
+     *
+     * @return 规则组编码
+     */
+    String getCode();
+
+    /**
+     * 获取规则组编码
+     *
+     * @return 规则组编码
+     */
+    String getName();
 
     /**
      * 执行规则组
@@ -19,9 +33,7 @@ public abstract class AbstractRuleGroup {
      * @param context 规则上下文
      * @return 是否执行成功
      */
-    public abstract boolean execute(List<RuleDef> list, Map<String, Object> context);
+    boolean execute(List<RuleDef> list, Map<String, Object> context);
 
-
-    public abstract String getCode();
 
 }

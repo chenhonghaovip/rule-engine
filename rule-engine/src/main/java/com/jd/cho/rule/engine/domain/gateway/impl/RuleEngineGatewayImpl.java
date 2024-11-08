@@ -11,7 +11,7 @@ import com.jd.cho.rule.engine.domain.model.RuleCondition;
 import com.jd.cho.rule.engine.domain.model.RuleDef;
 import com.jd.cho.rule.engine.domain.model.RulePack;
 import com.jd.cho.rule.engine.group.RuleGroupRunStrategy;
-import com.jd.cho.rule.engine.spi.AbstractRuleGroup;
+import com.jd.cho.rule.engine.spi.RuleGroupExtendService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -50,7 +50,7 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
     @Override
     public boolean execute(RulePack rulePack, Map<String, Object> context) {
         List<RuleDef> rules = rulePack.getRules();
-        AbstractRuleGroup ruleGroup = RuleGroupRunStrategy.getRuleGroup(rulePack.getRuleArrangeStrategy());
+        RuleGroupExtendService ruleGroup = RuleGroupRunStrategy.getRuleGroup(rulePack.getRuleArrangeStrategy());
         return ruleGroup.execute(rules, context);
     }
 
