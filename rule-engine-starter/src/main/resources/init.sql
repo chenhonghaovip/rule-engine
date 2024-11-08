@@ -90,7 +90,6 @@ create table rule_def
 ) engine = innodb
   default charset = utf8mb4 comment '规则定义表';
 
-
 create table rule_pack
 (
     id                    bigint auto_increment comment '主键' primary key,
@@ -99,6 +98,7 @@ create table rule_pack
     rule_pack_type        varchar(20)                        not null comment '规则包类型',
     rule_arrange_strategy varchar(200) null comment '规则调度策略',
     rule_ids              varchar(300)                       not null comment '规则ID集合',
+    pack_params           longtext null comment '规则包入参',
     version               int      default 1                 not null comment '版本号',
     latest                int      default 1                 not null comment '是否最新版本（0:否，1:是）',
     remark                varchar(200) null comment '备注',

@@ -3,6 +3,7 @@ package com.jd.cho.rule.engine.common.enums;
 import lombok.Getter;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -46,6 +47,8 @@ public enum FactorTypeEnum {
         this.code = code;
         this.desc = desc;
     }
+
+    public static final List<FactorTypeEnum> FACTOR_TYPE_ENUMS = Arrays.asList(FactorTypeEnum.values());
 
     public static FactorTypeEnum getOperationByOperator(String operator) {
         return Arrays.stream(FactorTypeEnum.values()).filter(each -> Objects.equals(each.getCode(), operator)).findFirst().orElse(null);

@@ -2,6 +2,9 @@ package com.jd.cho.rule.engine.common.enums;
 
 import lombok.Getter;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @author chenhonghao12
  * @version 1.0
@@ -33,4 +36,6 @@ public enum RuleArrangeStrategyEnum {
         this.code = code;
         this.desc = desc;
     }
+
+    public static final List<RuleArrangeStrategyEnum> RULE_ARRANGE_STRATEGY_ENUMS = Arrays.asList(RuleArrangeStrategyEnum.values());
 }

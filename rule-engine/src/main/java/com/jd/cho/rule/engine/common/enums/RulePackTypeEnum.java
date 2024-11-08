@@ -3,6 +3,7 @@ package com.jd.cho.rule.engine.common.enums;
 import lombok.Getter;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author chenhonghao12
@@ -34,6 +35,8 @@ public enum RulePackTypeEnum {
         this.code = code;
         this.desc = desc;
     }
+
+    public static final List<RulePackTypeEnum> RULE_PACK_TYPE_ENUMS = Arrays.asList(RulePackTypeEnum.values());
 
     public static RulePackTypeEnum getByCode(String code) {
         return Arrays.stream(RulePackTypeEnum.values()).filter(each -> each.getCode().equals(code)).findFirst().orElse(null);
