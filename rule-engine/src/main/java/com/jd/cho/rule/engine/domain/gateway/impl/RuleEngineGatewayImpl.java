@@ -54,6 +54,8 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
 
     @Override
     public boolean execute(String ruleCode, Map<String, Object> context) {
+
+
         Optional<RuleDefDO> optional = ruleDefMapper.selectOne(s -> s.where(RuleDefDynamicSqlSupport.ruleCode, isEqualTo(ruleCode))
                 .and(RuleDefDynamicSqlSupport.yn, isEqualTo(true))
                 .and(RuleDefDynamicSqlSupport.latest, isEqualTo(1))
