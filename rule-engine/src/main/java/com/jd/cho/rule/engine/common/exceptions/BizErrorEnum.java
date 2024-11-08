@@ -11,7 +11,13 @@ public enum BizErrorEnum implements CommonException {
 
     NO_PERMISSION(-1, "无权限操作"),
     SYSTEM_ERROR(-2, "系统异常"),
-    DOES_NOT_EXIST(-3, "数据不存在");
+    DOES_NOT_EXIST(-3, "数据不存在"),
+
+
+    DATA_HAS_CHANGE(-5, "数据已经被修改"),
+
+
+    ;
 
     /**
      * 错误码

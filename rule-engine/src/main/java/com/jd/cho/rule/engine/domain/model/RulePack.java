@@ -35,6 +35,11 @@ public class RulePack {
     private String ruleArrangeStrategy;
 
     /**
+     * 规则包参数
+     */
+    private String packParams;
+
+    /**
      * 规则包描述
      */
     private String remark;

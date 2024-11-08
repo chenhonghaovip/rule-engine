@@ -5,6 +5,8 @@ import com.jd.cho.rule.engine.domain.model.RulePack;
 import com.jd.cho.rule.engine.service.dto.RulePackDTO;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * @author chenhonghao12
@@ -33,22 +35,38 @@ public interface RuleConfigGateway {
      *
      * @param rulePackDTO 规则集合
      */
-    String createRule(RulePackDTO rulePackDTO);
+    String createRulePack(RulePackDTO rulePackDTO);
 
     /**
      * 更新规则包信息
      *
      * @param rulePackDTO 规则集合
      */
-    void batchUpdateRule(RulePackDTO rulePackDTO);
+    void updateRulePack(RulePackDTO rulePackDTO);
 
 
     /**
-     * 查询这些规则中需要的参数
+     * 查询规则包中规则计算所需参数
      *
-     * @param ruleCodes 规则code
+     * @param rulePackCode rulePackCode
      * @return 参数集合
      */
-    List<String> queryParams(List<String> ruleCodes);
+    Map<String, List<String>> queryFactorParamsWithMap(String rulePackCode);
 
+
+    /**
+     * 查询规则包中规则计算所需参数
+     *
+     * @param rulePackCode rulePackCode
+     * @return 参数集合
+     */
+    Set<String> queryFactorParams(String rulePackCode);
+
+    /**
+     * 查询规则包中涉及的因子
+     *
+     * @param rulePackCode rulePackCode
+     * @return 参数集合
+     */
+    Set<String> queryFactors(String rulePackCode);
 }

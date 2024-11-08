@@ -1,6 +1,9 @@
 package com.jd.cho.rule.engine.domain.gateway.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.jd.cho.rule.engine.common.dict.FactDict;
 import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
 import com.jd.cho.rule.engine.common.util.QlExpressUtil;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -137,16 +141,25 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
         return relation;
     }
 
+    /**
+     * 构建QLExpress脚本
+     *
+     * @param operator    操作符
+     * @param fieldName   字段名称
+     * @param value       字段值
+     * @param rightValues 右侧参数
+     * @return 构建好的表达式
+     */
     public String buildOperatorExpress(String operator, String fieldName, Object value, Map<String, Object> rightValues) {
         ExpressOperationEnum operation = ExpressOperationEnum.getOperationByOperator(operator);
         if (Objects.isNull(operation)) {
             return FactDict.SYMBOL_EMPTY;
         }
         if (Objects.nonNull(value)) {
-            rightValues.put(buildValueExpress(ORIGINAL_VALUE, fieldName), value);
+            rightValues.put(buildValueExpress(fieldName), value);
         }
         String expression = operation.getExpression();
-        return String.format(expression, fieldName, buildValueExpress(ORIGINAL_VALUE, fieldName));
+        return String.format(expression, fieldName, buildValueExpress(fieldName));
     }
 
     /**
@@ -154,13 +167,17 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
      *
      * @param fieldName 字段名称
      */
-    private static String buildValueExpress(String entityName, String fieldName) {
-        return String.format("%s_%s", entityName, fieldName);
+    private static String buildValueExpress(String fieldName) {
+        return String.format("%s_%s", ORIGINAL_VALUE, fieldName);
     }
 
+    /**
+     * 执行动作
+     *
+     * @param ruleActionBeans 动作集合
+     * @param context         上下文
+     */
     public void executeAction(List<RuleAction> ruleActionBeans, Map<String, Object> context) {
-//        List<RuleAction> ruleActionBeans = JSON.parseArray(actionExpression, RuleAction.class);
-
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Map maps = new HashMap();");
 
@@ -174,16 +191,18 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
         stringBuilder.append("return maps;");
         Object execute = QlExpressUtil.execute(stringBuilder.toString(), context);
         if (Objects.nonNull(execute)) {
-            Map<String, Object> executeMaps = (Map<String, Object>) execute;
+            Type type = new TypeToken<Map<String, Object>>() {
+            }.getType();
+            Map<String, Object> executeMaps = new Gson().fromJson(JSON.toJSONString(execute), type);
             Object result = context.get(FactDict.RESULT_ALIAS);
-            Map result1;
+            Map<String, Object> contextResult;
             if (Objects.nonNull(result)) {
-                result1 = (Map) result;
+                contextResult = new Gson().fromJson(JSON.toJSONString(result), type);
             } else {
-                result1 = Maps.newHashMap();
-                context.put(FactDict.RESULT_ALIAS, result1);
+                contextResult = Maps.newHashMap();
+                context.put(FactDict.RESULT_ALIAS, contextResult);
             }
-            result1.putAll(executeMaps);
+            contextResult.putAll(executeMaps);
         }
     }
 
