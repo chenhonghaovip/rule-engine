@@ -42,15 +42,15 @@ public class RuleFactor {
 
     /**
      * Database Column Remarks:
-     * 因子编码
+     * 增强后因子编码
      */
     private String factorCode;
 
     /**
      * Database Column Remarks:
-     * 因子全编码
+     * 原始因子编码
      */
-    private String factorFullCode;
+    private String originalFactorCode;
 
     /**
      * Database Column Remarks:

@@ -23,12 +23,12 @@ public class RuleFactorController {
     /**
      * 获取规则因子列表
      *
+     * @param sceneCode 场景code
      * @return list
      */
     @GetMapping(value = "/list")
-    public List<RuleFactorQueryDTO> list(@RequestParam("groupCode") String groupCode) {
-
-        return null;
+    public List<RuleFactorQueryDTO> list(@RequestParam("sceneCode") String sceneCode) {
+        return ruleFactorService.queryBySceneCode(sceneCode);
     }
 
 

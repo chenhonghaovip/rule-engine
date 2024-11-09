@@ -5,7 +5,6 @@ import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
@@ -14,7 +13,6 @@ import java.util.List;
  * @author chenhonghao12
  */
 @Data
-@ToString(callSuper = true)
 @NoArgsConstructor
 @SuperBuilder
 @AllArgsConstructor

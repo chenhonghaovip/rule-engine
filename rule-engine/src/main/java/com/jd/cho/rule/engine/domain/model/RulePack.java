@@ -1,7 +1,9 @@
 package com.jd.cho.rule.engine.domain.model;
 
 import com.jd.cho.rule.engine.common.enums.RulePackTypeEnum;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
@@ -12,6 +14,8 @@ import java.util.List;
  */
 @Data
 @SuperBuilder
+@AllArgsConstructor
+@NoArgsConstructor
 public class RulePack {
 
     /**

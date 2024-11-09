@@ -1,10 +1,11 @@
 package com.jd.cho.rule.engine.controller;
 
 import com.jd.cho.rule.engine.controller.VO.req.RuleSceneReq;
-import com.jd.cho.rule.engine.domain.model.RuleFactor;
 import com.jd.cho.rule.engine.service.RuleFactorService;
-import com.jd.cho.rule.engine.service.dto.RuleFactorQueryDTO;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -32,17 +33,6 @@ public class RuleSceneController {
         return null;
     }
 
-    /**
-     * 获取规则场景下的规则因子信息
-     *
-     * @param sceneCode 场景code
-     * @return list
-     */
-    @GetMapping(value = "/factors")
-    public List<RuleFactor> factors(@RequestParam("sceneCode") String sceneCode) {
-        List<RuleFactorQueryDTO> ruleFactorQueryDTOS = ruleFactorService.queryBySceneCode(sceneCode);
-        return null;
-    }
 
     /**
      * 规则场景创建

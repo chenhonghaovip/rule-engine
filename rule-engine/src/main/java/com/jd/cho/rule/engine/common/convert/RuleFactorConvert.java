@@ -3,21 +3,21 @@ package com.jd.cho.rule.engine.common.convert;
 import com.jd.cho.rule.engine.dal.DO.RuleFactorDO;
 import com.jd.cho.rule.engine.domain.model.RuleFactor;
 import com.jd.cho.rule.engine.service.dto.RuleFactorQueryDTO;
-import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 /**
  * @author chenhonghao12
  */
-@Mapper
+@Mapper(componentModel = "spring")
 public interface RuleFactorConvert {
     RuleFactorConvert INSTANCE = Mappers.getMapper(RuleFactorConvert.class);
 
-    @BeanMapping
+    @Mapping(source = "factorCode", target = "originalFactorCode")
     RuleFactor doToEntity(RuleFactorDO ruleFactorDO);
 
-    @BeanMapping
+
     RuleFactorQueryDTO.RuleFactorBean doToDTO(RuleFactor ruleFactor);
 
 }
