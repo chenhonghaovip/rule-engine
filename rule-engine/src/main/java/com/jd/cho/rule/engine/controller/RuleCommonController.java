@@ -1,6 +1,7 @@
 package com.jd.cho.rule.engine.controller;
 
 import com.jd.cho.rule.engine.common.base.CommonDict;
+import com.jd.cho.rule.engine.common.enums.ConstantEnum;
 import com.jd.cho.rule.engine.common.enums.FactorTypeEnum;
 import com.jd.cho.rule.engine.common.enums.RulePackTypeEnum;
 import com.jd.cho.rule.engine.group.RuleGroupRunStrategy;
@@ -26,6 +27,16 @@ public class RuleCommonController {
     @GetMapping("/factor/type")
     public List<FactorTypeEnum> factorTypeEnums() {
         return FactorTypeEnum.FACTOR_TYPE_ENUMS;
+    }
+
+    /**
+     * 获取因子常量类型列表
+     *
+     * @return 常量类型
+     */
+    @GetMapping("/factor/const")
+    public List<ConstantEnum> constantEnums() {
+        return ConstantEnum.CONSTANT_ENUMS;
     }
 
     /**

@@ -2,11 +2,17 @@ package com.jd.cho.rule.engine.controller;
 
 import com.jd.cho.rule.engine.controller.VO.req.RuleFactorReq;
 import com.jd.cho.rule.engine.service.RuleFactorService;
+import com.jd.cho.rule.engine.service.RulePackService;
 import com.jd.cho.rule.engine.service.dto.RuleFactorQueryDTO;
-import org.springframework.web.bind.annotation.*;
+import com.jd.cho.rule.engine.service.dto.RulePackDTO;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 规则引擎规则场景控制中心
@@ -20,15 +26,23 @@ public class RuleFactorController {
     @Resource
     private RuleFactorService ruleFactorService;
 
+    @Resource
+    private RulePackService rulePackService;
+
     /**
      * 获取规则因子列表
      *
-     * @param sceneCode 场景code
+     * @param context 场景code
      * @return list
      */
-    @GetMapping(value = "/list")
-    public List<RuleFactorQueryDTO> list(@RequestParam("sceneCode") String sceneCode) {
-        return ruleFactorService.queryBySceneCode(sceneCode);
+    @PostMapping(value = "/list")
+    public List<RuleFactorQueryDTO> list(@RequestBody Map<String, Object> context) {
+        return ruleFactorService.queryBySceneCode(context);
+    }
+
+    @PostMapping(value = "/test")
+    public String test(@RequestBody RulePackDTO rulePackDTO) {
+        return rulePackService.createRule(rulePackDTO);
     }
 
 
@@ -50,5 +64,6 @@ public class RuleFactorController {
     @PostMapping(value = "/modify")
     public void modify(@RequestBody RuleFactorReq ruleFactorReq) {
     }
+
 
 }

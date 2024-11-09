@@ -4,6 +4,7 @@ import com.jd.cho.rule.engine.service.dto.RuleFactorEditDTO;
 import com.jd.cho.rule.engine.service.dto.RuleFactorQueryDTO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 规则因子服务
@@ -33,11 +34,10 @@ public interface RuleFactorService {
     /**
      * 通过场景code获取对应的因子信息
      *
-     * @param sceneCode 场景code
+     * @param context 上下文参数
      * @return 规则因子集合
      */
-    List<RuleFactorQueryDTO> queryBySceneCode(String sceneCode);
-
+    List<RuleFactorQueryDTO> queryBySceneCode(Map<String, Object> context);
 
 
 }

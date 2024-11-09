@@ -34,7 +34,7 @@ public interface RulePackService {
      * @param rulePackCodes 规则code集合
      * @return 规则列表
      */
-    List<RulePackDTO> queryByRuleCodes(List<String> rulePackCodes);
+    List<RulePackDTO> onlineRulePack(List<String> rulePackCodes);
 
 
     /**
@@ -43,7 +43,7 @@ public interface RulePackService {
      * @param rulePackCode ruleCode
      * @return 规则列表
      */
-    List<RulePackDTO> queryByRuleCodes(String rulePackCode);
+    List<RulePackDTO> rulePackHistory(String rulePackCode);
 
 
     /**

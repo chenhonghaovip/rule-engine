@@ -17,15 +17,9 @@ public class RuleFactorReq implements Serializable {
     private String groupCode;
 
     /**
-     * 分组名称
-     */
-    private String groupName;
-
-    /**
      * 因子编码
      */
     private String factorCode;
-
 
     /**
      * 因子名称

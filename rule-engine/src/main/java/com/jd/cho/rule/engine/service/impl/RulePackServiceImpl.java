@@ -20,22 +20,21 @@ public class RulePackServiceImpl implements RulePackService {
 
     @Override
     public String createRule(RulePackDTO rulePackDTO) {
-
-        return null;
+        return ruleConfigGateway.createRulePack(rulePackDTO);
     }
 
     @Override
     public void updateRule(RulePackDTO rulePackDTO) {
-
+        ruleConfigGateway.updateRulePack(rulePackDTO);
     }
 
     @Override
-    public List<RulePackDTO> queryByRuleCodes(List<String> rulePackCodes) {
+    public List<RulePackDTO> onlineRulePack(List<String> rulePackCodes) {
         return null;
     }
 
     @Override
-    public List<RulePackDTO> queryByRuleCodes(String rulePackCode) {
+    public List<RulePackDTO> rulePackHistory(String rulePackCode) {
         return null;
     }
 

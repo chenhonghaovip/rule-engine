@@ -61,7 +61,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     private AtomicLoginUserComponent atomicLoginUserComponent;
 
     @Override
-    public List<RuleFactor> queryBySceneCode(String sceneCode) {
+    public List<RuleFactor> queryBySceneCode(String sceneCode, Map<String, Object> context) {
         Optional<RuleSceneDO> optionalRuleScene = ruleSceneMapper.selectOne(s -> s.where(RuleSceneDynamicSqlSupport.sceneCode, isEqualTo(sceneCode))
                 .and(RuleSceneDynamicSqlSupport.yn, isEqualTo(true)));
         if (!optionalRuleScene.isPresent()) {
@@ -80,7 +80,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
         List<RuleFactor> ruleFactorList = ruleFactors.stream().map(each -> {
             RuleFactor ruleFactor = RuleFactorConvert.INSTANCE.doToEntity(each);
             ruleFactor.setGroupName(groupMaps.get(each.getGroupCode()));
-            ruleFactor.setConstantValues(getDict(each.getConstantType(), each.getConstantValue()));
+            ruleFactor.setConstantValues(getDict(each.getConstantType(), each.getConstantValue(), context));
             ruleFactor.setExpressOperationList(ExpressOperationEnum.MAP.get(each.getFactorType()));
             return ruleFactor;
         }).collect(Collectors.toList());
@@ -258,11 +258,11 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
      * @param constantValue 常量值
      * @return 字典
      */
-    private List<CommonDict> getDict(String constantType, String constantValue) {
+    private List<CommonDict> getDict(String constantType, String constantValue, Map<String, Object> context) {
         if (ConstantEnum.INPUT.getCode().equals(constantType)) {
             return Lists.newArrayList();
         } else if (ConstantEnum.SCRIPT.getCode().equals(constantType)) {
-            constantValue = JSON.toJSONString(QlExpressUtil.execute(constantValue, Maps.newHashMap()));
+            constantValue = JSON.toJSONString(QlExpressUtil.execute(constantValue, context));
         }
         return JSON.parseArray(constantValue, CommonDict.class);
     }

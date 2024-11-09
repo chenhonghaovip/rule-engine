@@ -2,6 +2,9 @@ package com.jd.cho.rule.engine.common.enums;
 
 import lombok.Getter;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * @author chenhonghao12
  * @version 1.0
@@ -25,11 +28,13 @@ public enum ConstantEnum {
     ;
 
     private final String code;
-    private final Object desc;
+    private final String desc;
 
 
     ConstantEnum(String code, String desc) {
         this.code = code;
         this.desc = desc;
     }
+
+    public static final List<ConstantEnum> CONSTANT_ENUMS = Arrays.asList(ConstantEnum.values());
 }

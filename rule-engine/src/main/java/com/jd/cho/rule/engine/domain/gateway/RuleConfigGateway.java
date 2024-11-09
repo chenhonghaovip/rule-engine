@@ -20,7 +20,7 @@ public interface RuleConfigGateway {
      * @param sceneCode 场景code
      * @return 规则因子
      */
-    List<RuleFactor> queryBySceneCode(String sceneCode);
+    List<RuleFactor> queryBySceneCode(String sceneCode, Map<String, Object> context);
 
     /**
      * 查询规则包内规则定义

@@ -18,10 +18,10 @@ public class CommonDict {
     /**
      * code
      */
-    private String code;
+    private Object code;
 
     /**
      * 描述
      */
-    private Object desc;
+    private String desc;
 }
