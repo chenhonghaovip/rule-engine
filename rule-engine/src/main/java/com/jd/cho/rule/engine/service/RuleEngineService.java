@@ -14,20 +14,10 @@ public interface RuleEngineService {
     /**
      * 执行规则引擎协议
      *
-     * @param ruleCode 规则code
-     * @param context  上下文
+     * @param rulePackCode 规则code
+     * @param context      上下文
      * @return 执行结果（成功、失败）
      */
-    boolean execute(String ruleCode, Map<String, Object> context);
-
-
-//    /**
-//     * 执行规则引擎协议
-//     *
-//     * @param abstractRuleGroup 规则组
-//     * @param context           上下文
-//     * @return 执行结果
-//     */
-//    boolean execute(AbstractRuleGroup abstractRuleGroup, Map<String, Object> context);
+    boolean execute(String rulePackCode, Map<String, Object> context);
 
 }

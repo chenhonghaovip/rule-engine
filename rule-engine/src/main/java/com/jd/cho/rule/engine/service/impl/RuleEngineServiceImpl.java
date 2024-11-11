@@ -18,12 +18,7 @@ public class RuleEngineServiceImpl implements RuleEngineService {
     private RuleEngineGateway ruleEngineGateway;
 
     @Override
-    public boolean execute(String ruleCode, Map<String, Object> context) {
-        return ruleEngineGateway.execute(ruleCode, context);
+    public boolean execute(String rulePackCode, Map<String, Object> context) {
+        return ruleEngineGateway.execute(rulePackCode, context);
     }
-//
-//    @Override
-//    public boolean execute(AbstractRuleGroup abstractRuleGroup, Map<String, Object> context) {
-//        return abstractRuleGroup.execute(context);
-//    }
 }

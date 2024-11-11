@@ -1,13 +1,12 @@
 package com.jd.cho.rule.engine.controller;
 
-import com.jd.cho.rule.engine.common.convert.RulePackConvert;
 import com.jd.cho.rule.engine.controller.VO.req.RuleFactorReq;
-import com.jd.cho.rule.engine.controller.VO.req.RulePackReq;
 import com.jd.cho.rule.engine.service.RuleFactorService;
-import com.jd.cho.rule.engine.service.RulePackService;
 import com.jd.cho.rule.engine.service.dto.RuleFactorQueryDTO;
-import com.jd.cho.rule.engine.service.dto.RulePackDTO;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -25,9 +24,6 @@ public class RuleFactorController {
     @Resource
     private RuleFactorService ruleFactorService;
 
-    @Resource
-    private RulePackService rulePackService;
-
     /**
      * 获取规则因子列表
      *
@@ -37,28 +33,6 @@ public class RuleFactorController {
     @PostMapping(value = "/list")
     public List<RuleFactorQueryDTO> list(@RequestBody Map<String, Object> context) {
         return ruleFactorService.queryBySceneCode(context);
-    }
-
-    @PostMapping(value = "/createRule")
-    public String createRule(@RequestBody RulePackReq rulePackReq) {
-        RulePackDTO rulePackDTO = RulePackConvert.INSTANCE.doToDTO(rulePackReq);
-        return rulePackService.createRule(rulePackDTO);
-    }
-
-    @PostMapping(value = "/updateRule")
-    public void updateRule(@RequestBody RulePackReq rulePackReq) {
-        RulePackDTO rulePackDTO = RulePackConvert.INSTANCE.doToDTO(rulePackReq);
-        rulePackService.updateRule(rulePackDTO);
-    }
-
-    @GetMapping(value = "/onlineRulePack")
-    public RulePackDTO onlineRulePack(@RequestParam("rulePackCode") String rulePackCode) {
-        return rulePackService.onlineRulePack(rulePackCode);
-    }
-
-    @GetMapping(value = "/rulePackHistory")
-    public List<RulePackDTO> rulePackHistory(@RequestParam("rulePackCode") String rulePackCode) {
-        return rulePackService.rulePackHistory(rulePackCode);
     }
 
 
