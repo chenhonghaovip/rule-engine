@@ -7,6 +7,7 @@ import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jd.cho.rule.engine.common.base.CommonDict;
+import com.jd.cho.rule.engine.common.convert.RuleDefConvert;
 import com.jd.cho.rule.engine.common.convert.RuleFactorConvert;
 import com.jd.cho.rule.engine.common.convert.RulePackConvert;
 import com.jd.cho.rule.engine.common.dict.Dict;
@@ -213,13 +214,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
 
     private List<RuleDef> getRulePackInfo(List<Long> ruleIds) {
         List<RuleDefDO> ruleDefs = ruleDefMapper.select(s -> s.where(RuleDefDynamicSqlSupport.id, isIn(ruleIds)));
-        return ruleDefs.stream().map(each -> {
-            RuleDef rulesBean = new RuleDef();
-            rulesBean.setRuleCondition(JSON.parseObject(each.getRuleCondition(), RuleCondition.class));
-            rulesBean.setRuleActions(JSON.parseArray(each.getRuleAction(), RuleAction.class));
-            rulesBean.setPriority(each.getPriority());
-            return rulesBean;
-        }).collect(Collectors.toList());
+        return ruleDefs.stream().map(RuleDefConvert.INSTANCE::doToEntity).collect(Collectors.toList());
     }
 
     /**

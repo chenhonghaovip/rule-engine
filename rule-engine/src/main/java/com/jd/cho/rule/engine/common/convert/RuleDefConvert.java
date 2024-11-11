@@ -15,7 +15,7 @@ public interface RuleDefConvert {
     RuleDefConvert INSTANCE = Mappers.getMapper(RuleDefConvert.class);
 
     @Mapping(target = "ruleCondition", expression = "java(com.alibaba.fastjson.JSON.parseObject(ruleDefDO.getRuleCondition(), com.jd.cho.rule.engine.domain.model.RuleCondition.class))")
-    @Mapping(target = "ruleActions", ignore = true)
+    @Mapping(target = "ruleActions", expression = "java(com.alibaba.fastjson.JSON.parseArray(ruleDefDO.getRuleAction(), com.jd.cho.rule.engine.domain.model.RuleAction.class))")
     RuleDef doToEntity(RuleDefDO ruleDefDO);
 
 
