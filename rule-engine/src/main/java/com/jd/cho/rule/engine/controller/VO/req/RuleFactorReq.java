@@ -11,6 +11,7 @@ import java.io.Serializable;
 @Data
 public class RuleFactorReq implements Serializable {
 
+    private Long id;
     /**
      * 分组编码
      */

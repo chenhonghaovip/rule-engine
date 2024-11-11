@@ -188,7 +188,6 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
         ruleFactorDO.setModifier(AtomicLoginUserComponent.getLoginUserInfo().getLoginUser());
         ruleFactorDO.setModifyTime(new Date());
         ruleFactorDO.setFactorCode(null);
-        ruleFactorDO.setGroupCode(null);
         ruleFactorMapper.updateByPrimaryKeySelective(ruleFactorDO);
     }
 

@@ -17,6 +17,7 @@ import java.util.List;
  */
 @Data
 public class RuleFactorDTO implements Serializable {
+
     /**
      * 主键
      */
@@ -41,6 +42,11 @@ public class RuleFactorDTO implements Serializable {
      * 因子类型（日期、数值、集合、布尔、文本）
      */
     private FactorTypeEnum factorType;
+
+    /**
+     * 因子分组code
+     */
+    private String groupCode;
 
     /**
      * 支持的操作符

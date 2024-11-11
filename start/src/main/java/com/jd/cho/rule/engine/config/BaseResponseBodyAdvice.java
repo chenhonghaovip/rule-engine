@@ -32,11 +32,11 @@ public class BaseResponseBodyAdvice implements ResponseBodyAdvice<Object> {
 
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-        if (body instanceof BaseResponse) {
+        if (returnType.getParameterType().equals(BaseResponse.class)) {
             return body;
         }
         BaseResponse<Object> result = BaseResponse.successData(body);
-        if (body instanceof String) {
+        if (returnType.getParameterType().equals(String.class)) {
             try {
                 return objectMapper.writeValueAsString(result);
             } catch (JsonProcessingException e) {
