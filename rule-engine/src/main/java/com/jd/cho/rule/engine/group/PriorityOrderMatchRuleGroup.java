@@ -14,10 +14,11 @@ import java.util.Map;
  * @version 1.0
  */
 public class PriorityOrderMatchRuleGroup implements RuleGroupExtendService {
+    public static final String CODE = "1";
 
     @Override
     public String getCode() {
-        return "1";
+        return CODE;
     }
 
     @Override

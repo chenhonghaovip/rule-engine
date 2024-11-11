@@ -4,7 +4,7 @@ package com.jd.cho.rule.engine.common.dict;
  * @author chenhonghao12
  * @version 1.0
  */
-public class FactDict {
+public class Dict {
 
     // 事实别名
     public static final String FACT_ALIAS = "fact";
@@ -29,4 +29,7 @@ public class FactDict {
     public static final String SYMBOL_EMPTY = "";
     public static final String LOGICAL_AND = "&&";
     public static final String LOGICAL_OR = "||";
+
+
+    public static final String SPLIT = ",";
 }

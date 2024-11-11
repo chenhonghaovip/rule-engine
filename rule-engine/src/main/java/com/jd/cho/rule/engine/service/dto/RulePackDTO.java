@@ -37,7 +37,7 @@ public class RulePackDTO implements Serializable {
         @JSONField(name = "priority")
         private Integer priority;
         @JSONField(name = "ruleAction")
-        private List<RuleActionBean> ruleAction;
+        private List<RuleActionBean> ruleActions;
 
         @Data
         public static class RuleConditionBean implements Serializable {

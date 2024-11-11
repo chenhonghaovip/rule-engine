@@ -22,6 +22,9 @@ public interface RulePackConvert {
     @Mapping(target = "rulePackType", expression = "java(com.jd.cho.rule.engine.common.enums.RulePackTypeEnum.getByCode(rulePackReq.getRulePackType()))")
     RulePackDTO doToDTO(RulePackReq rulePackReq);
 
+
+    RulePackDTO doToDTO(RulePack rulePack);
+
     RulePack doToEntity(RulePackDO rulePackDO);
 
 }

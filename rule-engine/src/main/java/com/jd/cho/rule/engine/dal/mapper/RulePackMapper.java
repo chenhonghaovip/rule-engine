@@ -145,8 +145,7 @@ public interface RulePackMapper {
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_pack")
     default int insertSelective(RulePackDO record) {
         return MyBatis3Utils.insert(this::insert, record, rulePack, c ->
-                c.map(id).toPropertyWhenPresent("id", record::getId)
-                        .map(rulePackCode).toPropertyWhenPresent("rulePackCode", record::getRulePackCode)
+                c.map(rulePackCode).toPropertyWhenPresent("rulePackCode", record::getRulePackCode)
                         .map(rulePackName).toPropertyWhenPresent("rulePackName", record::getRulePackName)
                         .map(rulePackType).toPropertyWhenPresent("rulePackType", record::getRulePackType)
                         .map(ruleArrangeStrategy).toPropertyWhenPresent("ruleArrangeStrategy", record::getRuleArrangeStrategy)

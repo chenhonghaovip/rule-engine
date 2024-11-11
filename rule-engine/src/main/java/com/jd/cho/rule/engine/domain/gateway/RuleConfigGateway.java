@@ -31,6 +31,14 @@ public interface RuleConfigGateway {
     RulePack rulePackInfo(String rulePackCode);
 
     /**
+     * 历史信息
+     *
+     * @param rulePackCode 规则包编码
+     * @return 规则定义信息
+     */
+    List<RulePack> historyRulePackInfo(String rulePackCode);
+
+    /**
      * 批量插入规则包信息
      *
      * @param rulePackDTO 规则集合

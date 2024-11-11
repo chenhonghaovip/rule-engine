@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.jd.cho.rule.engine.common.dict.FactDict;
+import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
 import com.jd.cho.rule.engine.common.util.QlExpressUtil;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
@@ -87,10 +87,10 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
         }
 
         StringBuilder mvelExpression = new StringBuilder();
-        String type = StringUtils.isNotBlank(ruleCondition.getLogicOperation()) ? FactDict.RELATION_TYPE : FactDict.EXPRESSION_TYPE;
+        String type = StringUtils.isNotBlank(ruleCondition.getLogicOperation()) ? Dict.RELATION_TYPE : Dict.EXPRESSION_TYPE;
 
         switch (type) {
-            case FactDict.EXPRESSION_TYPE:
+            case Dict.EXPRESSION_TYPE:
                 String factorCode = ruleCondition.getFactorCode();
                 String originalFactorCode = ruleCondition.getOriginalFactorCode();
                 if (!Objects.equals(originalFactorCode, factorCode)) {
@@ -100,10 +100,10 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
                 String compareOperation = ruleCondition.getCompareOperation();
                 mvelExpression.append(buildOperatorExpress(compareOperation, factorCode, fieldValue, rightValues));
                 break;
-            case FactDict.RELATION_TYPE:
+            case Dict.RELATION_TYPE:
                 List<RuleCondition> children = ruleCondition.getChildren();
                 if (CollectionUtils.isEmpty(children)) {
-                    return FactDict.SYMBOL_EMPTY;
+                    return Dict.SYMBOL_EMPTY;
                 }
                 String logicOperator = this.convertRelationExpress(ruleCondition.getLogicOperation());
                 StringBuilder childrenExpression = new StringBuilder();
@@ -112,9 +112,9 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
                     String childExpression = buildWhenExpression(child, rightValues, fieldMapping);
                     if (!childExpression.isEmpty()) {
                         if (childrenExpression.length() > 0) {
-                            childrenExpression.append(FactDict.SYMBOL_SPACE).append(logicOperator).append(FactDict.SYMBOL_SPACE);
+                            childrenExpression.append(Dict.SYMBOL_SPACE).append(logicOperator).append(Dict.SYMBOL_SPACE);
                         }
-                        childrenExpression.append(FactDict.LEFT_BRACKETS).append(childExpression).append(FactDict.RIGHT_BRACKETS);
+                        childrenExpression.append(Dict.LEFT_BRACKETS).append(childExpression).append(Dict.RIGHT_BRACKETS);
                     }
                 }
                 mvelExpression.append(childrenExpression);
@@ -132,11 +132,11 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
      */
     protected String convertRelationExpress(String relation) {
         if (StringUtils.isEmpty(relation)) {
-            return FactDict.SYMBOL_EMPTY;
-        } else if (relation.equalsIgnoreCase(FactDict.RELATION_AND)) {
-            return FactDict.LOGICAL_AND;
-        } else if (relation.equalsIgnoreCase(FactDict.RELATION_OR)) {
-            return FactDict.LOGICAL_OR;
+            return Dict.SYMBOL_EMPTY;
+        } else if (relation.equalsIgnoreCase(Dict.RELATION_AND)) {
+            return Dict.LOGICAL_AND;
+        } else if (relation.equalsIgnoreCase(Dict.RELATION_OR)) {
+            return Dict.LOGICAL_OR;
         }
         return relation;
     }
@@ -153,7 +153,7 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
     public String buildOperatorExpress(String operator, String fieldName, Object value, Map<String, Object> rightValues) {
         ExpressOperationEnum operation = ExpressOperationEnum.getOperationByOperator(operator);
         if (Objects.isNull(operation)) {
-            return FactDict.SYMBOL_EMPTY;
+            return Dict.SYMBOL_EMPTY;
         }
         if (Objects.nonNull(value)) {
             rightValues.put(buildValueExpress(fieldName), value);
@@ -194,13 +194,13 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
             Type type = new TypeToken<Map<String, Object>>() {
             }.getType();
             Map<String, Object> executeMaps = new Gson().fromJson(JSON.toJSONString(execute), type);
-            Object result = context.get(FactDict.RESULT_ALIAS);
+            Object result = context.get(Dict.RESULT_ALIAS);
             Map<String, Object> contextResult;
             if (Objects.nonNull(result)) {
                 contextResult = new Gson().fromJson(JSON.toJSONString(result), type);
             } else {
                 contextResult = Maps.newHashMap();
-                context.put(FactDict.RESULT_ALIAS, contextResult);
+                context.put(Dict.RESULT_ALIAS, contextResult);
             }
             contextResult.putAll(executeMaps);
         }

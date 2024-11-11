@@ -17,6 +17,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RulePack {
+    /**
+     * 规则包id
+     */
+    private Long id;
 
     /**
      * 规则包名称

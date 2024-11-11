@@ -13,6 +13,8 @@ import java.util.List;
 @Data
 public class RulePackReq implements Serializable {
 
+    private Long id;
+
     @JSONField(name = "rulePackName")
     private String rulePackName;
     @JSONField(name = "rulePackCode")

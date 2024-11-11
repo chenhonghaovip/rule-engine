@@ -9,6 +9,7 @@ import com.google.gson.reflect.TypeToken;
 import com.jd.cho.rule.engine.common.base.CommonDict;
 import com.jd.cho.rule.engine.common.convert.RuleFactorConvert;
 import com.jd.cho.rule.engine.common.convert.RulePackConvert;
+import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.enums.ConstantEnum;
 import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
 import com.jd.cho.rule.engine.common.enums.RulePackTypeEnum;
@@ -29,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.lang.reflect.Type;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.jd.cho.rule.engine.common.exceptions.BizErrorEnum.DATA_HAS_CHANGE;
@@ -68,7 +70,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
             return Lists.newArrayList();
         }
         RuleSceneDO ruleSceneDO = optionalRuleScene.get();
-        List<String> groupCodes = Arrays.stream(ruleSceneDO.getGroupCode().split(",")).collect(Collectors.toList());
+        List<String> groupCodes = Arrays.stream(ruleSceneDO.getGroupCode().split(Dict.SPLIT)).collect(Collectors.toList());
         if (CollectionUtils.isEmpty(groupCodes)) {
             return Lists.newArrayList();
         }
@@ -99,22 +101,34 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
                 .and(RulePackDynamicSqlSupport.latest, isEqualTo(1)));
         if (optionalRulePackDO.isPresent()) {
             RulePackDO rulePackDO = optionalRulePackDO.get();
-            List<Long> ids = Arrays.stream(rulePackDO.getRuleIds().split(",")).map(Long::valueOf).collect(Collectors.toList());
-            List<RuleDefDO> ruleDefs = ruleDefMapper.select(s -> s.where(RuleDefDynamicSqlSupport.id, isIn(ids)));
-            List<RuleDef> rules = ruleDefs.stream().map(each -> {
-                RuleDef rulesBean = new RuleDef();
-                rulesBean.setRuleCondition(JSON.parseObject(each.getRuleCondition(), RuleCondition.class));
-                rulesBean.setRuleActions(JSON.parseArray(each.getRuleAction(), RuleAction.class));
-                rulesBean.setPriority(each.getPriority());
-                return rulesBean;
-            }).collect(Collectors.toList());
+            List<Long> ids = Arrays.stream(rulePackDO.getRuleIds().split(Dict.SPLIT)).map(Long::valueOf).collect(Collectors.toList());
+            List<RuleDef> ruleDefs = getRulePackInfo(ids);
 
             RulePack rulePack = RulePackConvert.INSTANCE.doToEntity(rulePackDO);
             rulePack.setRulePackType(RulePackTypeEnum.getByCode(rulePackDO.getRulePackType()));
-            rulePack.setRules(rules);
+            rulePack.setRules(ruleDefs);
             return rulePack;
         }
         return null;
+    }
+
+    @Override
+    public List<RulePack> historyRulePackInfo(String rulePackCode) {
+        List<RulePackDO> history = rulePackMapper.select(s -> s.where(RulePackDynamicSqlSupport.rulePackCode, isEqualTo(rulePackCode))
+                .and(RulePackDynamicSqlSupport.yn, isEqualTo(true)).orderBy(RulePackDynamicSqlSupport.version.descending()));
+
+        List<Long> ruleIds = Lists.newArrayList();
+        history.forEach(each -> ruleIds.addAll(Arrays.stream(each.getRuleIds().split(Dict.SPLIT)).map(Long::valueOf).collect(Collectors.toList())));
+        List<RuleDef> ruleDefs = getRulePackInfo(ruleIds);
+        Map<Long, RuleDef> ruleDefMaps = ruleDefs.stream().collect(Collectors.toMap(RuleDef::getId, Function.identity()));
+
+        return history.stream().map(each -> {
+            RulePack rulePack = RulePackConvert.INSTANCE.doToEntity(each);
+            rulePack.setRulePackType(RulePackTypeEnum.getByCode(each.getRulePackType()));
+            List<RuleDef> currentRuleDefs = Arrays.stream(each.getRuleIds().split(Dict.SPLIT)).map(Long::valueOf).map(ruleDefMaps::get).filter(Objects::nonNull).collect(Collectors.toList());
+            rulePack.setRules(currentRuleDefs);
+            return rulePack;
+        }).collect(Collectors.toList());
     }
 
     @Override
@@ -153,6 +167,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
                     throw new BusinessException(DATA_HAS_CHANGE);
                 }
 
+                rulePackDTO.setRulePackCode(each.getRulePackCode());
                 int version = optionalRulePackDO.get().getVersion() + 1;
                 insertRuleGroup(rulePackDTO, version, loginUserInfo);
             });
@@ -196,6 +211,16 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
         return factorCodes;
     }
 
+    private List<RuleDef> getRulePackInfo(List<Long> ruleIds) {
+        List<RuleDefDO> ruleDefs = ruleDefMapper.select(s -> s.where(RuleDefDynamicSqlSupport.id, isIn(ruleIds)));
+        return ruleDefs.stream().map(each -> {
+            RuleDef rulesBean = new RuleDef();
+            rulesBean.setRuleCondition(JSON.parseObject(each.getRuleCondition(), RuleCondition.class));
+            rulesBean.setRuleActions(JSON.parseArray(each.getRuleAction(), RuleAction.class));
+            rulesBean.setPriority(each.getPriority());
+            return rulesBean;
+        }).collect(Collectors.toList());
+    }
 
     /**
      * 获取当前包中所需变量信息
@@ -210,7 +235,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
         List<RuleFactorDO> ruleFactors = ruleFactorMapper.select(s -> s.where(RuleFactorDynamicSqlSupport.yn, isEqualTo(true))
                 .and(RuleFactorDynamicSqlSupport.factorCode, isIn(factorCodes)));
 
-        return ruleFactors.stream().collect(Collectors.toMap(RuleFactorDO::getFactorCode, each -> Arrays.stream(each.getFactorScriptParam().split(",")).collect(Collectors.toList())));
+        return ruleFactors.stream().collect(Collectors.toMap(RuleFactorDO::getFactorCode, each -> Arrays.stream(each.getFactorScriptParam().split(Dict.SPLIT)).collect(Collectors.toList())));
     }
 
 
@@ -224,7 +249,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
      */
     private String insertRuleGroup(RulePackDTO rulePackDTO, int version, UserInfo loginUserInfo) {
         List<RuleDefDO> ruleDefs = rulePackDTO.getRules().stream()
-                .map(o -> RuleDefDO.builder().ruleAction(JSON.toJSONString(o.getRuleAction()))
+                .map(o -> RuleDefDO.builder().ruleAction(JSON.toJSONString(o.getRuleActions()))
                         .ruleCondition(JSON.toJSONString(o.getRuleCondition()))
                         .priority(o.getPriority()).creator(loginUserInfo.getLoginUser()).tenant(loginUserInfo.getTenant()).build()).collect(Collectors.toList());
         ruleDefMapper.insertMultipleSelective(ruleDefs);
@@ -232,7 +257,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
         List<RuleCondition> ruleConditions = rulePackDTO.getRules().stream().map(each -> JSON.parseObject(JSON.toJSONString(each.getRuleCondition()), RuleCondition.class)).collect(Collectors.toList());
         Map<String, List<String>> factorScriptParam = getFactorScriptParam(ruleConditions);
 
-        String ruleIds = ruleDefs.stream().filter(each -> Objects.nonNull(each.getId())).map(o -> String.valueOf(o.getId())).collect(Collectors.joining(","));
+        String ruleIds = ruleDefs.stream().filter(each -> Objects.nonNull(each.getId())).map(o -> String.valueOf(o.getId())).collect(Collectors.joining(Dict.SPLIT));
         RulePackDO rulePackDO = RulePackConvert.INSTANCE.doToDO(rulePackDTO);
         rulePackDO.setCreator(loginUserInfo.getLoginUser());
         rulePackDO.setRuleIds(ruleIds);
