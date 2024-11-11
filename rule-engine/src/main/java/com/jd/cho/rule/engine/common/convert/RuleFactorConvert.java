@@ -20,4 +20,8 @@ public interface RuleFactorConvert {
 
     RuleFactorQueryDTO.RuleFactorBean doToDTO(RuleFactor ruleFactor);
 
+
+    @Mapping(target = "constantValue", expression = "java(com.alibaba.fastjson.JSON.toJSONString(ruleFactor.getConstantValues()))")
+    RuleFactorDO doToDO(RuleFactor ruleFactor);
+
 }

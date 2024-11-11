@@ -28,6 +28,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Type;
@@ -59,32 +60,55 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     private RuleFactorMapper ruleFactorMapper;
 
     @Resource
-    private RuleSceneActionMapper ruleSceneActionMapper;
-
-    @Resource
     private RuleFactorGroupMapper ruleFactorGroupMapper;
-
-    @Resource
-    private AtomicLoginUserComponent atomicLoginUserComponent;
 
     @Override
     public List<RuleScene> queryRuleScene() {
-        String tenant = atomicLoginUserComponent.getLoginUserInfo().getTenant();
+        String tenant = AtomicLoginUserComponent.getLoginUserInfo().getTenant();
         List<RuleSceneDO> ruleSceneList = ruleSceneMapper.select(s -> s.where(RuleSceneDynamicSqlSupport.yn, isEqualTo(true))
                 .and(RuleSceneDynamicSqlSupport.tenant, isEqualTo(tenant)));
 
+        List<String> groupCodes = Lists.newArrayList();
+        ruleSceneList.forEach(each -> groupCodes.addAll(Arrays.stream(each.getGroupCode().split(Dict.SPLIT)).collect(Collectors.toList())));
+        List<RuleFactorGroupDO> groupList = ruleFactorGroupMapper.select(s -> s.where(RuleFactorGroupDynamicSqlSupport.groupCode, isIn(groupCodes)));
+        Map<String, RuleFactorGroupDO> groupMaps = groupList.stream().collect(Collectors.toMap(RuleFactorGroupDO::getGroupCode, Function.identity()));
 
-        return ruleSceneList.stream().map(RuleSceneConvert.INSTANCE::doToEntity).collect(Collectors.toList());
+        return ruleSceneList.stream().map(each -> {
+            RuleScene ruleScene = RuleSceneConvert.INSTANCE.doToEntity(each);
+            List<RuleFactorGroup> groups = Arrays.stream(each.getGroupCode().split(Dict.SPLIT)).map(o -> {
+                RuleFactorGroupDO ruleFactorGroupDO = groupMaps.get(o);
+                return RuleFactorGroup.builder().groupName(ruleFactorGroupDO.getGroupName()).groupCode(o).id(ruleFactorGroupDO.getId()).build();
+            }).collect(Collectors.toList());
+            ruleScene.setRuleFactorGroups(groups);
+            return ruleScene;
+        }).collect(Collectors.toList());
     }
 
     @Override
     public String createRuleScene(RuleScene ruleScene) {
-        return null;
+        if (StringUtils.isBlank(ruleScene.getSceneCode())) {
+            String sceneCode = UUID.randomUUID().toString();
+            ruleScene.setSceneCode(sceneCode);
+        }
+        UserInfo userInfo = AtomicLoginUserComponent.getLoginUserInfo();
+        RuleSceneDO ruleSceneDO = RuleSceneConvert.INSTANCE.doToDO(ruleScene);
+        String groupCode = ruleScene.getRuleFactorGroups().stream().map(RuleFactorGroup::getGroupCode).collect(Collectors.joining(Dict.SPLIT));
+        ruleSceneDO.setGroupCode(groupCode);
+        ruleSceneDO.setCreator(userInfo.getLoginUser());
+        ruleSceneDO.setTenant(userInfo.getTenant());
+        ruleSceneMapper.insertSelective(ruleSceneDO);
+        return ruleScene.getSceneCode();
     }
 
     @Override
     public void updateRuleScene(RuleScene ruleScene) {
-
+        ruleScene.setSceneCode(null);
+        RuleSceneDO ruleSceneDO = RuleSceneConvert.INSTANCE.doToDO(ruleScene);
+        String groupCode = ruleScene.getRuleFactorGroups().stream().map(RuleFactorGroup::getGroupCode).collect(Collectors.joining(Dict.SPLIT));
+        ruleSceneDO.setGroupCode(groupCode);
+        ruleSceneDO.setModifier(AtomicLoginUserComponent.getLoginUser());
+        ruleSceneDO.setModifyTime(new Date());
+        ruleSceneMapper.updateByPrimaryKey(ruleSceneDO);
     }
 
     @Override
@@ -104,21 +128,43 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
 
     @Override
     public List<RuleFactorGroup> queryRuleFactorGroup() {
-        return null;
+        UserInfo loginUserInfo = AtomicLoginUserComponent.getLoginUserInfo();
+        List<RuleFactorGroupDO> list = ruleFactorGroupMapper.select(s -> s.where(RuleFactorGroupDynamicSqlSupport.yn, isEqualTo(true))
+                .and(RuleFactorGroupDynamicSqlSupport.tenant, isEqualTo(loginUserInfo.getTenant())));
+        return list.stream().map(each -> RuleFactorGroup.builder().groupCode(each.getGroupCode()).groupName(each.getGroupName()).id(each.getId()).build()).collect(Collectors.toList());
     }
 
     @Override
     public String createRuleFactorGroup(RuleFactorGroup ruleFactorGroup) {
-        return null;
+        Assert.notNull(ruleFactorGroup, "数据不能为空");
+        if (StringUtils.isBlank(ruleFactorGroup.getGroupCode())) {
+            ruleFactorGroup.setGroupCode(UUID.randomUUID().toString());
+        }
+        UserInfo loginUserInfo = AtomicLoginUserComponent.getLoginUserInfo();
+        RuleFactorGroupDO ruleFactorGroupDO = RuleFactorGroupDO.builder().groupCode(ruleFactorGroup.getGroupCode())
+                .groupName(ruleFactorGroup.getGroupName()).creator(loginUserInfo.getLoginUser())
+                .tenant(loginUserInfo.getTenant()).build();
+        ruleFactorGroupMapper.insertSelective(ruleFactorGroupDO);
+        return ruleFactorGroup.getGroupCode();
     }
 
     @Override
     public void updateRuleFactorGroup(RuleFactorGroup ruleFactorGroup) {
-
+        Assert.notNull(ruleFactorGroup, "数据不能为空");
+        UserInfo loginUserInfo = AtomicLoginUserComponent.getLoginUserInfo();
+        RuleFactorGroupDO ruleFactorGroupDO = RuleFactorGroupDO.builder().groupCode(ruleFactorGroup.getGroupCode())
+                .groupName(ruleFactorGroup.getGroupName()).modifier(loginUserInfo.getLoginUser())
+                .modifyTime(new Date()).build();
+        ruleFactorGroupMapper.updateByPrimaryKey(ruleFactorGroupDO);
     }
 
     @Override
     public String createRuleFactor(RuleFactor ruleFactor) {
+        RuleFactorDO ruleFactorDO = RuleFactorConvert.INSTANCE.doToDO(ruleFactor);
+        UserInfo loginUserInfo = AtomicLoginUserComponent.getLoginUserInfo();
+        ruleFactorDO.setCreator(loginUserInfo.getLoginUser());
+        ruleFactorDO.setTenant(loginUserInfo.getTenant());
+        ruleFactorMapper.insertSelective(ruleFactorDO);
         return null;
     }
 
@@ -205,7 +251,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
             if (count > 0) {
                 throw new BusinessException("规则包code重复");
             }
-            UserInfo loginUserInfo = atomicLoginUserComponent.getLoginUserInfo();
+            UserInfo loginUserInfo = AtomicLoginUserComponent.getLoginUserInfo();
             String rulePackCode = StringUtils.isNotBlank(rulePackDTO.getRulePackCode()) ? rulePackDTO.getRulePackCode() : UUID.randomUUID().toString();
             rulePackDTO.setRulePackCode(rulePackCode);
             return insertRuleGroup(rulePackDTO, 1, loginUserInfo);
@@ -223,7 +269,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
             Optional<RulePackDO> optionalRulePackDO = rulePackMapper.selectByPrimaryKey(id);
             optionalRulePackDO.ifPresent(each -> {
 
-                UserInfo loginUserInfo = atomicLoginUserComponent.getLoginUserInfo();
+                UserInfo loginUserInfo = AtomicLoginUserComponent.getLoginUserInfo();
                 int update = rulePackMapper.update(s -> s.set(RulePackDynamicSqlSupport.modifyTime).equalTo(new Date())
                         .set(RulePackDynamicSqlSupport.modifier).equalTo(loginUserInfo.getLoginUser())
                         .set(RulePackDynamicSqlSupport.latest).equalTo(0)
