@@ -15,6 +15,7 @@ public enum BizErrorEnum implements CommonException {
 
 
     DATA_HAS_CHANGE(-5, "数据已经被修改"),
+    CODE_IS_EXIST(-6, "该code已存在，请修改后重试"),
 
 
     ;

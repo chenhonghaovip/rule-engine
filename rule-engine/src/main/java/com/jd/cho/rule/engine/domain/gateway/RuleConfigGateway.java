@@ -88,7 +88,7 @@ public interface RuleConfigGateway {
      *
      * @return List<RuleScene>
      */
-    String createRuleFactor(RuleFactor ruleFactor);
+    void createRuleFactor(RuleFactor ruleFactor);
 
     /**
      * 查询规则场景

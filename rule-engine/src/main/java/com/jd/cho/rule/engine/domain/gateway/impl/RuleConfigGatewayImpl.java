@@ -15,7 +15,9 @@ import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.enums.ConstantEnum;
 import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
 import com.jd.cho.rule.engine.common.enums.RulePackTypeEnum;
+import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
 import com.jd.cho.rule.engine.common.exceptions.BusinessException;
+import com.jd.cho.rule.engine.common.util.AssertUtil;
 import com.jd.cho.rule.engine.common.util.QlExpressUtil;
 import com.jd.cho.rule.engine.dal.DO.*;
 import com.jd.cho.rule.engine.dal.mapper.*;
@@ -159,18 +161,35 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     }
 
     @Override
-    public String createRuleFactor(RuleFactor ruleFactor) {
-        RuleFactorDO ruleFactorDO = RuleFactorConvert.INSTANCE.doToDO(ruleFactor);
+    public void createRuleFactor(RuleFactor ruleFactor) {
+        AssertUtil.isNotNull(ruleFactor, BizErrorEnum.DOES_NOT_EXIST);
+        AssertUtil.isNotBlank(ruleFactor.getFactorCode(), BizErrorEnum.DOES_NOT_EXIST);
         UserInfo loginUserInfo = AtomicLoginUserComponent.getLoginUserInfo();
+
+        long count = ruleFactorMapper.count(s -> s.where(RuleFactorDynamicSqlSupport.factorCode, isEqualTo(ruleFactor.getFactorCode()))
+                .and(RuleFactorDynamicSqlSupport.tenant, isEqualTo(loginUserInfo.getTenant()))
+                .and(RuleFactorDynamicSqlSupport.yn, isEqualTo(true)));
+        if (count > 0) {
+            throw new BusinessException(BizErrorEnum.CODE_IS_EXIST);
+        }
+
+        RuleFactorDO ruleFactorDO = RuleFactorConvert.INSTANCE.doToDO(ruleFactor);
+
         ruleFactorDO.setCreator(loginUserInfo.getLoginUser());
         ruleFactorDO.setTenant(loginUserInfo.getTenant());
         ruleFactorMapper.insertSelective(ruleFactorDO);
-        return null;
     }
 
     @Override
     public void updateRuleFactor(RuleFactor ruleFactor) {
-
+        AssertUtil.isNotNull(ruleFactor, BizErrorEnum.DOES_NOT_EXIST);
+        AssertUtil.isNotBlank(ruleFactor.getFactorCode(), BizErrorEnum.DOES_NOT_EXIST);
+        RuleFactorDO ruleFactorDO = RuleFactorConvert.INSTANCE.doToDO(ruleFactor);
+        ruleFactorDO.setModifier(AtomicLoginUserComponent.getLoginUserInfo().getLoginUser());
+        ruleFactorDO.setModifyTime(new Date());
+        ruleFactorDO.setFactorCode(null);
+        ruleFactorDO.setGroupCode(null);
+        ruleFactorMapper.updateByPrimaryKeySelective(ruleFactorDO);
     }
 
     @Override
