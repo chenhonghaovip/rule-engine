@@ -87,5 +87,20 @@ public class RuleFactor {
      */
     private String remark;
 
+    /**
+     * 脚本参数
+     */
+    private String factorScriptParam;
+
+    /**
+     * 状态（0:否，1:是）
+     */
+    private Boolean status;
+
+    /**
+     * 脚本代码
+     */
+    private String factorScript;
+
 
 }

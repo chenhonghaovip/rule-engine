@@ -1,11 +1,13 @@
 package com.jd.cho.rule.engine.common.enums;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.google.common.collect.Lists;
 import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -76,16 +78,13 @@ public enum ExpressOperationEnum {
     public static final Map<String, List<ExpressOperationEnum>> MAP = Arrays.stream(ExpressOperationEnum.values()).collect(Collectors.groupingBy(ExpressOperationEnum::getGroup));
 
     public static ExpressOperationEnum getOperationByOperator(String operator) {
-
-        ExpressOperationEnum[] list = ExpressOperationEnum.values();
-        for (ExpressOperationEnum item : list) {
-            String compareOperator = item.getOperator();
-            if (compareOperator.equals(operator)) {
-                return item;
-            }
-        }
-        return null;
+        return Arrays.stream(ExpressOperationEnum.values()).filter(each -> Objects.equals(operator, each.getOperator())).findFirst().orElse(null);
     }
+
+    public static List<ExpressOperationEnum> getOperationByType(String type) {
+        return MAP.getOrDefault(type, Lists.newArrayList());
+    }
+
 
     public String getOperator() {
         return operator;

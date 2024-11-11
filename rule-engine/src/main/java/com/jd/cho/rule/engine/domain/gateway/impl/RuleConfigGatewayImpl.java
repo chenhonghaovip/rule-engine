@@ -10,6 +10,7 @@ import com.jd.cho.rule.engine.common.base.CommonDict;
 import com.jd.cho.rule.engine.common.convert.RuleDefConvert;
 import com.jd.cho.rule.engine.common.convert.RuleFactorConvert;
 import com.jd.cho.rule.engine.common.convert.RulePackConvert;
+import com.jd.cho.rule.engine.common.convert.RuleSceneConvert;
 import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.enums.ConstantEnum;
 import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
@@ -58,10 +59,73 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     private RuleFactorMapper ruleFactorMapper;
 
     @Resource
+    private RuleSceneActionMapper ruleSceneActionMapper;
+
+    @Resource
     private RuleFactorGroupMapper ruleFactorGroupMapper;
 
     @Resource
     private AtomicLoginUserComponent atomicLoginUserComponent;
+
+    @Override
+    public List<RuleScene> queryRuleScene() {
+        String tenant = atomicLoginUserComponent.getLoginUserInfo().getTenant();
+        List<RuleSceneDO> ruleSceneList = ruleSceneMapper.select(s -> s.where(RuleSceneDynamicSqlSupport.yn, isEqualTo(true))
+                .and(RuleSceneDynamicSqlSupport.tenant, isEqualTo(tenant)));
+
+
+        return ruleSceneList.stream().map(RuleSceneConvert.INSTANCE::doToEntity).collect(Collectors.toList());
+    }
+
+    @Override
+    public String createRuleScene(RuleScene ruleScene) {
+        return null;
+    }
+
+    @Override
+    public void updateRuleScene(RuleScene ruleScene) {
+
+    }
+
+    @Override
+    public List<RuleSceneAction> queryRuleSceneAction(String sceneCode) {
+        return null;
+    }
+
+    @Override
+    public String createRuleSceneAction(RuleSceneAction ruleSceneAction) {
+        return null;
+    }
+
+    @Override
+    public void updateRuleSceneAction(RuleSceneAction ruleSceneAction) {
+
+    }
+
+    @Override
+    public List<RuleFactorGroup> queryRuleFactorGroup() {
+        return null;
+    }
+
+    @Override
+    public String createRuleFactorGroup(RuleFactorGroup ruleFactorGroup) {
+        return null;
+    }
+
+    @Override
+    public void updateRuleFactorGroup(RuleFactorGroup ruleFactorGroup) {
+
+    }
+
+    @Override
+    public String createRuleFactor(RuleFactor ruleFactor) {
+        return null;
+    }
+
+    @Override
+    public void updateRuleFactor(RuleFactor ruleFactor) {
+
+    }
 
     @Override
     public List<RuleFactor> queryBySceneCode(String sceneCode, Map<String, Object> context) {

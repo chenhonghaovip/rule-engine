@@ -2,11 +2,13 @@ package com.jd.cho.rule.engine.controller;
 
 import com.jd.cho.rule.engine.common.base.CommonDict;
 import com.jd.cho.rule.engine.common.enums.ConstantEnum;
+import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
 import com.jd.cho.rule.engine.common.enums.FactorTypeEnum;
 import com.jd.cho.rule.engine.common.enums.RulePackTypeEnum;
 import com.jd.cho.rule.engine.group.RuleGroupRunStrategy;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -28,6 +30,18 @@ public class RuleCommonController {
     public List<FactorTypeEnum> factorTypeEnums() {
         return FactorTypeEnum.FACTOR_TYPE_ENUMS;
     }
+
+
+    /**
+     * 获取因子类型列表
+     *
+     * @return 因子支持类型
+     */
+    @GetMapping("/factor/express")
+    public List<ExpressOperationEnum> expressOperationEnums(@RequestParam("type") String type) {
+        return ExpressOperationEnum.getOperationByType(type);
+    }
+
 
     /**
      * 获取因子常量类型列表
