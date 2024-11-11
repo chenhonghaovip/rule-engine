@@ -1,7 +1,9 @@
 package com.jd.cho.rule.engine.domain.model;
 
 import com.jd.cho.rule.engine.common.base.CommonDict;
+import com.jd.cho.rule.engine.common.enums.ConstantEnum;
 import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
+import com.jd.cho.rule.engine.common.enums.FactorTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,7 +35,6 @@ public class RuleFactor {
      */
     private String groupName;
 
-
     /**
      * Database Column Remarks:
      * 因子主键
@@ -62,7 +63,7 @@ public class RuleFactor {
      * Database Column Remarks:
      * 因子类型（日期、数值、集合、布尔、文本）
      */
-    private String factorType;
+    private FactorTypeEnum factorType;
 
     /**
      * 支持的操作符
@@ -73,8 +74,14 @@ public class RuleFactor {
      * Database Column Remarks:
      * 常量类型（Input:输入，Enum:枚举，Script:脚本）
      */
-    private String constantType;
+    private ConstantEnum constantType;
 
+
+    /**
+     * Database Column Remarks:
+     * 常量值
+     */
+    private String constantValue;
     /**
      * Database Column Remarks:
      * 常量值

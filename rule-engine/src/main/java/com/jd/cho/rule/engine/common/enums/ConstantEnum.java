@@ -4,6 +4,7 @@ import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author chenhonghao12
@@ -12,9 +13,9 @@ import java.util.List;
 @Getter
 public enum ConstantEnum {
     /**
-     * 脚本类型
+     * 输入类型
      */
-    INPUT("Input", "脚本类型"),
+    INPUT("Input", "输入类型"),
 
     /**
      * 枚举类型
@@ -37,4 +38,8 @@ public enum ConstantEnum {
     }
 
     public static final List<ConstantEnum> CONSTANT_ENUMS = Arrays.asList(ConstantEnum.values());
+
+    public static ConstantEnum getByCode(String code) {
+        return Arrays.stream(ConstantEnum.values()).filter(each -> Objects.equals(each.getCode(), code)).findFirst().orElse(null);
+    }
 }

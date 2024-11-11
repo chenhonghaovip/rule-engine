@@ -25,12 +25,12 @@ public class RuleSceneReq implements Serializable {
     /**
      * 场景描述
      */
-    private String remark;
+    private String sceneDesc;
 
     /**
      * 场景下规则因子分组
      */
-    private List<RuleFactorGroupReq> ruleFactorGroupReqs;
+    private List<RuleFactorGroupReq> ruleFactorGroups;
 
 
 }

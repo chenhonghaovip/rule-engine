@@ -5,7 +5,7 @@ import com.jd.cho.rule.engine.common.exceptions.BusinessException;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.domain.model.RuleFactor;
 import com.jd.cho.rule.engine.service.RuleFactorService;
-import com.jd.cho.rule.engine.service.dto.RuleFactorEditDTO;
+import com.jd.cho.rule.engine.service.dto.RuleFactorDTO;
 import com.jd.cho.rule.engine.service.dto.RuleFactorQueryDTO;
 import org.springframework.stereotype.Service;
 
@@ -26,13 +26,16 @@ public class RuleFactorServiceImpl implements RuleFactorService {
     private RuleConfigGateway ruleConfigGateway;
 
     @Override
-    public String createRuleFactor(RuleFactorEditDTO ruleFactorDTO) {
+    public String createRuleFactor(RuleFactorDTO ruleFactorDTO) {
+        RuleFactor ruleFactor = RuleFactorConvert.INSTANCE.doToEntity(ruleFactorDTO);
+        ruleConfigGateway.createRuleFactor(ruleFactor);
         return null;
     }
 
     @Override
-    public void updateRuleFactor(RuleFactorEditDTO ruleFactorDTO) {
-
+    public void updateRuleFactor(RuleFactorDTO ruleFactorDTO) {
+        RuleFactor ruleFactor = RuleFactorConvert.INSTANCE.doToEntity(ruleFactorDTO);
+        ruleConfigGateway.updateRuleFactor(ruleFactor);
     }
 
     @Override

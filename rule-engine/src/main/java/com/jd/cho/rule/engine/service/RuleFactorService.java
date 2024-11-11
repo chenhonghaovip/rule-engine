@@ -1,6 +1,6 @@
 package com.jd.cho.rule.engine.service;
 
-import com.jd.cho.rule.engine.service.dto.RuleFactorEditDTO;
+import com.jd.cho.rule.engine.service.dto.RuleFactorDTO;
 import com.jd.cho.rule.engine.service.dto.RuleFactorQueryDTO;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public interface RuleFactorService {
      * @param ruleFactorDTO 规则因子
      * @return 规则因子ID
      */
-    String createRuleFactor(RuleFactorEditDTO ruleFactorDTO);
+    String createRuleFactor(RuleFactorDTO ruleFactorDTO);
 
 
     /**
@@ -28,7 +28,7 @@ public interface RuleFactorService {
      *
      * @param ruleFactorDTO 规则因子
      */
-    void updateRuleFactor(RuleFactorEditDTO ruleFactorDTO);
+    void updateRuleFactor(RuleFactorDTO ruleFactorDTO);
 
 
     /**

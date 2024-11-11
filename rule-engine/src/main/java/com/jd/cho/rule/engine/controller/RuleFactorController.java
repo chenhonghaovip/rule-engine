@@ -1,7 +1,9 @@
 package com.jd.cho.rule.engine.controller;
 
+import com.jd.cho.rule.engine.common.convert.RuleFactorConvert;
 import com.jd.cho.rule.engine.controller.VO.req.RuleFactorReq;
 import com.jd.cho.rule.engine.service.RuleFactorService;
+import com.jd.cho.rule.engine.service.dto.RuleFactorDTO;
 import com.jd.cho.rule.engine.service.dto.RuleFactorQueryDTO;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,7 +44,9 @@ public class RuleFactorController {
      * @param ruleFactorReq ruleFactorReq
      */
     @PostMapping(value = "/create")
-    public void create(@RequestBody RuleFactorReq ruleFactorReq) {
+    public String create(@RequestBody RuleFactorReq ruleFactorReq) {
+        RuleFactorDTO ruleFactorEditDTO = RuleFactorConvert.INSTANCE.doToDTO(ruleFactorReq);
+        return ruleFactorService.createRuleFactor(ruleFactorEditDTO);
     }
 
 
@@ -53,6 +57,8 @@ public class RuleFactorController {
      */
     @PostMapping(value = "/modify")
     public void modify(@RequestBody RuleFactorReq ruleFactorReq) {
+        RuleFactorDTO ruleFactorEditDTO = RuleFactorConvert.INSTANCE.doToDTO(ruleFactorReq);
+        ruleFactorService.updateRuleFactor(ruleFactorEditDTO);
     }
 
 

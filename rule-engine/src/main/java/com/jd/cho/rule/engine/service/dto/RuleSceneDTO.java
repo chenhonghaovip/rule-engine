@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 public class RuleSceneDTO implements Serializable {
 
-
+    private Long id;
     /**
      * 场景编码
      */
@@ -28,11 +28,6 @@ public class RuleSceneDTO implements Serializable {
      * 场景描述
      */
     private String sceneDesc;
-
-    /**
-     * 分组编码
-     */
-    private String groupCode;
 
     /**
      * 规则分组信息

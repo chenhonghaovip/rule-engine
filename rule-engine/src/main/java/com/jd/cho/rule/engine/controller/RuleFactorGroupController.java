@@ -16,7 +16,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/rule/factor/group")
 public class RuleFactorGroupController {
-
     /**
      * 分组因子分组查询
      *
@@ -35,6 +34,8 @@ public class RuleFactorGroupController {
      */
     @PostMapping(value = "/create")
     public void create(RuleFactorGroupReq ruleFactorGroupReq) {
+
+
     }
 
 

@@ -50,7 +50,7 @@ public enum FactorTypeEnum {
 
     public static final List<FactorTypeEnum> FACTOR_TYPE_ENUMS = Arrays.asList(FactorTypeEnum.values());
 
-    public static FactorTypeEnum getOperationByOperator(String operator) {
-        return Arrays.stream(FactorTypeEnum.values()).filter(each -> Objects.equals(each.getCode(), operator)).findFirst().orElse(null);
+    public static FactorTypeEnum getByCode(String code) {
+        return Arrays.stream(FactorTypeEnum.values()).filter(each -> Objects.equals(each.getCode(), code)).findFirst().orElse(null);
     }
 }

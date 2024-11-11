@@ -1,6 +1,5 @@
 package com.jd.cho.rule.engine.service.dto;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.jd.cho.rule.engine.common.enums.RulePackTypeEnum;
 import lombok.Data;
 
@@ -16,27 +15,50 @@ public class RulePackDTO implements Serializable {
 
     private Long id;
 
-    @JSONField(name = "rulePackName")
+    /**
+     * 规则包名称
+     */
     private String rulePackName;
-    @JSONField(name = "rulePackCode")
+
+    /**
+     * 规则包code
+     */
     private String rulePackCode;
-    @JSONField(name = "rulePackType")
+    /**
+     * 规则包类型
+     */
     private RulePackTypeEnum rulePackType;
-    @JSONField(name = "ruleArrangeStrategy")
+
+    /**
+     * 包内规则执行策略
+     */
     private String ruleArrangeStrategy;
-    @JSONField(name = "remark")
+    /**
+     * 规则包描述
+     */
     private String remark;
-    @JSONField(name = "rules")
+
+    /**
+     * 包内规则信息
+     */
     private List<RulesBean> rules;
 
     @Data
     public static class RulesBean implements Serializable {
 
-        @JSONField(name = "ruleCondition")
+        /**
+         * 规则条件
+         */
         private RuleConditionBean ruleCondition;
-        @JSONField(name = "priority")
+
+        /**
+         * 规则优先级
+         */
         private Integer priority;
-        @JSONField(name = "ruleAction")
+
+        /**
+         * 规则动作
+         */
         private List<RuleActionBean> ruleActions;
 
         @Data
@@ -51,7 +73,6 @@ public class RulePackDTO implements Serializable {
              * 比较运算
              */
             private String compareOperation;
-
 
             /**
              * 因子code
@@ -68,7 +89,6 @@ public class RulePackDTO implements Serializable {
              */
             private Object value;
 
-
             /**
              * 子规则列表
              */
@@ -77,14 +97,15 @@ public class RulePackDTO implements Serializable {
 
         @Data
         public static class RuleActionBean implements Serializable {
-            /**
-             * fieldCode : field1
-             * values : [11,22]
-             */
 
-            @JSONField(name = "fieldCode")
+            /**
+             * 字段code
+             */
             private String fieldCode;
-            @JSONField(name = "values")
+
+            /**
+             * 字段值
+             */
             private Object values;
         }
     }
