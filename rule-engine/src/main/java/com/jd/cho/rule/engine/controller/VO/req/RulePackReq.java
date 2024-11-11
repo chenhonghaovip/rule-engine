@@ -1,7 +1,6 @@
-package com.jd.cho.rule.engine.service.dto;
+package com.jd.cho.rule.engine.controller.VO.req;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.jd.cho.rule.engine.common.enums.RulePackTypeEnum;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,16 +11,14 @@ import java.util.List;
  * @version 1.0
  */
 @Data
-public class RulePackDTO implements Serializable {
-
-    private Long id;
+public class RulePackReq implements Serializable {
 
     @JSONField(name = "rulePackName")
     private String rulePackName;
     @JSONField(name = "rulePackCode")
     private String rulePackCode;
     @JSONField(name = "rulePackType")
-    private RulePackTypeEnum rulePackType;
+    private String rulePackType;
     @JSONField(name = "ruleArrangeStrategy")
     private String ruleArrangeStrategy;
     @JSONField(name = "remark")

@@ -1,6 +1,8 @@
 package com.jd.cho.rule.engine.controller;
 
+import com.jd.cho.rule.engine.common.convert.RulePackConvert;
 import com.jd.cho.rule.engine.controller.VO.req.RuleFactorReq;
+import com.jd.cho.rule.engine.controller.VO.req.RulePackReq;
 import com.jd.cho.rule.engine.service.RuleFactorService;
 import com.jd.cho.rule.engine.service.RulePackService;
 import com.jd.cho.rule.engine.service.dto.RuleFactorQueryDTO;
@@ -41,7 +43,9 @@ public class RuleFactorController {
     }
 
     @PostMapping(value = "/test")
-    public String test(@RequestBody RulePackDTO rulePackDTO) {
+    public String test(@RequestBody RulePackReq rulePackReq) {
+        RulePackDTO rulePackDTO = RulePackConvert.INSTANCE.doToDTO(rulePackReq);
+
         return rulePackService.createRule(rulePackDTO);
     }
 

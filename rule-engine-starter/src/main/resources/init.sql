@@ -102,7 +102,7 @@ create table rule_pack
     version               int      default 1                 not null comment '版本号',
     latest                int      default 1                 not null comment '是否最新版本（0:否，1:是）',
     remark                varchar(200) null comment '备注',
-    status                tinyint(1) not null comment '状态（0:否，1:是）',
+    status                tinyint(1) not null default 1 comment '状态（0:否，1:是）',
     yn                    tinyint(1) default 1 not null comment '是否删除 1-否，0-是',
     create_time           datetime default CURRENT_TIMESTAMP not null comment '创建时间',
     modify_time           datetime null comment '更新时间',

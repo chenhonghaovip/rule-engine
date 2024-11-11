@@ -44,8 +44,17 @@ public interface RuleDefMapper {
     int insert(InsertStatementProvider<RuleDefDO> insertStatement);
 
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_def")
-    @InsertProvider(type = SqlProviderAdapter.class, method = "insertMultiple")
-    int insertMultiple(MultiRowInsertStatementProvider<RuleDefDO> multipleInsertStatement);
+    @Insert({
+            "${insertStatement}"
+    })
+    @Options(useGeneratedKeys = true, keyProperty = "records.id")
+    int insertMultiple(@Param("insertStatement") String insertStatement, @Param("records") List<RuleDefDO> records);
+
+
+    @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_def")
+    default int insertMultiple(MultiRowInsertStatementProvider<RuleDefDO> multipleInsertStatement) {
+        return insertMultiple(multipleInsertStatement.getInsertStatement(), multipleInsertStatement.getRecords());
+    }
 
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_def")
     @SelectProvider(type = SqlProviderAdapter.class, method = "select")
@@ -115,6 +124,18 @@ public interface RuleDefMapper {
                         .map(modifyTime).toProperty("modifyTime")
                         .map(creator).toProperty("creator")
                         .map(modifier).toProperty("modifier")
+                        .map(tenant).toProperty("tenant")
+                        .map(ruleCondition).toProperty("ruleCondition")
+                        .map(ruleAction).toProperty("ruleAction")
+        );
+    }
+
+
+    @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_def")
+    default int insertMultipleSelective(Collection<RuleDefDO> records) {
+        return MyBatis3Utils.insertMultiple(this::insertMultiple, records, ruleDef, c ->
+                c.map(priority).toProperty("priority")
+                        .map(creator).toProperty("creator")
                         .map(tenant).toProperty("tenant")
                         .map(ruleCondition).toProperty("ruleCondition")
                         .map(ruleAction).toProperty("ruleAction")

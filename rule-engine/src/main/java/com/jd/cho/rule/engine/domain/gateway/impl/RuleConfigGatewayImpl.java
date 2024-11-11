@@ -121,10 +121,15 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     @Transactional(rollbackFor = Exception.class)
     public String createRulePack(RulePackDTO rulePackDTO) {
         if (Objects.nonNull(rulePackDTO)) {
-            String loginUser = atomicLoginUserComponent.getLoginUser();
+            long count = rulePackMapper.count(s -> s.where(RulePackDynamicSqlSupport.rulePackCode, isEqualTo(rulePackDTO.getRulePackCode()))
+                    .and(RulePackDynamicSqlSupport.yn, isEqualTo(true)));
+            if (count > 0) {
+                throw new BusinessException("规则包code重复");
+            }
+            UserInfo loginUserInfo = atomicLoginUserComponent.getLoginUserInfo();
             String rulePackCode = StringUtils.isNotBlank(rulePackDTO.getRulePackCode()) ? rulePackDTO.getRulePackCode() : UUID.randomUUID().toString();
             rulePackDTO.setRulePackCode(rulePackCode);
-            return insertRuleGroup(rulePackDTO, 1, loginUser);
+            return insertRuleGroup(rulePackDTO, 1, loginUserInfo);
         }
         return null;
     }
@@ -132,15 +137,16 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateRulePack(RulePackDTO rulePackDTO) {
-        String loginUser = atomicLoginUserComponent.getLoginUser();
+
         if (Objects.nonNull(rulePackDTO)) {
             // 修改旧版本信息
             Long id = rulePackDTO.getId();
             Optional<RulePackDO> optionalRulePackDO = rulePackMapper.selectByPrimaryKey(id);
             optionalRulePackDO.ifPresent(each -> {
 
+                UserInfo loginUserInfo = atomicLoginUserComponent.getLoginUserInfo();
                 int update = rulePackMapper.update(s -> s.set(RulePackDynamicSqlSupport.modifyTime).equalTo(new Date())
-                        .set(RulePackDynamicSqlSupport.modifier).equalTo(loginUser)
+                        .set(RulePackDynamicSqlSupport.modifier).equalTo(loginUserInfo.getLoginUser())
                         .set(RulePackDynamicSqlSupport.latest).equalTo(0)
                         .where(RulePackDynamicSqlSupport.id, isEqualTo(id)).and(RulePackDynamicSqlSupport.latest, isEqualTo(1)));
                 if (update == 0) {
@@ -148,7 +154,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
                 }
 
                 int version = optionalRulePackDO.get().getVersion() + 1;
-                insertRuleGroup(rulePackDTO, version, loginUser);
+                insertRuleGroup(rulePackDTO, version, loginUserInfo);
             });
         }
     }
@@ -211,25 +217,29 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     /**
      * 添加规则包信息
      *
-     * @param rulePackDTO 规则包
-     * @param version     规则包版本
-     * @param loginUser   登录人
+     * @param rulePackDTO   规则包
+     * @param version       规则包版本
+     * @param loginUserInfo 登录人
      * @return 规则包编号
      */
-    private String insertRuleGroup(RulePackDTO rulePackDTO, int version, String loginUser) {
-        List<RuleDefDO> ruleDefs = rulePackDTO.getRules().stream().map(o -> new RuleDefDO().withRuleAction(JSON.toJSONString(o.getRuleAction())).withRuleAction(JSON.toJSONString(o.getRuleCondition())).withPriority(o.getPriority())).collect(Collectors.toList());
-        ruleDefMapper.insertMultiple(ruleDefs);
+    private String insertRuleGroup(RulePackDTO rulePackDTO, int version, UserInfo loginUserInfo) {
+        List<RuleDefDO> ruleDefs = rulePackDTO.getRules().stream()
+                .map(o -> RuleDefDO.builder().ruleAction(JSON.toJSONString(o.getRuleAction()))
+                        .ruleCondition(JSON.toJSONString(o.getRuleCondition()))
+                        .priority(o.getPriority()).creator(loginUserInfo.getLoginUser()).tenant(loginUserInfo.getTenant()).build()).collect(Collectors.toList());
+        ruleDefMapper.insertMultipleSelective(ruleDefs);
 
         List<RuleCondition> ruleConditions = rulePackDTO.getRules().stream().map(each -> JSON.parseObject(JSON.toJSONString(each.getRuleCondition()), RuleCondition.class)).collect(Collectors.toList());
         Map<String, List<String>> factorScriptParam = getFactorScriptParam(ruleConditions);
 
-        String ruleIds = ruleDefs.stream().map(o -> String.valueOf(o.getId())).collect(Collectors.joining(","));
+        String ruleIds = ruleDefs.stream().filter(each -> Objects.nonNull(each.getId())).map(o -> String.valueOf(o.getId())).collect(Collectors.joining(","));
         RulePackDO rulePackDO = RulePackConvert.INSTANCE.doToDO(rulePackDTO);
-        rulePackDO.setCreator(loginUser);
+        rulePackDO.setCreator(loginUserInfo.getLoginUser());
         rulePackDO.setRuleIds(ruleIds);
         rulePackDO.setVersion(version);
+        rulePackDO.setTenant(loginUserInfo.getTenant());
         rulePackDO.setPackParams(JSON.toJSONString(factorScriptParam));
-        rulePackMapper.insert(rulePackDO);
+        rulePackMapper.insertSelective(rulePackDO);
         return rulePackDTO.getRulePackCode();
     }
 
