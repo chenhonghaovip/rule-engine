@@ -38,7 +38,7 @@ public class RuleFactorReq implements Serializable {
     private String constantType;
 
     /**
-     * 常量值
+     * 常量值脚本
      */
     private String constantValue;
 

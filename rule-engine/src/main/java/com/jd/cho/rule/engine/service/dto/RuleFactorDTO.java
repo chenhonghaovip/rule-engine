@@ -59,9 +59,25 @@ public class RuleFactorDTO implements Serializable {
     private ConstantEnum constantType;
 
     /**
+     * 常量值脚本
+     */
+    private String constantValue;
+
+    /**
      * 常量值
      */
     private List<CommonDict> constantValues;
+
+
+    /**
+     * 脚本代码
+     */
+    private String factorScript;
+
+    /**
+     * 脚本参数
+     */
+    private String factorScriptParam;
 
     /**
      * 备注

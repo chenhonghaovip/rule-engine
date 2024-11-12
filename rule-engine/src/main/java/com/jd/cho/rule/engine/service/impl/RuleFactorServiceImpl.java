@@ -3,7 +3,9 @@ package com.jd.cho.rule.engine.service.impl;
 import com.jd.cho.rule.engine.common.base.CommonDict;
 import com.jd.cho.rule.engine.common.convert.RuleFactorConvert;
 import com.jd.cho.rule.engine.common.dict.Dict;
+import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
 import com.jd.cho.rule.engine.common.exceptions.BusinessException;
+import com.jd.cho.rule.engine.common.util.AssertUtil;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.domain.model.RuleFactor;
 import com.jd.cho.rule.engine.service.RuleFactorService;
@@ -30,6 +32,10 @@ public class RuleFactorServiceImpl implements RuleFactorService {
     @Override
     public String createRuleFactor(RuleFactorDTO ruleFactorDTO) {
         RuleFactor ruleFactor = RuleFactorConvert.INSTANCE.doToEntity(ruleFactorDTO);
+
+        AssertUtil.isNotNull(ruleFactor, BizErrorEnum.DOES_NOT_EXIST);
+        AssertUtil.isNotBlank(ruleFactor.getFactorCode(), BizErrorEnum.DOES_NOT_EXIST);
+        AssertUtil.isNotNull(ruleFactor.getFactorType(), BizErrorEnum.FACTOR_TYPE_IS_NOT_EXIST);
         ruleConfigGateway.createRuleFactor(ruleFactor);
         return null;
     }

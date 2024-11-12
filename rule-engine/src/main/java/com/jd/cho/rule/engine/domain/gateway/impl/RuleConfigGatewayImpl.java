@@ -27,7 +27,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Type;
@@ -201,7 +200,6 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
 
     @Override
     public String createRuleFactorGroup(RuleFactorGroup ruleFactorGroup) {
-        Assert.notNull(ruleFactorGroup, "数据不能为空");
         if (StringUtils.isBlank(ruleFactorGroup.getGroupCode())) {
             ruleFactorGroup.setGroupCode(UUID.randomUUID().toString());
         }
@@ -215,21 +213,16 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
 
     @Override
     public void createRuleFactor(RuleFactor ruleFactor) {
-        AssertUtil.isNotNull(ruleFactor, BizErrorEnum.DOES_NOT_EXIST);
-        AssertUtil.isNotBlank(ruleFactor.getFactorCode(), BizErrorEnum.DOES_NOT_EXIST);
-        UserInfo loginUserInfo = AtomicLoginUserComponent.getLoginUserInfo();
-
         long count = ruleFactorMapper.count(s -> s.where(RuleFactorDynamicSqlSupport.factorCode, isEqualTo(ruleFactor.getFactorCode()))
-                .and(RuleFactorDynamicSqlSupport.tenant, isEqualTo(loginUserInfo.getTenant()))
                 .and(RuleFactorDynamicSqlSupport.yn, isEqualTo(true)));
         if (count > 0) {
             throw new BusinessException(BizErrorEnum.CODE_IS_EXIST);
         }
 
-        RuleFactorDO ruleFactorDO = RuleFactorConvert.INSTANCE.doToDO(ruleFactor);
+        groupExistCheck(Lists.newArrayList(ruleFactor.getGroupCode()));
 
-        ruleFactorDO.setCreator(loginUserInfo.getLoginUser());
-        ruleFactorDO.setTenant(loginUserInfo.getTenant());
+        RuleFactorDO ruleFactorDO = RuleFactorConvert.INSTANCE.doToDO(ruleFactor);
+        AtomicLoginUserComponent.packCreateBaseInfo(ruleFactorDO);
         ruleFactorMapper.insertSelective(ruleFactorDO);
     }
 
@@ -237,9 +230,10 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     public void updateRuleFactor(RuleFactor ruleFactor) {
         AssertUtil.isNotNull(ruleFactor, BizErrorEnum.DOES_NOT_EXIST);
         AssertUtil.isNotBlank(ruleFactor.getFactorCode(), BizErrorEnum.DOES_NOT_EXIST);
+        groupExistCheck(Lists.newArrayList(ruleFactor.getGroupCode()));
+
         RuleFactorDO ruleFactorDO = RuleFactorConvert.INSTANCE.doToDO(ruleFactor);
-        ruleFactorDO.setModifier(AtomicLoginUserComponent.getLoginUserInfo().getLoginUser());
-        ruleFactorDO.setModifyTime(new Date());
+        AtomicLoginUserComponent.packUpdateBaseInfo(ruleFactorDO);
         ruleFactorDO.setFactorCode(null);
         ruleFactorMapper.updateByPrimaryKeySelective(ruleFactorDO);
     }
@@ -279,12 +273,12 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     @Override
     public List<CommonDict> factorConstantValues(Map<String, Object> context) {
         String factorCode = (String) context.get(Dict.FACTOR_CODE);
-        List<RuleFactorDO> ruleFactorDOS = ruleFactorMapper.select(s -> s.where(RuleFactorDynamicSqlSupport.factorCode, isEqualTo(factorCode))
+        List<RuleFactorDO> ruleFactorList = ruleFactorMapper.select(s -> s.where(RuleFactorDynamicSqlSupport.factorCode, isEqualTo(factorCode))
                 .and(RuleFactorDynamicSqlSupport.yn, isEqualTo(true)));
-        if (CollectionUtils.isEmpty(ruleFactorDOS)) {
+        if (CollectionUtils.isEmpty(ruleFactorList)) {
             throw new BusinessException(BizErrorEnum.DOES_NOT_EXIST);
         }
-        RuleFactorDO ruleFactorDO = ruleFactorDOS.get(0);
+        RuleFactorDO ruleFactorDO = ruleFactorList.get(0);
         return getDict(ruleFactorDO.getConstantType(), ruleFactorDO.getConstantValue(), context);
     }
 
@@ -447,11 +441,10 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
 
         String ruleIds = ruleDefs.stream().filter(each -> Objects.nonNull(each.getId())).map(o -> String.valueOf(o.getId())).collect(Collectors.joining(Dict.SPLIT));
         RulePackDO rulePackDO = RulePackConvert.INSTANCE.doToDO(rulePackDTO);
-        rulePackDO.setCreator(loginUserInfo.getLoginUser());
         rulePackDO.setRuleIds(ruleIds);
         rulePackDO.setVersion(version);
-        rulePackDO.setTenant(loginUserInfo.getTenant());
         rulePackDO.setPackParams(JSON.toJSONString(factorScriptParam));
+        AtomicLoginUserComponent.packCreateBaseInfo(rulePackDO);
         rulePackMapper.insertSelective(rulePackDO);
         return rulePackDTO.getRulePackCode();
     }
