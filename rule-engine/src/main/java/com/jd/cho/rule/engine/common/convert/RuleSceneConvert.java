@@ -24,6 +24,7 @@ public interface RuleSceneConvert {
     RuleScene doToEntity(RuleSceneDTO ruleSceneDTO);
 
 
+    @Mapping(target = "groupCode", expression = "java(ruleScene.getRuleFactorGroups().stream().map(RuleFactorGroup::getGroupCode).collect(java.util.stream.Collectors.joining(com.jd.cho.rule.engine.common.dict.Dict.SPLIT)))")
     RuleSceneDO doToDO(RuleScene ruleScene);
 
 

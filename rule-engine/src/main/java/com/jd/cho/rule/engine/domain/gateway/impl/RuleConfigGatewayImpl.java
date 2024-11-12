@@ -74,9 +74,10 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
             throw new BusinessException(BizErrorEnum.SCENE_CODE_IS_EXIST);
         }
 
+        List<String> groupCodes = ruleScene.getRuleFactorGroups().stream().map(RuleFactorGroup::getGroupCode).collect(Collectors.toList());
+        groupExistCheck(groupCodes);
+
         RuleSceneDO ruleSceneDO = RuleSceneConvert.INSTANCE.doToDO(ruleScene);
-        String groupCode = ruleScene.getRuleFactorGroups().stream().map(RuleFactorGroup::getGroupCode).collect(Collectors.joining(Dict.SPLIT));
-        ruleSceneDO.setGroupCode(groupCode);
         AtomicLoginUserComponent.packCreateBaseInfo(ruleSceneDO);
         ruleSceneMapper.insertSelective(ruleSceneDO);
 
@@ -84,6 +85,20 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
             this.createRuleSceneAction(ruleScene.getRuleSceneActions(), ruleScene.getSceneCode());
         }
         return ruleScene.getSceneCode();
+    }
+
+    /**
+     * 判断groupCode是否真实有效存在
+     *
+     * @param groupCodes 分组code
+     */
+    private void groupExistCheck(List<String> groupCodes) {
+        if (CollectionUtils.isNotEmpty(groupCodes)) {
+            List<RuleFactorGroup> ruleFactorGroups = this.queryRuleFactorGroup(groupCodes);
+            if (ruleFactorGroups.size() != groupCodes.size()) {
+                throw new BusinessException(BizErrorEnum.GROUP_CODE_IS_NOT_EXIST);
+            }
+        }
     }
 
     @Override
@@ -118,12 +133,13 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateRuleScene(RuleScene ruleScene) {
+
+        List<String> groupCodes = ruleScene.getRuleFactorGroups().stream().map(RuleFactorGroup::getGroupCode).collect(Collectors.toList());
+        groupExistCheck(groupCodes);
+
         ruleScene.setSceneCode(null);
         RuleSceneDO ruleSceneDO = RuleSceneConvert.INSTANCE.doToDO(ruleScene);
-        String groupCode = ruleScene.getRuleFactorGroups().stream().map(RuleFactorGroup::getGroupCode).collect(Collectors.joining(Dict.SPLIT));
-        ruleSceneDO.setGroupCode(groupCode);
-        ruleSceneDO.setModifier(AtomicLoginUserComponent.getLoginUser());
-        ruleSceneDO.setModifyTime(new Date());
+        AtomicLoginUserComponent.packUpdateBaseInfo(ruleSceneDO);
         ruleSceneMapper.updateByPrimaryKeySelective(ruleSceneDO);
 
         if (CollectionUtils.isNotEmpty(ruleScene.getRuleSceneActions())) {
@@ -195,16 +211,6 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
                 .tenant(loginUserInfo.getTenant()).build();
         ruleFactorGroupMapper.insertSelective(ruleFactorGroupDO);
         return ruleFactorGroup.getGroupCode();
-    }
-
-    @Override
-    public void updateRuleFactorGroup(RuleFactorGroup ruleFactorGroup) {
-        Assert.notNull(ruleFactorGroup, "数据不能为空");
-        UserInfo loginUserInfo = AtomicLoginUserComponent.getLoginUserInfo();
-        RuleFactorGroupDO ruleFactorGroupDO = RuleFactorGroupDO.builder().groupCode(ruleFactorGroup.getGroupCode())
-                .groupName(ruleFactorGroup.getGroupName()).modifier(loginUserInfo.getLoginUser())
-                .modifyTime(new Date()).build();
-        ruleFactorGroupMapper.updateByPrimaryKey(ruleFactorGroupDO);
     }
 
     @Override

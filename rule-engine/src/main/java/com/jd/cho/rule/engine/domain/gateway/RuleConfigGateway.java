@@ -79,10 +79,6 @@ public interface RuleConfigGateway {
      */
     String createRuleFactorGroup(RuleFactorGroup ruleFactorGroup);
 
-    /**
-     * 修改规则因子分组
-     */
-    void updateRuleFactorGroup(RuleFactorGroup ruleFactorGroup);
     /**---------------------------------------           规则因子分组end                     --------------------------------------*/
 
 

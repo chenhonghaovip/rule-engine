@@ -18,6 +18,7 @@ public enum BizErrorEnum implements CommonException {
     CODE_IS_EXIST(-6, "该code已存在，请修改后重试"),
     ACTION_CODE_IS_EXIST(-7, "当前场景下动作code重复"),
     SCENE_CODE_IS_EXIST(-8, "当前场景code重复"),
+    GROUP_CODE_IS_NOT_EXIST(-9, "规则因子分组code不存在"),
 
     ;
 
