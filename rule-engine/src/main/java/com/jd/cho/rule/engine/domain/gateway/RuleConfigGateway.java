@@ -1,5 +1,6 @@
 package com.jd.cho.rule.engine.domain.gateway;
 
+import com.jd.cho.rule.engine.common.base.CommonDict;
 import com.jd.cho.rule.engine.domain.model.*;
 import com.jd.cho.rule.engine.service.dto.RulePackDTO;
 
@@ -103,6 +104,13 @@ public interface RuleConfigGateway {
      */
     List<RuleFactor> queryBySceneCode(String sceneCode, Map<String, Object> context);
 
+    /**
+     * 获取规则因子的下拉列表值
+     *
+     * @param context 场景code、规则因子常量值所需参数等
+     * @return list
+     */
+    List<CommonDict> factorConstantValues(Map<String, Object> context);
 
     /**---------------------------------------           规则因子end                     --------------------------------------*/
 

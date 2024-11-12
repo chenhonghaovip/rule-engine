@@ -224,6 +224,18 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     }
 
     @Override
+    public List<CommonDict> factorConstantValues(Map<String, Object> context) {
+        String factorCode = (String) context.get(Dict.FACTOR_CODE);
+        List<RuleFactorDO> ruleFactorDOS = ruleFactorMapper.select(s -> s.where(RuleFactorDynamicSqlSupport.factorCode, isEqualTo(factorCode))
+                .and(RuleFactorDynamicSqlSupport.yn, isEqualTo(true)));
+        if (CollectionUtils.isEmpty(ruleFactorDOS)) {
+            throw new BusinessException(BizErrorEnum.DOES_NOT_EXIST);
+        }
+        RuleFactorDO ruleFactorDO = ruleFactorDOS.get(0);
+        return getDict(ruleFactorDO.getConstantType(), ruleFactorDO.getConstantValue(), context);
+    }
+
+    @Override
     public RulePack rulePackInfo(String rulePackCode) {
         Optional<RulePackDO> optionalRulePackDO = rulePackMapper.selectOne(s -> s.where(RulePackDynamicSqlSupport.rulePackCode, isEqualTo(rulePackCode))
                 .and(RulePackDynamicSqlSupport.yn, isEqualTo(true))

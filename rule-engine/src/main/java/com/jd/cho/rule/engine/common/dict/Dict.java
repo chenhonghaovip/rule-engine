@@ -6,8 +6,18 @@ package com.jd.cho.rule.engine.common.dict;
  */
 public class Dict {
 
-    // 事实别名
-    public static final String FACT_ALIAS = "fact";
+    /**
+     * 场景code
+     */
+    public static final String SCENE_CODE = "sceneCode";
+
+
+    /**
+     * 因子code
+     */
+    public static final String FACTOR_CODE = "factorCode";
+
+
     // 结果别名
     public static final String RESULT_ALIAS = "result";
     // and关系

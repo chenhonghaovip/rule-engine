@@ -1,5 +1,6 @@
 package com.jd.cho.rule.engine.controller;
 
+import com.jd.cho.rule.engine.common.base.CommonDict;
 import com.jd.cho.rule.engine.common.convert.RuleFactorConvert;
 import com.jd.cho.rule.engine.controller.VO.req.RuleFactorReq;
 import com.jd.cho.rule.engine.service.RuleFactorService;
@@ -29,12 +30,24 @@ public class RuleFactorController {
     /**
      * 获取规则因子列表
      *
-     * @param context 场景code
+     * @param context 场景code、规则因子常量值所需参数等
      * @return list
      */
     @PostMapping(value = "/list")
     public List<RuleFactorQueryDTO> list(@RequestBody Map<String, Object> context) {
         return ruleFactorService.queryBySceneCode(context);
+    }
+
+
+    /**
+     * 获取规则因子的下拉列表值
+     *
+     * @param context 场景code、规则因子常量值所需参数等
+     * @return list
+     */
+    @PostMapping(value = "/values")
+    public List<CommonDict> factorConstantValues(@RequestBody Map<String, Object> context) {
+        return ruleFactorService.factorConstantValues(context);
     }
 
 

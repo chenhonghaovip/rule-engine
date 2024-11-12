@@ -1,6 +1,8 @@
 package com.jd.cho.rule.engine.service.impl;
 
+import com.jd.cho.rule.engine.common.base.CommonDict;
 import com.jd.cho.rule.engine.common.convert.RuleFactorConvert;
+import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.exceptions.BusinessException;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.domain.model.RuleFactor;
@@ -40,10 +42,10 @@ public class RuleFactorServiceImpl implements RuleFactorService {
 
     @Override
     public List<RuleFactorQueryDTO> queryBySceneCode(Map<String, Object> context) {
-        if (Objects.isNull(context) || Objects.isNull(context.get("sceneCode"))) {
+        if (Objects.isNull(context) || Objects.isNull(context.get(Dict.SCENE_CODE))) {
             throw new BusinessException("场景编码不能为空");
         }
-        String sceneCode = (String) context.get("sceneCode");
+        String sceneCode = (String) context.get(Dict.SCENE_CODE);
         List<RuleFactor> ruleFactors = ruleConfigGateway.queryBySceneCode(sceneCode, context);
         Map<String, List<RuleFactor>> groupCodeMaps = ruleFactors.stream().collect(Collectors.groupingBy(RuleFactor::getGroupCode));
 
@@ -53,5 +55,13 @@ public class RuleFactorServiceImpl implements RuleFactorService {
                         .groupName(each.getValue().stream().findFirst().orElse(new RuleFactor()).getGroupName())
                         .ruleFactorBeans(each.getValue().stream().map(RuleFactorConvert.INSTANCE::doToDTO).collect(Collectors.toList())).build()).collect(Collectors.toList());
 
+    }
+
+    @Override
+    public List<CommonDict> factorConstantValues(Map<String, Object> context) {
+        if (Objects.isNull(context) || Objects.isNull(context.get(Dict.FACTOR_CODE))) {
+            throw new BusinessException("规则因子编码不能为空");
+        }
+        return ruleConfigGateway.factorConstantValues(context);
     }
 }

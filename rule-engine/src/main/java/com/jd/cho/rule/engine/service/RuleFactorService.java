@@ -1,5 +1,6 @@
 package com.jd.cho.rule.engine.service;
 
+import com.jd.cho.rule.engine.common.base.CommonDict;
 import com.jd.cho.rule.engine.service.dto.RuleFactorDTO;
 import com.jd.cho.rule.engine.service.dto.RuleFactorQueryDTO;
 
@@ -40,4 +41,11 @@ public interface RuleFactorService {
     List<RuleFactorQueryDTO> queryBySceneCode(Map<String, Object> context);
 
 
+    /**
+     * 获取规则因子的下拉列表值
+     *
+     * @param context 场景code、规则因子常量值所需参数等
+     * @return list
+     */
+    List<CommonDict> factorConstantValues(Map<String, Object> context);
 }
