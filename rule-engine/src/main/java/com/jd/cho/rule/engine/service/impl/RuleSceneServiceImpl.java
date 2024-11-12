@@ -8,10 +8,12 @@ import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.domain.model.RuleScene;
 import com.jd.cho.rule.engine.service.RuleSceneService;
 import com.jd.cho.rule.engine.service.dto.RuleSceneDTO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -36,6 +38,10 @@ public class RuleSceneServiceImpl implements RuleSceneService {
         AssertUtil.isNotNull(ruleSceneDTO, BizErrorEnum.DOES_NOT_EXIST);
         ruleSceneDTO.setId(null);
         RuleScene ruleScene = RuleSceneConvert.INSTANCE.doToEntity(ruleSceneDTO);
+        if (StringUtils.isBlank(ruleScene.getSceneCode())) {
+            String sceneCode = UUID.randomUUID().toString();
+            ruleScene.setSceneCode(sceneCode);
+        }
         return ruleConfigGateway.createRuleScene(ruleScene);
     }
 

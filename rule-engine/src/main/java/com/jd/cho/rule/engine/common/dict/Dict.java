@@ -11,35 +11,68 @@ public class Dict {
      */
     public static final String SCENE_CODE = "sceneCode";
 
-
     /**
      * 因子code
      */
     public static final String FACTOR_CODE = "factorCode";
 
-
-    // 结果别名
+    /**
+     * 结果别名
+     */
     public static final String RESULT_ALIAS = "result";
-    // and关系
+
+    /**
+     * and关系
+     */
     public static final String RELATION_AND = "and";
-    // or关系
+
+    /**
+     * or关系
+     */
     public static final String RELATION_OR = "or";
-    // 匹配成功信息
-    public static final String MATCH_SUCCESS_MESSAGE = "匹配成功";
-    public static final String FIELD_TYPE = "type";
-    public static final String FIELD_OPERATOR = "operator";
-    public static final String FIELD_NAME = "metricName";
-    public static final String FIELD_VALUE = "value";
-    public static final String FIELD_CHILDREN = "children";
+
+    /**
+     * 表达式类型-EXPRESSION
+     */
     public static final String EXPRESSION_TYPE = "EXPRESSION";
+
+    /**
+     * 表达式类型-RELATION
+     */
     public static final String RELATION_TYPE = "RELATION";
+
+    /**
+     * 左括号
+     */
     public static final String LEFT_BRACKETS = "(";
+
+    /**
+     * 右括号
+     */
     public static final String RIGHT_BRACKETS = ")";
+
+    /**
+     * 空格
+     */
     public static final String SYMBOL_SPACE = " ";
+
+    /**
+     * 空
+     */
     public static final String SYMBOL_EMPTY = "";
+
+    /**
+     * 逻辑与
+     */
     public static final String LOGICAL_AND = "&&";
+
+    /**
+     * 逻辑或
+     */
     public static final String LOGICAL_OR = "||";
 
-
+    /**
+     * 逗号
+     */
     public static final String SPLIT = ",";
 }

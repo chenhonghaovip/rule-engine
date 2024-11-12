@@ -1,5 +1,6 @@
 package com.jd.cho.rule.engine.common.enums;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -11,6 +12,7 @@ import java.util.Objects;
  * @version 1.0
  */
 @Getter
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum FactorTypeEnum {
     /**
      * 文本类型

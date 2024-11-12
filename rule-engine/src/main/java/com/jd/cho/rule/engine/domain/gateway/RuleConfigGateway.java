@@ -23,60 +23,57 @@ public interface RuleConfigGateway {
     List<RuleScene> queryRuleScene();
 
     /**
-     * 查询规则场景
+     * 创建规则场景
      *
      * @return List<RuleScene>
      */
     String createRuleScene(RuleScene ruleScene);
 
     /**
-     * 查询规则场景
+     * 编辑规则场景
      */
     void updateRuleScene(RuleScene ruleScene);
 
 
     /**---------------------------------------           规则场景end                     --------------------------------------*/
 
-
     /**---------------------------------------           规则动作start                     --------------------------------------*/
     /**
-     * 查询规则场景
+     * 查询规则动作
      *
      * @return List<RuleScene>
      */
     List<RuleSceneAction> queryRuleSceneAction(String sceneCode);
 
     /**
-     * 查询规则场景
-     *
-     * @return List<RuleScene>
+     * 创建规则动作
      */
-    String createRuleSceneAction(RuleSceneAction ruleSceneAction);
+    void createRuleSceneAction(List<RuleSceneAction> ruleSceneActions, String sceneCode);
 
     /**
-     * 查询规则场景
+     * 编辑规则动作
      */
-    void updateRuleSceneAction(RuleSceneAction ruleSceneAction);
+    void updateRuleSceneAction(List<RuleSceneAction> ruleSceneActions, String sceneCode);
     /**---------------------------------------           规则动作end                     --------------------------------------*/
 
 
     /**---------------------------------------           规则因子分组start                     --------------------------------------*/
     /**
-     * 查询规则场景
+     * 查询规则因子分组
      *
      * @return List<RuleScene>
      */
     List<RuleFactorGroup> queryRuleFactorGroup();
 
     /**
-     * 查询规则场景
+     * 创建规则因子分组
      *
      * @return List<RuleScene>
      */
     String createRuleFactorGroup(RuleFactorGroup ruleFactorGroup);
 
     /**
-     * 查询规则场景
+     * 修改规则因子分组
      */
     void updateRuleFactorGroup(RuleFactorGroup ruleFactorGroup);
     /**---------------------------------------           规则因子分组end                     --------------------------------------*/
@@ -85,14 +82,12 @@ public interface RuleConfigGateway {
     /**---------------------------------------           规则因子start                     --------------------------------------*/
 
     /**
-     * 查询规则场景
-     *
-     * @return List<RuleScene>
+     * 创建规则因子
      */
     void createRuleFactor(RuleFactor ruleFactor);
 
     /**
-     * 查询规则场景
+     * 编辑规则因子
      */
     void updateRuleFactor(RuleFactor ruleFactor);
 

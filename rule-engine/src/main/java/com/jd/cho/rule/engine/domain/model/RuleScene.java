@@ -32,4 +32,9 @@ public class RuleScene {
      */
     private List<RuleFactorGroup> ruleFactorGroups;
 
+    /**
+     * 动作信息
+     */
+    private List<RuleSceneAction> ruleSceneActions;
+
 }

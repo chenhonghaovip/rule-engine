@@ -1,6 +1,5 @@
-package com.jd.cho.rule.engine.domain.model;
+package com.jd.cho.rule.engine.controller.VO.req;
 
-import com.jd.cho.rule.engine.common.enums.ConstantEnum;
 import lombok.Data;
 
 /**
@@ -8,7 +7,7 @@ import lombok.Data;
  * @version 1.0
  */
 @Data
-public class RuleSceneAction {
+public class RuleActionReq {
     /**
      * 主键
      */
@@ -20,7 +19,6 @@ public class RuleSceneAction {
     private String sceneCode;
 
     /**
-     * Database Column Remarks:
      * 行为编码
      */
     private String actionCode;
@@ -28,12 +26,10 @@ public class RuleSceneAction {
     /**
      * 行为类型
      */
-    private ConstantEnum actionType;
+    private String actionType;
 
     /**
      * 行为内容
      */
     private String action;
-
-
 }

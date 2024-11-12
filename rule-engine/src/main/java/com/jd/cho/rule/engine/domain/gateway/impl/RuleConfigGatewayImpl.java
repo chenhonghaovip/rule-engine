@@ -62,9 +62,30 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     private RuleFactorMapper ruleFactorMapper;
 
     @Resource
+    private RuleSceneActionMapper ruleSceneActionMapper;
+
+    @Resource
     private RuleFactorGroupMapper ruleFactorGroupMapper;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
+    public String createRuleScene(RuleScene ruleScene) {
+        UserInfo userInfo = AtomicLoginUserComponent.getLoginUserInfo();
+        RuleSceneDO ruleSceneDO = RuleSceneConvert.INSTANCE.doToDO(ruleScene);
+        String groupCode = ruleScene.getRuleFactorGroups().stream().map(RuleFactorGroup::getGroupCode).collect(Collectors.joining(Dict.SPLIT));
+        ruleSceneDO.setGroupCode(groupCode);
+        ruleSceneDO.setCreator(userInfo.getLoginUser());
+        ruleSceneDO.setTenant(userInfo.getTenant());
+        ruleSceneMapper.insertSelective(ruleSceneDO);
+
+        if (CollectionUtils.isNotEmpty(ruleScene.getRuleSceneActions())) {
+            this.createRuleSceneAction(ruleScene.getRuleSceneActions(), ruleScene.getSceneCode());
+        }
+        return ruleScene.getSceneCode();
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
     public List<RuleScene> queryRuleScene() {
         String tenant = AtomicLoginUserComponent.getLoginUserInfo().getTenant();
         List<RuleSceneDO> ruleSceneList = ruleSceneMapper.select(s -> s.where(RuleSceneDynamicSqlSupport.yn, isEqualTo(true))
@@ -87,22 +108,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     }
 
     @Override
-    public String createRuleScene(RuleScene ruleScene) {
-        if (StringUtils.isBlank(ruleScene.getSceneCode())) {
-            String sceneCode = UUID.randomUUID().toString();
-            ruleScene.setSceneCode(sceneCode);
-        }
-        UserInfo userInfo = AtomicLoginUserComponent.getLoginUserInfo();
-        RuleSceneDO ruleSceneDO = RuleSceneConvert.INSTANCE.doToDO(ruleScene);
-        String groupCode = ruleScene.getRuleFactorGroups().stream().map(RuleFactorGroup::getGroupCode).collect(Collectors.joining(Dict.SPLIT));
-        ruleSceneDO.setGroupCode(groupCode);
-        ruleSceneDO.setCreator(userInfo.getLoginUser());
-        ruleSceneDO.setTenant(userInfo.getTenant());
-        ruleSceneMapper.insertSelective(ruleSceneDO);
-        return ruleScene.getSceneCode();
-    }
-
-    @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updateRuleScene(RuleScene ruleScene) {
         ruleScene.setSceneCode(null);
         RuleSceneDO ruleSceneDO = RuleSceneConvert.INSTANCE.doToDO(ruleScene);
@@ -111,6 +117,13 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
         ruleSceneDO.setModifier(AtomicLoginUserComponent.getLoginUser());
         ruleSceneDO.setModifyTime(new Date());
         ruleSceneMapper.updateByPrimaryKey(ruleSceneDO);
+
+        if (CollectionUtils.isNotEmpty(ruleScene.getRuleSceneActions())) {
+            // TODO 需要重新获取场景code
+            this.updateRuleSceneAction(ruleScene.getRuleSceneActions(), ruleScene.getSceneCode());
+        }
+
+
     }
 
     @Override
@@ -119,13 +132,28 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     }
 
     @Override
-    public String createRuleSceneAction(RuleSceneAction ruleSceneAction) {
-        return null;
+    @Transactional(rollbackFor = Exception.class)
+    public void createRuleSceneAction(List<RuleSceneAction> ruleSceneActions, String sceneCode) {
+        if (CollectionUtils.isNotEmpty(ruleSceneActions)) {
+            UserInfo userInfo = AtomicLoginUserComponent.getLoginUserInfo();
+            List<RuleSceneActionDO> collect = ruleSceneActions.stream().map(each -> RuleSceneActionDO.builder().actionCode(each.getActionCode())
+                    .actionType(each.getActionType().getCode()).action(each.getAction()).sceneCode(sceneCode)
+                    .creator(userInfo.getLoginUser()).tenant(userInfo.getTenant()).build()).collect(Collectors.toList());
+            ruleSceneActionMapper.insertMultiple(collect);
+        }
     }
 
     @Override
-    public void updateRuleSceneAction(RuleSceneAction ruleSceneAction) {
-
+    @Transactional(rollbackFor = Exception.class)
+    public void updateRuleSceneAction(List<RuleSceneAction> ruleSceneActions, String sceneCode) {
+        ruleSceneActionMapper.update(s -> s.set(RuleSceneActionDynamicSqlSupport.yn).equalTo(false)
+                .set(RuleSceneActionDynamicSqlSupport.modifier).equalTo(AtomicLoginUserComponent.getLoginUser())
+                .set(RuleSceneActionDynamicSqlSupport.modifyTime).equalTo(new Date())
+                .where(RuleSceneActionDynamicSqlSupport.sceneCode, isEqualTo(sceneCode))
+                .and(RuleSceneActionDynamicSqlSupport.yn, isEqualTo(true)));
+        if (CollectionUtils.isNotEmpty(ruleSceneActions)) {
+            this.createRuleSceneAction(ruleSceneActions, sceneCode);
+        }
     }
 
     @Override

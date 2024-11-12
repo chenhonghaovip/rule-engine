@@ -34,5 +34,10 @@ public class RuleSceneDTO implements Serializable {
      */
     private List<RuleFactorGroupDTO> ruleFactorGroups;
 
+    /**
+     * 规则动作信息
+     */
+    private List<RuleActionDTO> ruleSceneActions;
+
 
 }

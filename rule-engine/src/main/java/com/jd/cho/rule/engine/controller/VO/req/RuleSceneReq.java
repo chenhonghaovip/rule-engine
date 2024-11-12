@@ -32,5 +32,9 @@ public class RuleSceneReq implements Serializable {
      */
     private List<RuleFactorGroupReq> ruleFactorGroups;
 
+    /**
+     * 场景下动作列表
+     */
+    private List<RuleActionReq> ruleActions;
 
 }
