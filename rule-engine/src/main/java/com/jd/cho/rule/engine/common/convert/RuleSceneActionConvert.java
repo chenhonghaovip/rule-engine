@@ -13,7 +13,7 @@ import org.mapstruct.factory.Mappers;
 public interface RuleSceneActionConvert {
     RuleSceneActionConvert INSTANCE = Mappers.getMapper(RuleSceneActionConvert.class);
 
-    @Mapping(target = "actionType", expression = "java(com.jd.cho.rule.engine.common.enums.ConstantEnum.getByCode(ruleSceneActionDO.getActionType())")
+    @Mapping(target = "actionType", expression = "java(com.jd.cho.rule.engine.common.enums.ConstantEnum.getByCode(ruleSceneActionDO.getActionType()))")
     RuleSceneAction doToEntity(RuleSceneActionDO ruleSceneActionDO);
 
 
