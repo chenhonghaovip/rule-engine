@@ -3,7 +3,10 @@ package com.jd.cho.rule.engine.group;
 
 import com.google.common.collect.Maps;
 import com.jd.cho.rule.engine.common.base.CommonDict;
+import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
+import com.jd.cho.rule.engine.common.exceptions.BusinessException;
 import com.jd.cho.rule.engine.spi.RuleGroupExtendService;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Map;
@@ -14,13 +17,19 @@ import java.util.stream.Collectors;
  * @author chenhonghao12
  * @version 1.0
  */
+@Slf4j
 public class RuleGroupRunStrategy {
-    private static Map<String, RuleGroupExtendService> ruleGroupMap = Maps.newHashMap();
+    private static final Map<String, RuleGroupExtendService> SERVICE_HASH_MAP = Maps.newHashMap();
 
     static {
         ServiceLoader<RuleGroupExtendService> load = ServiceLoader.load(RuleGroupExtendService.class);
         for (RuleGroupExtendService abstractRuleGroup : load) {
-            ruleGroupMap.put(abstractRuleGroup.getCode(), abstractRuleGroup);
+            String code = abstractRuleGroup.getCode();
+            if (SERVICE_HASH_MAP.containsKey(code)) {
+                log.error("{}已经存在，请修改避免重复", code);
+                throw new BusinessException(BizErrorEnum.CODE_IS_EXIST);
+            }
+            SERVICE_HASH_MAP.put(code, abstractRuleGroup);
         }
     }
 
@@ -30,7 +39,7 @@ public class RuleGroupRunStrategy {
      * @return 拓展接口
      */
     public static List<CommonDict> allRuleGroup() {
-        return ruleGroupMap.entrySet().stream().map(entry -> new CommonDict(entry.getKey(), entry.getValue().getName())).collect(Collectors.toList());
+        return SERVICE_HASH_MAP.entrySet().stream().map(entry -> new CommonDict(entry.getKey(), entry.getValue().getName())).collect(Collectors.toList());
     }
 
     /**
@@ -40,6 +49,6 @@ public class RuleGroupRunStrategy {
      * @return RuleGroupExtendService
      */
     public static RuleGroupExtendService getRuleGroup(String code) {
-        return ruleGroupMap.get(code);
+        return SERVICE_HASH_MAP.get(code);
     }
 }
