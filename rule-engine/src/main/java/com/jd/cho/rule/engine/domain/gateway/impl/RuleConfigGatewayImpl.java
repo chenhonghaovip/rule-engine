@@ -124,11 +124,12 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
         ruleSceneDO.setGroupCode(groupCode);
         ruleSceneDO.setModifier(AtomicLoginUserComponent.getLoginUser());
         ruleSceneDO.setModifyTime(new Date());
-        ruleSceneMapper.updateByPrimaryKey(ruleSceneDO);
+        ruleSceneMapper.updateByPrimaryKeySelective(ruleSceneDO);
 
         if (CollectionUtils.isNotEmpty(ruleScene.getRuleSceneActions())) {
-            // TODO 需要重新获取场景code
-            this.updateRuleSceneAction(ruleScene.getRuleSceneActions(), ruleScene.getSceneCode());
+            ruleSceneMapper.selectByPrimaryKey(ruleScene.getId()).ifPresent(each -> {
+                this.updateRuleSceneAction(ruleScene.getRuleSceneActions(), each.getSceneCode());
+            });
         }
     }
 
