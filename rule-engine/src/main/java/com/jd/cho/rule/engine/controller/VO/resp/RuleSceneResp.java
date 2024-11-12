@@ -36,6 +36,6 @@ public class RuleSceneResp {
     /**
      *
      */
-    private List<RuleSceneActionResp> ruleActions;
+    private List<RuleSceneActionResp> ruleSceneActions;
 
 }

@@ -1,5 +1,6 @@
 package com.jd.cho.rule.engine.controller.VO.resp;
 
+import com.jd.cho.rule.engine.common.enums.ConstantEnum;
 import lombok.Data;
 
 /**
@@ -26,7 +27,7 @@ public class RuleSceneActionResp {
     /**
      * 行为类型
      */
-    private String actionType;
+    private ConstantEnum actionType;
 
     /**
      * 行为内容
