@@ -91,7 +91,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
         List<String> groupCodes = Lists.newArrayList();
         List<String> sceneCodes = Lists.newArrayList();
         ruleSceneList.forEach(each -> {
-            groupCodes.addAll(Arrays.stream(each.getGroupCode().split(Dict.SPLIT)).collect(Collectors.toList()))
+            groupCodes.addAll(Arrays.stream(each.getGroupCode().split(Dict.SPLIT)).collect(Collectors.toList()));
             sceneCodes.add(each.getSceneCode());
         });
 
