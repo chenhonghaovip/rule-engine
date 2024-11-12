@@ -67,12 +67,17 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public String createRuleScene(RuleScene ruleScene) {
-        UserInfo userInfo = AtomicLoginUserComponent.getLoginUserInfo();
+        // code重复性校验
+        long count = ruleSceneMapper.count(s -> s.where(RuleSceneDynamicSqlSupport.sceneCode, isEqualTo(ruleScene.getSceneCode()))
+                .and(RuleSceneDynamicSqlSupport.yn, isEqualTo(true)));
+        if (count > 0) {
+            throw new BusinessException(BizErrorEnum.SCENE_CODE_IS_EXIST);
+        }
+
         RuleSceneDO ruleSceneDO = RuleSceneConvert.INSTANCE.doToDO(ruleScene);
         String groupCode = ruleScene.getRuleFactorGroups().stream().map(RuleFactorGroup::getGroupCode).collect(Collectors.joining(Dict.SPLIT));
         ruleSceneDO.setGroupCode(groupCode);
-        ruleSceneDO.setCreator(userInfo.getLoginUser());
-        ruleSceneDO.setTenant(userInfo.getTenant());
+        AtomicLoginUserComponent.packCreateBaseInfo(ruleSceneDO);
         ruleSceneMapper.insertSelective(ruleSceneDO);
 
         if (CollectionUtils.isNotEmpty(ruleScene.getRuleSceneActions())) {
@@ -125,8 +130,6 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
             // TODO 需要重新获取场景code
             this.updateRuleSceneAction(ruleScene.getRuleSceneActions(), ruleScene.getSceneCode());
         }
-
-
     }
 
     @Override
@@ -140,11 +143,13 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     @Transactional(rollbackFor = Exception.class)
     public void createRuleSceneAction(List<RuleSceneAction> ruleSceneActions, String sceneCode) {
         if (CollectionUtils.isNotEmpty(ruleSceneActions)) {
-            UserInfo userInfo = AtomicLoginUserComponent.getLoginUserInfo();
-            List<RuleSceneActionDO> collect = ruleSceneActions.stream().map(each -> RuleSceneActionDO.builder().actionCode(each.getActionCode())
-                    .actionType(each.getActionType().getCode()).action(each.getAction()).sceneCode(sceneCode)
-                    .creator(userInfo.getLoginUser()).tenant(userInfo.getTenant()).build()).collect(Collectors.toList());
-            ruleSceneActionMapper.insertMultiple(collect);
+            List<RuleSceneActionDO> insert = ruleSceneActions.stream().map(each -> {
+                RuleSceneActionDO ruleSceneActionDO = RuleSceneActionConvert.INSTANCE.doToDO(each);
+                AtomicLoginUserComponent.packCreateBaseInfo(ruleSceneActionDO);
+                ruleSceneActionDO.setSceneCode(sceneCode);
+                return ruleSceneActionDO;
+            }).collect(Collectors.toList());
+            ruleSceneActionMapper.insertMultipleSelective(insert);
         }
     }
 

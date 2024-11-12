@@ -125,6 +125,18 @@ public interface RuleSceneActionMapper {
     }
 
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_scene_action")
+    default int insertMultipleSelective(Collection<RuleSceneActionDO> records) {
+        return MyBatis3Utils.insertMultiple(this::insertMultiple, records, ruleSceneAction, c ->
+                c.map(sceneCode).toProperty("sceneCode")
+                        .map(actionCode).toProperty("actionCode")
+                        .map(actionType).toProperty("actionType")
+                        .map(creator).toProperty("creator")
+                        .map(tenant).toProperty("tenant")
+                        .map(action).toProperty("action")
+        );
+    }
+
+    @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_scene_action")
     default int insertSelective(RuleSceneActionDO record) {
         return MyBatis3Utils.insert(this::insert, record, ruleSceneAction, c ->
                 c.map(id).toPropertyWhenPresent("id", record::getId)

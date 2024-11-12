@@ -1,11 +1,14 @@
 package com.jd.cho.rule.engine.common.convert;
 
+import com.jd.cho.rule.engine.controller.VO.req.RuleActionReq;
 import com.jd.cho.rule.engine.controller.VO.req.RuleSceneReq;
 import com.jd.cho.rule.engine.controller.VO.resp.RuleSceneResp;
 import com.jd.cho.rule.engine.dal.DO.RuleSceneDO;
 import com.jd.cho.rule.engine.domain.model.RuleScene;
+import com.jd.cho.rule.engine.service.dto.RuleActionDTO;
 import com.jd.cho.rule.engine.service.dto.RuleSceneDTO;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 /**
@@ -29,5 +32,7 @@ public interface RuleSceneConvert {
 
     RuleSceneDTO doToDTO(RuleSceneReq ruleSceneReq);
 
+    @Mapping(target = "actionType", expression = "java(com.jd.cho.rule.engine.common.enums.ConstantEnum.getByCode(ruleActionReq.getActionType()))")
+    RuleActionDTO doToDTO(RuleActionReq ruleActionReq);
 
 }

@@ -7,7 +7,9 @@ import com.jd.cho.rule.engine.controller.VO.resp.RuleSceneResp;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.domain.model.RuleScene;
 import com.jd.cho.rule.engine.service.RuleSceneService;
+import com.jd.cho.rule.engine.service.dto.RuleActionDTO;
 import com.jd.cho.rule.engine.service.dto.RuleSceneDTO;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -35,22 +37,33 @@ public class RuleSceneServiceImpl implements RuleSceneService {
 
     @Override
     public String createRuleScene(RuleSceneDTO ruleSceneDTO) {
-        AssertUtil.isNotNull(ruleSceneDTO, BizErrorEnum.DOES_NOT_EXIST);
-        ruleSceneDTO.setId(null);
+        baseCheck(ruleSceneDTO);
+
         RuleScene ruleScene = RuleSceneConvert.INSTANCE.doToEntity(ruleSceneDTO);
         if (StringUtils.isBlank(ruleScene.getSceneCode())) {
             String sceneCode = UUID.randomUUID().toString();
             ruleScene.setSceneCode(sceneCode);
         }
+        ruleScene.setId(null);
+
         return ruleConfigGateway.createRuleScene(ruleScene);
     }
 
     @Override
     public void updateRuleScene(RuleSceneDTO ruleSceneDTO) {
-        AssertUtil.isNotNull(ruleSceneDTO, BizErrorEnum.DOES_NOT_EXIST);
+        baseCheck(ruleSceneDTO);
         AssertUtil.isNotNull(ruleSceneDTO.getId(), BizErrorEnum.DOES_NOT_EXIST);
 
         RuleScene ruleScene = RuleSceneConvert.INSTANCE.doToEntity(ruleSceneDTO);
         ruleConfigGateway.updateRuleScene(ruleScene);
+    }
+
+
+    private void baseCheck(RuleSceneDTO ruleSceneDTO) {
+        AssertUtil.isNotNull(ruleSceneDTO, BizErrorEnum.DOES_NOT_EXIST);
+        if (CollectionUtils.isNotEmpty(ruleSceneDTO.getRuleSceneActions())) {
+            boolean repeat = ruleSceneDTO.getRuleSceneActions().size() != ruleSceneDTO.getRuleSceneActions().stream().map(RuleActionDTO::getActionCode).distinct().count();
+            AssertUtil.isFalse(repeat, BizErrorEnum.ACTION_CODE_IS_EXIST);
+        }
     }
 }

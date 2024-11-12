@@ -12,6 +12,7 @@ import java.util.List;
 @Data
 public class RuleSceneReq implements Serializable {
 
+    private Long id;
     /**
      * 场景code
      */
@@ -35,6 +36,6 @@ public class RuleSceneReq implements Serializable {
     /**
      * 场景下动作列表
      */
-    private List<RuleActionReq> ruleActions;
+    private List<RuleActionReq> ruleSceneActions;
 
 }
