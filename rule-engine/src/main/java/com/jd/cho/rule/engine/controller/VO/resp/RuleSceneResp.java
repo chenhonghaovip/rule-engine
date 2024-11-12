@@ -33,18 +33,9 @@ public class RuleSceneResp {
      */
     private List<RuleFactorGroupResp> ruleFactorGroups;
 
+    /**
+     *
+     */
+    private List<RuleSceneActionResp> ruleActions;
 
-    @Data
-    public static class RuleFactorGroupResp {
-        private Long id;
-        /**
-         * 分组编码
-         */
-        private String groupCode;
-
-        /**
-         * 分组名称
-         */
-        private String groupName;
-    }
 }

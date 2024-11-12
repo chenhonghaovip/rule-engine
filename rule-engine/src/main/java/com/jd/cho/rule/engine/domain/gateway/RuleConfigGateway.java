@@ -43,7 +43,7 @@ public interface RuleConfigGateway {
      *
      * @return List<RuleScene>
      */
-    List<RuleSceneAction> queryRuleSceneAction(String sceneCode);
+    List<RuleSceneAction> queryRuleSceneAction(List<String> sceneCodes);
 
     /**
      * 创建规则动作
@@ -64,6 +64,13 @@ public interface RuleConfigGateway {
      * @return List<RuleScene>
      */
     List<RuleFactorGroup> queryRuleFactorGroup();
+
+    /**
+     * 查询规则因子分组
+     *
+     * @return List<RuleScene>
+     */
+    List<RuleFactorGroup> queryRuleFactorGroup(List<String> groupCodes);
 
     /**
      * 创建规则因子分组

@@ -6,6 +6,7 @@ import com.jd.cho.rule.engine.dal.DO.RuleSceneDO;
 import com.jd.cho.rule.engine.domain.model.RuleScene;
 import com.jd.cho.rule.engine.service.dto.RuleSceneDTO;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 /**
@@ -27,6 +28,7 @@ public interface RuleSceneConvert {
     RuleSceneResp doToResp(RuleScene ruleScene);
 
 
+    @Mapping(target = "actionType", expression = "java(com.jd.cho.rule.engine.common.enums.ConstantEnum.getByCode(ruleFactorDO.getConstantType()))")
     RuleSceneDTO doToDTO(RuleSceneReq ruleSceneReq);
 
 
