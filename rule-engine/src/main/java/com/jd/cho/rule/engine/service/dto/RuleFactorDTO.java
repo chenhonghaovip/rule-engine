@@ -68,7 +68,6 @@ public class RuleFactorDTO implements Serializable {
      */
     private List<CommonDict> constantValues;
 
-
     /**
      * 脚本代码
      */
