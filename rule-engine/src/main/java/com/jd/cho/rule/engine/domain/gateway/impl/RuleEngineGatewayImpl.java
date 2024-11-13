@@ -151,7 +151,7 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
      * @return 构建好的表达式
      */
     public String buildOperatorExpress(String operator, String fieldName, Object value, Map<String, Object> rightValues) {
-        ExpressOperationEnum operation = ExpressOperationEnum.getOperationByOperator(operator);
+        ExpressOperationEnum operation = ExpressOperationEnum.getByCode(operator);
         if (Objects.isNull(operation)) {
             return Dict.SYMBOL_EMPTY;
         }

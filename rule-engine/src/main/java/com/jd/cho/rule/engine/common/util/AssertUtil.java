@@ -3,7 +3,10 @@ package com.jd.cho.rule.engine.common.util;
 
 import com.jd.cho.rule.engine.common.exceptions.BusinessException;
 import com.jd.cho.rule.engine.common.exceptions.CommonException;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Collection;
 
 /**
  * @author chenhonghao12
@@ -31,6 +34,12 @@ public class AssertUtil {
 
     public static void isNotNull(Object object, CommonException commonError) {
         if (object == null) {
+            throw new BusinessException(commonError);
+        }
+    }
+
+    public static void isNotEmpty(Collection collection, CommonException commonError) {
+        if (CollectionUtils.isEmpty(collection)) {
             throw new BusinessException(commonError);
         }
     }

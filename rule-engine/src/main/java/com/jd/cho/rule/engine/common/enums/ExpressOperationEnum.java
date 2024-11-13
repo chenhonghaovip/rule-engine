@@ -77,7 +77,7 @@ public enum ExpressOperationEnum {
 
     public static final Map<String, List<ExpressOperationEnum>> MAP = Arrays.stream(ExpressOperationEnum.values()).collect(Collectors.groupingBy(ExpressOperationEnum::getGroup));
 
-    public static ExpressOperationEnum getOperationByOperator(String operator) {
+    public static ExpressOperationEnum getByCode(String operator) {
         return Arrays.stream(ExpressOperationEnum.values()).filter(each -> Objects.equals(operator, each.getOperator())).findFirst().orElse(null);
     }
 
