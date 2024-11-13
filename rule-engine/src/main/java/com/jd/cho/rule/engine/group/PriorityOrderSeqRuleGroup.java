@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 按照优先级顺序执行，优先级高的先执行，直到执行完全部规则
+ *
  * @author chenhonghao12
  * @version 1.0
  */
@@ -16,12 +18,12 @@ public class PriorityOrderSeqRuleGroup implements RuleGroupExtendService {
 
     @Override
     public String getCode() {
-        return "2";
+        return "OrderSeq";
     }
 
     @Override
     public String getName() {
-        return null;
+        return "顺序执行所有规则";
     }
 
     @Override

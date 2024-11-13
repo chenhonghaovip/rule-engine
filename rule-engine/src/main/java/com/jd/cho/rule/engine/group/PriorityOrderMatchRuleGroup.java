@@ -10,11 +10,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 按照优先级执行，执行到第一个规则匹配成功，执行后就返回，不再继续执行
+ *
  * @author chenhonghao12
  * @version 1.0
  */
 public class PriorityOrderMatchRuleGroup implements RuleGroupExtendService {
-    public static final String CODE = "1";
+    public static final String CODE = "OrderMatch";
 
     @Override
     public String getCode() {
@@ -23,7 +25,7 @@ public class PriorityOrderMatchRuleGroup implements RuleGroupExtendService {
 
     @Override
     public String getName() {
-        return null;
+        return "当有规则被命中时终止";
     }
 
     @Override
