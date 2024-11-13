@@ -171,6 +171,7 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
         return String.format("%s_%s", ORIGINAL_VALUE, fieldName);
     }
 
+
     /**
      * 执行动作
      *
@@ -178,32 +179,47 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
      * @param context         上下文
      */
     public void executeAction(List<RuleAction> ruleActionBeans, Map<String, Object> context) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Map maps = new HashMap();");
-
-        ruleActionBeans.forEach(each -> {
-            Object values = each.getValues();
-            if (values instanceof String) {
-                values = "\"" + values + "\"";
-            }
-            stringBuilder.append("maps.put(\"").append(each.getFieldCode()).append("\",").append(values).append(");");
-        });
-        stringBuilder.append("return maps;");
-        Object execute = QlExpressUtil.execute(stringBuilder.toString(), context);
-        if (Objects.nonNull(execute)) {
+        Map<String, Object> resultMap = Maps.newHashMap();
+        ruleActionBeans.forEach(each -> resultMap.put(each.getFieldCode(), each.getValues()));
+        Object result = context.get(Dict.RESULT_ALIAS);
+        Map<String, Object> contextResult;
+        if (Objects.nonNull(result)) {
             Type type = new TypeToken<Map<String, Object>>() {
             }.getType();
-            Map<String, Object> executeMaps = new Gson().fromJson(JSON.toJSONString(execute), type);
-            Object result = context.get(Dict.RESULT_ALIAS);
-            Map<String, Object> contextResult;
-            if (Objects.nonNull(result)) {
-                contextResult = new Gson().fromJson(JSON.toJSONString(result), type);
-            } else {
-                contextResult = Maps.newHashMap();
-                context.put(Dict.RESULT_ALIAS, contextResult);
-            }
-            contextResult.putAll(executeMaps);
+            contextResult = new Gson().fromJson(JSON.toJSONString(result), type);
+        } else {
+            contextResult = Maps.newHashMap();
+
         }
+        contextResult.putAll(resultMap);
+        context.put(Dict.RESULT_ALIAS, contextResult);
+
+//        StringBuilder stringBuilder = new StringBuilder();
+//        stringBuilder.append("Map maps = new HashMap();");
+//
+//        ruleActionBeans.forEach(each -> {
+//            Object values = each.getValues();
+//            if (values instanceof String) {
+//                values = "\"" + values + "\"";
+//            }
+//            stringBuilder.append("maps.put(\"").append(each.getFieldCode()).append("\",").append(values).append(");");
+//        });
+//        stringBuilder.append("return maps;");
+//        Object execute = QlExpressUtil.execute(stringBuilder.toString(), context);
+//        if (Objects.nonNull(execute)) {
+//            Type type = new TypeToken<Map<String, Object>>() {
+//            }.getType();
+//            Map<String, Object> executeMaps = new Gson().fromJson(JSON.toJSONString(execute), type);
+//            Object result = context.get(Dict.RESULT_ALIAS);
+//            Map<String, Object> contextResult;
+//            if (Objects.nonNull(result)) {
+//                contextResult = new Gson().fromJson(JSON.toJSONString(result), type);
+//            } else {
+//                contextResult = Maps.newHashMap();
+//                context.put(Dict.RESULT_ALIAS, contextResult);
+//            }
+//            contextResult.putAll(executeMaps);
+//        }
     }
 
 

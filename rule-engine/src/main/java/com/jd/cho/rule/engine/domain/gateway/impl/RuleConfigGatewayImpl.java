@@ -410,14 +410,17 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
      * @param rules 变量信息
      * @return key:因子-value:因子入参
      */
-    private Map<String, List<String>> getFactorScriptParam(List<RuleCondition> rules) {
+    private Map<String, RuleFactorDO> getFactorScriptParam(List<RuleCondition> rules) {
         Set<String> factorCodes = Sets.newHashSet();
         rules.forEach(each -> findFactorCodes(each, factorCodes));
 
         List<RuleFactorDO> ruleFactors = ruleFactorMapper.select(s -> s.where(RuleFactorDynamicSqlSupport.yn, isEqualTo(true))
                 .and(RuleFactorDynamicSqlSupport.factorCode, isIn(factorCodes)));
+        if (ruleFactors.size() != factorCodes.size()) {
+            throw new BusinessException(BizErrorEnum.FACTOR_CODE_IS_NOT_EXIST);
+        }
 
-        return ruleFactors.stream().collect(Collectors.toMap(RuleFactorDO::getFactorCode, each -> Arrays.stream(each.getFactorScriptParam().split(Dict.SPLIT)).collect(Collectors.toList())));
+        return ruleFactors.stream().collect(Collectors.toMap(RuleFactorDO::getGroupCode, Function.identity()));
     }
 
 
@@ -430,14 +433,15 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
      * @return 规则包编号
      */
     private String insertRuleGroup(RulePackDTO rulePackDTO, int version, UserInfo loginUserInfo) {
+        List<RuleCondition> ruleConditions = rulePackDTO.getRules().stream().map(each -> JSON.parseObject(JSON.toJSONString(each.getRuleCondition()), RuleCondition.class)).collect(Collectors.toList());
+        Map<String, RuleFactorDO> factorMaps = getFactorScriptParam(ruleConditions);
+        Map<String, List<String>> factorScriptParam = factorMaps.values().stream().collect(Collectors.toMap(RuleFactorDO::getFactorCode, each -> Arrays.stream(each.getFactorScriptParam().split(Dict.SPLIT)).collect(Collectors.toList())));
+
         List<RuleDefDO> ruleDefs = rulePackDTO.getRules().stream()
                 .map(o -> RuleDefDO.builder().ruleAction(JSON.toJSONString(o.getRuleActions()))
                         .ruleCondition(JSON.toJSONString(o.getRuleCondition()))
                         .priority(o.getPriority()).creator(loginUserInfo.getLoginUser()).tenant(loginUserInfo.getTenant()).build()).collect(Collectors.toList());
         ruleDefMapper.insertMultipleSelective(ruleDefs);
-
-        List<RuleCondition> ruleConditions = rulePackDTO.getRules().stream().map(each -> JSON.parseObject(JSON.toJSONString(each.getRuleCondition()), RuleCondition.class)).collect(Collectors.toList());
-        Map<String, List<String>> factorScriptParam = getFactorScriptParam(ruleConditions);
 
         String ruleIds = ruleDefs.stream().filter(each -> Objects.nonNull(each.getId())).map(o -> String.valueOf(o.getId())).collect(Collectors.joining(Dict.SPLIT));
         RulePackDO rulePackDO = RulePackConvert.INSTANCE.doToDO(rulePackDTO);
@@ -448,6 +452,22 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
         rulePackMapper.insertSelective(rulePackDO);
         return rulePackDTO.getRulePackCode();
     }
+
+//    /**
+//     * 检查规则包中配置的规则因子是否存在
+//     *
+//     * @param factorScriptParam 规则因子集合
+//     */
+//    private void ruleFactorCheck(Map<String, List<String>> factorScriptParam) {
+//        if (Objects.nonNull(factorScriptParam)) {
+//            List<String> factorCodes = new ArrayList<>(factorScriptParam.keySet());
+//            long validCount = ruleFactorMapper.count(s -> s.where(RuleFactorDynamicSqlSupport.factorCode, isIn(factorCodes))
+//                    .and(RuleFactorDynamicSqlSupport.yn, isEqualTo(true)));
+//            if (validCount != factorCodes.size()) {
+//                throw new BusinessException(BizErrorEnum.FACTOR_CODE_IS_NOT_EXIST);
+//            }
+//        }
+//    }
 
 
     /**

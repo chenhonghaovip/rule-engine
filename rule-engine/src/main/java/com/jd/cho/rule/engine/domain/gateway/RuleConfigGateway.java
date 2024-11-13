@@ -131,7 +131,7 @@ public interface RuleConfigGateway {
     List<RulePack> historyRulePackInfo(String rulePackCode);
 
     /**
-     * 批量插入规则包信息
+     * 新增规则包信息
      *
      * @param rulePackDTO 规则集合
      */

@@ -20,6 +20,7 @@ public enum BizErrorEnum implements CommonException {
     SCENE_CODE_IS_EXIST(-8, "当前场景code重复"),
     GROUP_CODE_IS_NOT_EXIST(-9, "规则因子分组code不存在"),
     FACTOR_TYPE_IS_NOT_EXIST(-10, "规则因子类型不能为空"),
+    FACTOR_CODE_IS_NOT_EXIST(-10, "规则因子不存在"),
     PLEASE_CHECK_SPI_ACHIEVING(-11, "请检查LoginUserExtendService类是否被实现"),
 
     ;
