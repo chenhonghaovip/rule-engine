@@ -38,7 +38,13 @@ public class AssertUtil {
         }
     }
 
-    public static void isNotEmpty(Collection collection, CommonException commonError) {
+    public static void isNotNull(Object object) {
+        if (object == null) {
+            throw new BusinessException();
+        }
+    }
+
+    public static void isNotEmpty(Collection<?> collection, CommonException commonError) {
         if (CollectionUtils.isEmpty(collection)) {
             throw new BusinessException(commonError);
         }
@@ -47,6 +53,12 @@ public class AssertUtil {
     public static void isNotBlank(String str, CommonException commonError) {
         if (StringUtils.isBlank(str)) {
             throw new BusinessException(commonError);
+        }
+    }
+
+    public static void isNotBlank(String str) {
+        if (StringUtils.isBlank(str)) {
+            throw new BusinessException();
         }
     }
 

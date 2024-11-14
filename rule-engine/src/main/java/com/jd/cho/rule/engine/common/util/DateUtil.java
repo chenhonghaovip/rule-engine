@@ -51,6 +51,7 @@ public class DateUtil {
      * @param endDate   结束时间yyyy-MM-dd HH:mm:ss OR yyyy-MM-dd
      * @return 对比结果
      */
+    @Deprecated
     public static boolean dateBefore(String beginDate, String endDate) {
         if (StringUtils.isBlank(beginDate) || StringUtils.isBlank(endDate)) {
             return false;
@@ -84,6 +85,7 @@ public class DateUtil {
      * @param endDate   结束时间yyyy-MM-dd HH:mm:ss OR yyyy-MM-dd
      * @return 对比结果
      */
+    @Deprecated
     public static boolean dateAfter(String beginDate, String endDate) {
         if (StringUtils.isBlank(beginDate) || StringUtils.isBlank(endDate)) {
             return false;
@@ -125,6 +127,7 @@ public class DateUtil {
      * @param endDate   结束日期字符串
      * @return 如果两个日期都是非空的，并且它们是同一天，则返回true；否则返回false
      */
+    @Deprecated
     public static boolean dateEqualDay(String beginDate, String endDate) {
         // 检查日期字符串是否为空，如果任意一个为空，则返回false
         if (StringUtils.isBlank(beginDate) || StringUtils.isBlank(endDate)) {
@@ -166,6 +169,7 @@ public class DateUtil {
      * @param endDate   结束日期字符串
      * @return 如果两个日期字符串相等，则返回true；否则返回false
      */
+    @Deprecated
     public static boolean dateEqual(String beginDate, String endDate) {
         if (StringUtils.isBlank(beginDate) || StringUtils.isBlank(endDate)) {
             return false;

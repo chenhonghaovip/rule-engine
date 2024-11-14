@@ -53,7 +53,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = BusinessException.class)
     public BaseResponse<Void> bizExceptionHandler(BusinessException e, HttpServletRequest httpServletRequest) {
-        log.error("发生业务异常！参数为：{}，原因是:{}", JSON.toJSONString(httpServletRequest.getParameterMap()), e.getMessage());
+        log.error("发生业务异常！异常code:{},参数为：{}，原因是:{}", e.getErrorCode(), JSON.toJSONString(httpServletRequest.getParameterMap()), e.getMessage(), e);
         return BaseResponse.error(e.getErrorCode(), e.getMessage());
     }
 

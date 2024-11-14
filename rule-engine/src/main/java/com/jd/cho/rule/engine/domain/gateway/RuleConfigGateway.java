@@ -90,7 +90,7 @@ public interface RuleConfigGateway {
     void createRuleFactor(RuleFactor ruleFactor);
 
     /**
-     * 编辑规则因子
+     * 编辑规则因子（编辑时，规则因子的code和类型不能修改，否则可能会导致已生效的规则异常）
      */
     void updateRuleFactor(RuleFactor ruleFactor);
 

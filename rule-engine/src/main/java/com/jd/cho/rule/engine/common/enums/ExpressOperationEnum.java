@@ -41,10 +41,10 @@ public enum ExpressOperationEnum {
     /**
      * 日期类型
      */
-    DATE_BEFORE(FactorTypeEnum.DATE.getCode(), "DATE_BEFORE", "dateBefore(%s,%s)", "早于"),
-    DATE_AFTER(FactorTypeEnum.DATE.getCode(), "DATE_AFTER", "dateAfter(%s,%s)", "晚于"),
-    DATE_EQUAL_DAY(FactorTypeEnum.DATE.getCode(), "DATE_EQUAL_DAY", "dateEqualDay(%s,%s)", "等于(天)"),
-    DATE_EQUAL(FactorTypeEnum.DATE.getCode(), "DATE_EQUAL", "dateEqual(%s,%s)", "等于"),
+    DATE_BEFORE(FactorTypeEnum.DATE.getCode(), "DATE_BEFORE", "dateBefore(%s,new Date(%s))", "早于"),
+    DATE_AFTER(FactorTypeEnum.DATE.getCode(), "DATE_AFTER", "dateAfter(%s,new Date(%s))", "晚于"),
+    DATE_EQUAL_DAY(FactorTypeEnum.DATE.getCode(), "DATE_EQUAL_DAY", "dateEqualDay(%s,new Date(%s))", "等于(天)"),
+    DATE_EQUAL(FactorTypeEnum.DATE.getCode(), "DATE_EQUAL", "dateEqual(%s,new Date(%s))", "等于"),
     DATE_IS_NULL(FactorTypeEnum.DATE.getCode(), "DATE_IS_NULL", "%s == null", "为空"),
     DATE_NOT_NULL(FactorTypeEnum.DATE.getCode(), "DATE_NOT_NULL", "%s != null", "不为空"),
 

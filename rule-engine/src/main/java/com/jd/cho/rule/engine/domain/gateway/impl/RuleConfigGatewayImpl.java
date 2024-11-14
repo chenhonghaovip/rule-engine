@@ -19,6 +19,7 @@ import com.jd.cho.rule.engine.common.util.QlExpressUtil;
 import com.jd.cho.rule.engine.dal.DO.*;
 import com.jd.cho.rule.engine.dal.mapper.*;
 import com.jd.cho.rule.engine.domain.atomic.AtomicLoginUserComponent;
+import com.jd.cho.rule.engine.domain.atomic.RuleDefExpressionParser;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.domain.model.*;
 import com.jd.cho.rule.engine.service.dto.RulePackDTO;
@@ -235,6 +236,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
         RuleFactorDO ruleFactorDO = RuleFactorConvert.INSTANCE.doToDO(ruleFactor);
         AtomicLoginUserComponent.packUpdateBaseInfo(ruleFactorDO);
         ruleFactorDO.setFactorCode(null);
+        ruleFactorDO.setFactorType(null);
         ruleFactorMapper.updateByPrimaryKeySelective(ruleFactorDO);
     }
 
@@ -410,7 +412,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
      * @param rules 变量信息
      * @return key:因子-value:因子入参
      */
-    private Map<String, RuleFactorDO> getFactorScriptParam(List<RuleCondition> rules) {
+    private Map<String, RuleFactor> getFactorScriptParam(List<RuleCondition> rules) {
         Set<String> factorCodes = Sets.newHashSet();
         rules.forEach(each -> findFactorCodes(each, factorCodes));
 
@@ -420,7 +422,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
             throw new BusinessException(BizErrorEnum.FACTOR_CODE_IS_NOT_EXIST);
         }
 
-        return ruleFactors.stream().collect(Collectors.toMap(RuleFactorDO::getGroupCode, Function.identity()));
+        return ruleFactors.stream().map(RuleFactorConvert.INSTANCE::doToEntity).collect(Collectors.toMap(RuleFactor::getFactorCode, Function.identity()));
     }
 
 
@@ -434,8 +436,11 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
      */
     private String insertRuleGroup(RulePackDTO rulePackDTO, int version, UserInfo loginUserInfo) {
         List<RuleCondition> ruleConditions = rulePackDTO.getRules().stream().map(each -> JSON.parseObject(JSON.toJSONString(each.getRuleCondition()), RuleCondition.class)).collect(Collectors.toList());
-        Map<String, RuleFactorDO> factorMaps = getFactorScriptParam(ruleConditions);
-        Map<String, List<String>> factorScriptParam = factorMaps.values().stream().collect(Collectors.toMap(RuleFactorDO::getFactorCode, each -> Arrays.stream(each.getFactorScriptParam().split(Dict.SPLIT)).collect(Collectors.toList())));
+        final Map<String, RuleFactor> factorMaps = getFactorScriptParam(ruleConditions);
+        Map<String, List<String>> factorScriptParam = factorMaps.values().stream().collect(Collectors.toMap(RuleFactor::getFactorCode, each -> Arrays.stream(each.getFactorScriptParam().split(Dict.SPLIT)).collect(Collectors.toList())));
+
+        ruleConditions.forEach(ruleCondition -> RuleDefExpressionParser.checkRuleCondition(ruleCondition, factorMaps));
+
 
         List<RuleDefDO> ruleDefs = rulePackDTO.getRules().stream()
                 .map(o -> RuleDefDO.builder().ruleAction(JSON.toJSONString(o.getRuleActions()))
@@ -481,7 +486,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
                 && StringUtils.isNotBlank(ruleCondition.getCompareOperation())
                 && StringUtils.isBlank(ruleCondition.getLogicOperation());
         if (isExpress) {
-            resultCodes.add(ruleCondition.getFactorCode());
+            resultCodes.add(ruleCondition.getOriginalFactorCode());
         } else if (CollectionUtils.isNotEmpty(ruleCondition.getChildren())) {
             ruleCondition.getChildren().forEach(each -> findFactorCodes(each, resultCodes));
         }

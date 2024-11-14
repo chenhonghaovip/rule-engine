@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -42,9 +43,7 @@ public class FactorValueServiceImpl implements FactorValueService {
         List<RuleFactorDO> ruleFactors = ruleFactorMapper.select(s -> s.where(RuleFactorDynamicSqlSupport.factorCode, isEqualTo(realFactorName)));
         RuleFactorDO ruleFactorDO = ruleFactors.stream().findFirst().orElse(null);
 
-        if (Objects.nonNull(ruleFactorDO)) {
-//            String script = "signDomainService.doSomeThing();" + "return NewList(\"11aa\", \"23\", \"3\");";
-//            FieldConfig build = FieldConfig.builder().fieldFullCode(String.valueOf(fieldName)).script(script).build();
+        if (Objects.nonNull(ruleFactorDO) && StringUtils.isNotBlank(ruleFactorDO.getFactorScript())) {
             return QlExpressUtil.execute(ruleFactorDO.getFactorScript(), param);
         }
 

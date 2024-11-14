@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -26,9 +27,11 @@ public class RuleEngineController {
      * @param context 请求参数
      */
     @PostMapping("/run")
-    public void execute(@RequestBody Map<String, Object> context) {
+    public Object execute(@RequestBody Map<String, Object> context) {
         String rulePackCode = (String) context.get("rulePackCode");
+        context.put("b", new Date());
         ruleEngineService.execute(rulePackCode, context);
+        return context.get("result");
     }
 
 

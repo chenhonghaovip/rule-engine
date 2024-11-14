@@ -1,15 +1,19 @@
 package com.jd.cho.rule.engine.domain.atomic;
 
+import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Maps;
 import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
+import com.jd.cho.rule.engine.common.enums.FactorTypeEnum;
 import com.jd.cho.rule.engine.common.enums.RelationTypeEnum;
 import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
+import com.jd.cho.rule.engine.common.exceptions.BusinessException;
 import com.jd.cho.rule.engine.common.util.AssertUtil;
 import com.jd.cho.rule.engine.domain.model.RuleCondition;
 import com.jd.cho.rule.engine.domain.model.RuleFactor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -25,32 +29,61 @@ import java.util.Objects;
 public class RuleDefExpressionParser {
 
 
-    private static final String ORIGINAL_VALUE = "";
+    private static final String ORIGINAL_VALUE = "original";
 
-    public static boolean checkRuleCondition(RuleCondition ruleCondition, Map<String, RuleFactor> ruleFactorMap) {
+
+    public static void checkRuleCondition(RuleCondition ruleCondition, Map<String, RuleFactor> ruleFactorMap) {
         try {
-            if (Objects.nonNull(ruleCondition)) {
-                if (StringUtils.isNotBlank(ruleCondition.getLogicOperation())) {
-                    log.error("当前逻辑操作符不合法:{}", ruleCondition.getLogicOperation());
-                    AssertUtil.isNotNull(RelationTypeEnum.getByCode(ruleCondition.getLogicOperation()), BizErrorEnum.DOES_NOT_EXIST);
-                } else {
-                    // 判断规则是否异常
-                    RuleFactor ruleFactor = ruleFactorMap.get(ruleCondition.getFactorCode());
-                    AssertUtil.isNotNull(ruleFactor, BizErrorEnum.DOES_NOT_EXIST);
-                    AssertUtil.isNotNull(ruleFactor.getFactorType(), BizErrorEnum.FACTOR_TYPE_IS_NOT_EXIST);
-
-                    ExpressOperationEnum byCode = ExpressOperationEnum.getByCode(ruleCondition.getCompareOperation());
-                    AssertUtil.isNotNull(ruleFactor.getFactorType(), BizErrorEnum.FACTOR_TYPE_IS_NOT_EXIST);
-                    AssertUtil.isTrue(byCode.getGroup().equals(ruleFactor.getFactorType().getCode()), BizErrorEnum.DOES_NOT_EXIST);
-
-                }
-            }
+            checkRuleConditionInner(ruleCondition, ruleFactorMap);
+        } catch (BusinessException e) {
+            log.error("规则定义不合法:code:{},msg:{},param:{}", e.getErrorCode(), e.getMessage(), JSON.toJSONString(ruleCondition));
+            throw new BusinessException(e);
         } catch (Exception e) {
-            log.error("规则定义不合法，请检查后重试");
-            return false;
+            log.error("规则定义不合法，请检查后重试:{}", JSON.toJSONString(ruleCondition), e);
+            throw new BusinessException(e);
         }
-        return true;
 
+    }
+
+    /**
+     * 校验规则是否合法
+     *
+     * @param ruleCondition 规则协议
+     * @param ruleFactorMap 规则因子信息
+     */
+    public static void checkRuleConditionInner(RuleCondition ruleCondition, Map<String, RuleFactor> ruleFactorMap) {
+        if (Objects.nonNull(ruleCondition)) {
+            if (StringUtils.isNotBlank(ruleCondition.getLogicOperation())) {
+                AssertUtil.isNotNull(RelationTypeEnum.getByCode(ruleCondition.getLogicOperation()), BizErrorEnum.EXPRESS_OPERATION_DOES_NOT_EXIST);
+                if (CollectionUtils.isNotEmpty(ruleCondition.getChildren())) {
+                    ruleCondition.getChildren().forEach(each -> checkRuleConditionInner(each, ruleFactorMap));
+                }
+            } else {
+                // 判断规则是否异常
+                AssertUtil.isNotBlank(ruleCondition.getOriginalFactorCode(), BizErrorEnum.ORIGINAL_FACTOR_CODE_IS_NOT_EXIST);
+                AssertUtil.isNotBlank(ruleCondition.getFactorCode(), BizErrorEnum.FACTOR_CODE_IS_NOT_EXIST);
+                RuleFactor ruleFactor = ruleFactorMap.get(ruleCondition.getOriginalFactorCode());
+                AssertUtil.isNotNull(ruleFactor, BizErrorEnum.RULE_FACTOR_DOES_NOT_EXIST);
+
+                FactorTypeEnum factorType = ruleFactor.getFactorType();
+                AssertUtil.isNotNull(factorType, BizErrorEnum.FACTOR_TYPE_IS_NOT_EXIST);
+
+                ExpressOperationEnum byCode = ExpressOperationEnum.getByCode(ruleCondition.getCompareOperation());
+                AssertUtil.isTrue(byCode.getGroup().equals(factorType.getCode()), BizErrorEnum.FACTOR_TYPE_AND_OPERATE_NOT_MATCH);
+            }
+        }
+
+
+    }
+
+    public static void main(String[] args) {
+        String s1 = "{\n" + "    \"children\":\n" + "    [\n" + "        {\n" + "            \"children\":\n" + "            [\n" + "                {\n" + "                    \"compareOperation\": \"TEXT_NULL\",\n" + "                    \"factorCode\": \"c\",\n" + "                    \"originalFactorCode\": \"c_c\",\n" + "                    \"value\": \"20\"\n" + "                },\n" + "                {\n" + "                    \"compareOperation\": \"DATE_IS_NULL\",\n" + "                    \"factorCode\": \"d\",\n" + "                    \"originalFactorCode\": \"d\",\n" + "                    \"value\": \"null\"\n" + "                }\n" + "            ],\n" + "            \"logicOperation\": \"or\"\n" + "        },\n" + "        {\n" + "            \"compareOperation\": \"COLLECTION_CONTAIN_ANY_ONE\",\n" + "            \"factorCode\": \"a\",\n" + "            \"originalFactorCode\": \"a\",\n" + "            \"value\":\n" + "            [\n" + "                \"11\",\n" + "                \"23\"\n" + "            ]\n" + "        },\n" + "        {\n" + "            \"compareOperation\": \"DATE_AFTER\",\n" + "            \"factorCode\": \"b\",\n" + "            \"originalFactorCode\": \"b\",\n" + "            \"value\": \"2021-03-11 11:11:11\"\n" + "        }\n" + "    ],\n" + "    \"logicOperation\": \"and\"\n" + "}";
+
+        RuleCondition ruleCondition = JSON.parseObject(s1, RuleCondition.class);
+
+        checkRuleCondition(ruleCondition, Maps.newHashMap());
+        String s = buildWhenExpression(ruleCondition, Maps.newHashMap(), Maps.newHashMap());
+        System.out.println(s);
     }
 
 
@@ -64,7 +97,7 @@ public class RuleDefExpressionParser {
      */
     public static String buildWhenExpression(RuleCondition ruleCondition, Map<String, Object> rightValues, Map<String, String> fieldMapping) {
         if (Objects.isNull(ruleCondition)) {
-            return "";
+            return Dict.SYMBOL_EMPTY;
         }
 
         StringBuilder mvelExpression = new StringBuilder();
@@ -86,19 +119,22 @@ public class RuleDefExpressionParser {
                 if (CollectionUtils.isEmpty(children)) {
                     return Dict.SYMBOL_EMPTY;
                 }
-                String logicOperator = convertRelationExpress(ruleCondition.getLogicOperation());
-                StringBuilder childrenExpression = new StringBuilder();
+
+                RelationTypeEnum relationTypeEnum = RelationTypeEnum.getByCode(ruleCondition.getLogicOperation());
+                AssertUtil.isNotNull(relationTypeEnum);
+
+                StringBuilder currentExpression = new StringBuilder();
                 for (RuleCondition child : children) {
                     // 递归构建单个规则条件
                     String childExpression = buildWhenExpression(child, rightValues, fieldMapping);
                     if (!childExpression.isEmpty()) {
-                        if (childrenExpression.length() > 0) {
-                            childrenExpression.append(Dict.SYMBOL_SPACE).append(logicOperator).append(Dict.SYMBOL_SPACE);
+                        if (currentExpression.length() > 0) {
+                            currentExpression.append(Dict.SYMBOL_SPACE).append(relationTypeEnum.getExpression()).append(Dict.SYMBOL_SPACE);
                         }
-                        childrenExpression.append(Dict.LEFT_BRACKETS).append(childExpression).append(Dict.RIGHT_BRACKETS);
+                        currentExpression.append(Dict.LEFT_BRACKETS).append(childExpression).append(Dict.RIGHT_BRACKETS);
                     }
                 }
-                mvelExpression.append(childrenExpression);
+                mvelExpression.append(currentExpression);
                 break;
             default:
                 break;
@@ -106,21 +142,6 @@ public class RuleDefExpressionParser {
         return mvelExpression.toString();
     }
 
-    /**
-     * 转换条件连接符
-     *
-     * @param relation 条件连接符
-     */
-    protected static String convertRelationExpress(String relation) {
-        if (StringUtils.isEmpty(relation)) {
-            return Dict.SYMBOL_EMPTY;
-        } else if (relation.equalsIgnoreCase(Dict.RELATION_AND)) {
-            return Dict.LOGICAL_AND;
-        } else if (relation.equalsIgnoreCase(Dict.RELATION_OR)) {
-            return Dict.LOGICAL_OR;
-        }
-        return relation;
-    }
 
     /**
      * 构建QLExpress脚本
@@ -133,14 +154,14 @@ public class RuleDefExpressionParser {
      */
     public static String buildOperatorExpress(String operator, String fieldName, Object value, Map<String, Object> rightValues) {
         ExpressOperationEnum operation = ExpressOperationEnum.getByCode(operator);
-        if (Objects.isNull(operation)) {
-            return Dict.SYMBOL_EMPTY;
-        }
+        AssertUtil.isNotNull(operation);
+
+        String originalFieldName = buildValueExpress(fieldName);
         if (Objects.nonNull(value)) {
-            rightValues.put(buildValueExpress(fieldName), value);
+            rightValues.put(originalFieldName, value);
         }
         String expression = operation.getExpression();
-        return String.format(expression, fieldName, buildValueExpress(fieldName));
+        return String.format(expression, fieldName, originalFieldName);
     }
 
     /**

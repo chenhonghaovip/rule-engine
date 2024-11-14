@@ -11,26 +11,31 @@ import java.util.List;
  */
 @Getter
 public enum RelationTypeEnum {
-    AND("&&", "且"),
     /**
-     * 脚本类型
+     * 且
      */
-    OR("||", "或"),
-
+    AND("AND", "&&", "且"),
+    /**
+     * 或
+     */
+    OR("OR", "||", "或"),
     ;
 
     private final String code;
+    private final String expression;
     private final String desc;
 
-    RelationTypeEnum(String code, String desc) {
+
+    RelationTypeEnum(String code, String expression, String desc) {
         this.code = code;
+        this.expression = expression;
         this.desc = desc;
     }
 
     public static final List<RelationTypeEnum> RELATION_TYPE_ENUMS = Arrays.asList(RelationTypeEnum.values());
 
     public static RelationTypeEnum getByCode(String code) {
-        return RELATION_TYPE_ENUMS.stream().filter(each -> each.getCode().equals(code)).findFirst().orElse(null);
+        return RELATION_TYPE_ENUMS.stream().filter(each -> each.getCode().equalsIgnoreCase(code)).findFirst().orElse(null);
     }
 
 }
