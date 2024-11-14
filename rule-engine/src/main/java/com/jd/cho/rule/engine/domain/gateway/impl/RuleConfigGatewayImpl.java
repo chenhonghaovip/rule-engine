@@ -19,11 +19,11 @@ import com.jd.cho.rule.engine.common.util.QlExpressUtil;
 import com.jd.cho.rule.engine.dal.DO.*;
 import com.jd.cho.rule.engine.dal.mapper.*;
 import com.jd.cho.rule.engine.domain.atomic.AtomicLoginUserComponent;
+import com.jd.cho.rule.engine.domain.atomic.AtomicRuleFactorComponent;
 import com.jd.cho.rule.engine.domain.atomic.RuleDefExpressionParser;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.domain.model.*;
 import com.jd.cho.rule.engine.service.dto.RulePackDTO;
-import com.jd.cho.rule.engine.spi.RuleFactorExtendService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -68,8 +68,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     @Transactional(rollbackFor = Exception.class)
     public String createRuleScene(RuleScene ruleScene) {
         // code重复性校验
-        long count = ruleSceneMapper.count(s -> s.where(RuleSceneDynamicSqlSupport.sceneCode, isEqualTo(ruleScene.getSceneCode()))
-                .and(RuleSceneDynamicSqlSupport.yn, isEqualTo(true)));
+        long count = ruleSceneMapper.count(s -> s.where(RuleSceneDynamicSqlSupport.sceneCode, isEqualTo(ruleScene.getSceneCode())).and(RuleSceneDynamicSqlSupport.yn, isEqualTo(true)));
         if (count > 0) {
             throw new BusinessException(BizErrorEnum.SCENE_CODE_IS_EXIST);
         }
@@ -105,8 +104,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     @Transactional(rollbackFor = Exception.class)
     public List<RuleScene> queryRuleScene() {
         String tenant = AtomicLoginUserComponent.getLoginUserInfo().getTenant();
-        List<RuleSceneDO> ruleSceneList = ruleSceneMapper.select(s -> s.where(RuleSceneDynamicSqlSupport.yn, isEqualTo(true))
-                .and(RuleSceneDynamicSqlSupport.tenant, isEqualTo(tenant)));
+        List<RuleSceneDO> ruleSceneList = ruleSceneMapper.select(s -> s.where(RuleSceneDynamicSqlSupport.yn, isEqualTo(true)).and(RuleSceneDynamicSqlSupport.tenant, isEqualTo(tenant)));
 
         List<String> groupCodes = Lists.newArrayList();
         List<String> sceneCodes = Lists.newArrayList();
@@ -151,8 +149,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
 
     @Override
     public List<RuleSceneAction> queryRuleSceneAction(List<String> sceneCodes) {
-        List<RuleSceneActionDO> ruleSceneActionDOList = ruleSceneActionMapper.select(s -> s.where(RuleSceneActionDynamicSqlSupport.sceneCode, isIn(sceneCodes))
-                .and(RuleSceneActionDynamicSqlSupport.yn, isEqualTo(true)));
+        List<RuleSceneActionDO> ruleSceneActionDOList = ruleSceneActionMapper.select(s -> s.where(RuleSceneActionDynamicSqlSupport.sceneCode, isIn(sceneCodes)).and(RuleSceneActionDynamicSqlSupport.yn, isEqualTo(true)));
         return ruleSceneActionDOList.stream().map(RuleSceneActionConvert.INSTANCE::doToEntity).collect(Collectors.toList());
     }
 
@@ -173,11 +170,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateRuleSceneAction(List<RuleSceneAction> ruleSceneActions, String sceneCode) {
-        ruleSceneActionMapper.update(s -> s.set(RuleSceneActionDynamicSqlSupport.yn).equalTo(false)
-                .set(RuleSceneActionDynamicSqlSupport.modifier).equalTo(AtomicLoginUserComponent.getLoginUser())
-                .set(RuleSceneActionDynamicSqlSupport.modifyTime).equalTo(new Date())
-                .where(RuleSceneActionDynamicSqlSupport.sceneCode, isEqualTo(sceneCode))
-                .and(RuleSceneActionDynamicSqlSupport.yn, isEqualTo(true)));
+        ruleSceneActionMapper.update(s -> s.set(RuleSceneActionDynamicSqlSupport.yn).equalTo(false).set(RuleSceneActionDynamicSqlSupport.modifier).equalTo(AtomicLoginUserComponent.getLoginUser()).set(RuleSceneActionDynamicSqlSupport.modifyTime).equalTo(new Date()).where(RuleSceneActionDynamicSqlSupport.sceneCode, isEqualTo(sceneCode)).and(RuleSceneActionDynamicSqlSupport.yn, isEqualTo(true)));
         if (CollectionUtils.isNotEmpty(ruleSceneActions)) {
             this.createRuleSceneAction(ruleSceneActions, sceneCode);
         }
@@ -186,16 +179,14 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     @Override
     public List<RuleFactorGroup> queryRuleFactorGroup() {
         UserInfo loginUserInfo = AtomicLoginUserComponent.getLoginUserInfo();
-        List<RuleFactorGroupDO> list = ruleFactorGroupMapper.select(s -> s.where(RuleFactorGroupDynamicSqlSupport.yn, isEqualTo(true))
-                .and(RuleFactorGroupDynamicSqlSupport.tenant, isEqualTo(loginUserInfo.getTenant())));
+        List<RuleFactorGroupDO> list = ruleFactorGroupMapper.select(s -> s.where(RuleFactorGroupDynamicSqlSupport.yn, isEqualTo(true)).and(RuleFactorGroupDynamicSqlSupport.tenant, isEqualTo(loginUserInfo.getTenant())));
         return list.stream().map(each -> RuleFactorGroup.builder().groupCode(each.getGroupCode()).groupName(each.getGroupName()).id(each.getId()).build()).collect(Collectors.toList());
     }
 
     @Override
     public List<RuleFactorGroup> queryRuleFactorGroup(List<String> groupCodes) {
         UserInfo loginUserInfo = AtomicLoginUserComponent.getLoginUserInfo();
-        List<RuleFactorGroupDO> list = ruleFactorGroupMapper.select(s -> s.where(RuleFactorGroupDynamicSqlSupport.yn, isEqualTo(true))
-                .and(RuleFactorGroupDynamicSqlSupport.tenant, isEqualTo(loginUserInfo.getTenant())).and(RuleFactorGroupDynamicSqlSupport.groupCode, isIn(groupCodes)));
+        List<RuleFactorGroupDO> list = ruleFactorGroupMapper.select(s -> s.where(RuleFactorGroupDynamicSqlSupport.yn, isEqualTo(true)).and(RuleFactorGroupDynamicSqlSupport.tenant, isEqualTo(loginUserInfo.getTenant())).and(RuleFactorGroupDynamicSqlSupport.groupCode, isIn(groupCodes)));
         return list.stream().map(each -> RuleFactorGroup.builder().groupCode(each.getGroupCode()).groupName(each.getGroupName()).id(each.getId()).build()).collect(Collectors.toList());
     }
 
@@ -205,17 +196,14 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
             ruleFactorGroup.setGroupCode(UUID.randomUUID().toString());
         }
         UserInfo loginUserInfo = AtomicLoginUserComponent.getLoginUserInfo();
-        RuleFactorGroupDO ruleFactorGroupDO = RuleFactorGroupDO.builder().groupCode(ruleFactorGroup.getGroupCode())
-                .groupName(ruleFactorGroup.getGroupName()).creator(loginUserInfo.getLoginUser())
-                .tenant(loginUserInfo.getTenant()).build();
+        RuleFactorGroupDO ruleFactorGroupDO = RuleFactorGroupDO.builder().groupCode(ruleFactorGroup.getGroupCode()).groupName(ruleFactorGroup.getGroupName()).creator(loginUserInfo.getLoginUser()).tenant(loginUserInfo.getTenant()).build();
         ruleFactorGroupMapper.insertSelective(ruleFactorGroupDO);
         return ruleFactorGroup.getGroupCode();
     }
 
     @Override
     public void createRuleFactor(RuleFactor ruleFactor) {
-        long count = ruleFactorMapper.count(s -> s.where(RuleFactorDynamicSqlSupport.factorCode, isEqualTo(ruleFactor.getFactorCode()))
-                .and(RuleFactorDynamicSqlSupport.yn, isEqualTo(true)));
+        long count = ruleFactorMapper.count(s -> s.where(RuleFactorDynamicSqlSupport.factorCode, isEqualTo(ruleFactor.getFactorCode())).and(RuleFactorDynamicSqlSupport.yn, isEqualTo(true)));
         if (count > 0) {
             throw new BusinessException(BizErrorEnum.CODE_IS_EXIST);
         }
@@ -242,8 +230,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
 
     @Override
     public List<RuleFactor> queryBySceneCode(String sceneCode, Map<String, Object> context) {
-        Optional<RuleSceneDO> optionalRuleScene = ruleSceneMapper.selectOne(s -> s.where(RuleSceneDynamicSqlSupport.sceneCode, isEqualTo(sceneCode))
-                .and(RuleSceneDynamicSqlSupport.yn, isEqualTo(true)));
+        Optional<RuleSceneDO> optionalRuleScene = ruleSceneMapper.selectOne(s -> s.where(RuleSceneDynamicSqlSupport.sceneCode, isEqualTo(sceneCode)).and(RuleSceneDynamicSqlSupport.yn, isEqualTo(true)));
         if (!optionalRuleScene.isPresent()) {
             return Lists.newArrayList();
         }
@@ -265,18 +252,13 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
             return ruleFactor;
         }).collect(Collectors.toList());
 
-        ServiceLoader<RuleFactorExtendService> load = ServiceLoader.load(RuleFactorExtendService.class);
-        for (RuleFactorExtendService service : load) {
-            ruleFactorList = service.extendFactors(ruleFactorList);
-        }
-        return ruleFactorList;
+        return AtomicRuleFactorComponent.extendFactors(ruleFactorList);
     }
 
     @Override
     public List<CommonDict> factorConstantValues(Map<String, Object> context) {
         String factorCode = (String) context.get(Dict.FACTOR_CODE);
-        List<RuleFactorDO> ruleFactorList = ruleFactorMapper.select(s -> s.where(RuleFactorDynamicSqlSupport.factorCode, isEqualTo(factorCode))
-                .and(RuleFactorDynamicSqlSupport.yn, isEqualTo(true)));
+        List<RuleFactorDO> ruleFactorList = ruleFactorMapper.select(s -> s.where(RuleFactorDynamicSqlSupport.factorCode, isEqualTo(factorCode)).and(RuleFactorDynamicSqlSupport.yn, isEqualTo(true)));
         if (CollectionUtils.isEmpty(ruleFactorList)) {
             throw new BusinessException(BizErrorEnum.DOES_NOT_EXIST);
         }
@@ -286,9 +268,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
 
     @Override
     public RulePack rulePackInfo(String rulePackCode) {
-        Optional<RulePackDO> optionalRulePackDO = rulePackMapper.selectOne(s -> s.where(RulePackDynamicSqlSupport.rulePackCode, isEqualTo(rulePackCode))
-                .and(RulePackDynamicSqlSupport.yn, isEqualTo(true))
-                .and(RulePackDynamicSqlSupport.latest, isEqualTo(1)));
+        Optional<RulePackDO> optionalRulePackDO = rulePackMapper.selectOne(s -> s.where(RulePackDynamicSqlSupport.rulePackCode, isEqualTo(rulePackCode)).and(RulePackDynamicSqlSupport.yn, isEqualTo(true)).and(RulePackDynamicSqlSupport.latest, isEqualTo(1)));
         if (optionalRulePackDO.isPresent()) {
             RulePackDO rulePackDO = optionalRulePackDO.get();
             List<Long> ids = Arrays.stream(rulePackDO.getRuleIds().split(Dict.SPLIT)).map(Long::valueOf).collect(Collectors.toList());
@@ -304,8 +284,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
 
     @Override
     public List<RulePack> historyRulePackInfo(String rulePackCode) {
-        List<RulePackDO> history = rulePackMapper.select(s -> s.where(RulePackDynamicSqlSupport.rulePackCode, isEqualTo(rulePackCode))
-                .and(RulePackDynamicSqlSupport.yn, isEqualTo(true)).orderBy(RulePackDynamicSqlSupport.version.descending()));
+        List<RulePackDO> history = rulePackMapper.select(s -> s.where(RulePackDynamicSqlSupport.rulePackCode, isEqualTo(rulePackCode)).and(RulePackDynamicSqlSupport.yn, isEqualTo(true)).orderBy(RulePackDynamicSqlSupport.version.descending()));
 
         List<Long> ruleIds = Lists.newArrayList();
         history.forEach(each -> ruleIds.addAll(Arrays.stream(each.getRuleIds().split(Dict.SPLIT)).map(Long::valueOf).collect(Collectors.toList())));
@@ -325,8 +304,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     @Transactional(rollbackFor = Exception.class)
     public String createRulePack(RulePackDTO rulePackDTO) {
         if (Objects.nonNull(rulePackDTO)) {
-            long count = rulePackMapper.count(s -> s.where(RulePackDynamicSqlSupport.rulePackCode, isEqualTo(rulePackDTO.getRulePackCode()))
-                    .and(RulePackDynamicSqlSupport.yn, isEqualTo(true)));
+            long count = rulePackMapper.count(s -> s.where(RulePackDynamicSqlSupport.rulePackCode, isEqualTo(rulePackDTO.getRulePackCode())).and(RulePackDynamicSqlSupport.yn, isEqualTo(true)));
             if (count > 0) {
                 throw new BusinessException("规则包code重复");
             }
@@ -349,10 +327,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
             optionalRulePackDO.ifPresent(each -> {
 
                 UserInfo loginUserInfo = AtomicLoginUserComponent.getLoginUserInfo();
-                int update = rulePackMapper.update(s -> s.set(RulePackDynamicSqlSupport.modifyTime).equalTo(new Date())
-                        .set(RulePackDynamicSqlSupport.modifier).equalTo(loginUserInfo.getLoginUser())
-                        .set(RulePackDynamicSqlSupport.latest).equalTo(0)
-                        .where(RulePackDynamicSqlSupport.id, isEqualTo(id)).and(RulePackDynamicSqlSupport.latest, isEqualTo(1)));
+                int update = rulePackMapper.update(s -> s.set(RulePackDynamicSqlSupport.modifyTime).equalTo(new Date()).set(RulePackDynamicSqlSupport.modifier).equalTo(loginUserInfo.getLoginUser()).set(RulePackDynamicSqlSupport.latest).equalTo(0).where(RulePackDynamicSqlSupport.id, isEqualTo(id)).and(RulePackDynamicSqlSupport.latest, isEqualTo(1)));
                 if (update == 0) {
                     throw new BusinessException(DATA_HAS_CHANGE);
                 }
@@ -416,8 +391,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
         Set<String> factorCodes = Sets.newHashSet();
         rules.forEach(each -> findFactorCodes(each, factorCodes));
 
-        List<RuleFactorDO> ruleFactors = ruleFactorMapper.select(s -> s.where(RuleFactorDynamicSqlSupport.yn, isEqualTo(true))
-                .and(RuleFactorDynamicSqlSupport.factorCode, isIn(factorCodes)));
+        List<RuleFactorDO> ruleFactors = ruleFactorMapper.select(s -> s.where(RuleFactorDynamicSqlSupport.yn, isEqualTo(true)).and(RuleFactorDynamicSqlSupport.factorCode, isIn(factorCodes)));
         if (ruleFactors.size() != factorCodes.size()) {
             throw new BusinessException(BizErrorEnum.FACTOR_CODE_IS_NOT_EXIST);
         }
@@ -442,10 +416,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
         ruleConditions.forEach(ruleCondition -> RuleDefExpressionParser.checkRuleCondition(ruleCondition, factorMaps));
 
 
-        List<RuleDefDO> ruleDefs = rulePackDTO.getRules().stream()
-                .map(o -> RuleDefDO.builder().ruleAction(JSON.toJSONString(o.getRuleActions()))
-                        .ruleCondition(JSON.toJSONString(o.getRuleCondition()))
-                        .priority(o.getPriority()).creator(loginUserInfo.getLoginUser()).tenant(loginUserInfo.getTenant()).build()).collect(Collectors.toList());
+        List<RuleDefDO> ruleDefs = rulePackDTO.getRules().stream().map(o -> RuleDefDO.builder().ruleAction(JSON.toJSONString(o.getRuleActions())).ruleCondition(JSON.toJSONString(o.getRuleCondition())).priority(o.getPriority()).creator(loginUserInfo.getLoginUser()).tenant(loginUserInfo.getTenant()).build()).collect(Collectors.toList());
         ruleDefMapper.insertMultipleSelective(ruleDefs);
 
         String ruleIds = ruleDefs.stream().filter(each -> Objects.nonNull(each.getId())).map(o -> String.valueOf(o.getId())).collect(Collectors.joining(Dict.SPLIT));
@@ -482,9 +453,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
      * @param resultCodes   结果
      */
     private void findFactorCodes(RuleCondition ruleCondition, Set<String> resultCodes) {
-        boolean isExpress = StringUtils.isNotBlank(ruleCondition.getFactorCode())
-                && StringUtils.isNotBlank(ruleCondition.getCompareOperation())
-                && StringUtils.isBlank(ruleCondition.getLogicOperation());
+        boolean isExpress = StringUtils.isNotBlank(ruleCondition.getFactorCode()) && StringUtils.isNotBlank(ruleCondition.getCompareOperation()) && StringUtils.isBlank(ruleCondition.getLogicOperation());
         if (isExpress) {
             resultCodes.add(ruleCondition.getOriginalFactorCode());
         } else if (CollectionUtils.isNotEmpty(ruleCondition.getChildren())) {

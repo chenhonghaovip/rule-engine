@@ -5,9 +5,6 @@ import com.jd.cho.rule.engine.dal.DO.RuleFactorDO;
 import com.jd.cho.rule.engine.dal.mapper.RuleFactorDynamicSqlSupport;
 import com.jd.cho.rule.engine.dal.mapper.RuleFactorMapper;
 import com.jd.cho.rule.engine.domain.atomic.FactorValueService;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -50,15 +47,4 @@ public class FactorValueServiceImpl implements FactorValueService {
         return null;
     }
 
-
-    @Data
-    @AllArgsConstructor
-    @Builder
-    public static class FieldConfig {
-        private String fieldCode;
-
-        private String fieldFullCode;
-
-        private String script;
-    }
 }

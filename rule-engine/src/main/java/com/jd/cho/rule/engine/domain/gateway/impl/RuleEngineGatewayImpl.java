@@ -69,6 +69,7 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
 
 
     private boolean executeCondition(String expression, Map<String, Object> context, Map<String, Object> rightValues, Map<String, String> fieldMapping) {
+        log.info("current express:{},context:{},rightValue:{}", expression, JSON.toJSONString(context), JSON.toJSONString(rightValues));
         return (Boolean) QlExpressUtil.execute(expression, context, rightValues, fieldMapping);
     }
 
@@ -179,6 +180,7 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
      * @param context         上下文
      */
     public void executeAction(List<RuleAction> ruleActionBeans, Map<String, Object> context) {
+        log.info("rule engine condition is true,execute action:{}", JSON.toJSONString(ruleActionBeans));
         Map<String, Object> resultMap = Maps.newHashMap();
         ruleActionBeans.forEach(each -> resultMap.put(each.getFieldCode(), each.getValues()));
         Object result = context.get(Dict.RESULT_ALIAS);
