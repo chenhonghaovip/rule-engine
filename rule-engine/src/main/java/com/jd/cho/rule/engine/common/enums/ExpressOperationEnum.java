@@ -54,8 +54,8 @@ public enum ExpressOperationEnum {
      */
     COLLECTION_IS_NULL(FactorTypeEnum.COLLECTION.getCode(), "COLLECTION_IS_NULL", "isEmpty(%s)", "为空"),
     COLLECTION_NOT_NULL(FactorTypeEnum.COLLECTION.getCode(), "COLLECTION_NOT_NULL", "isNotEmpty(%s)", "不为空"),
-    COLLECTION_CONTAIN_ANY_ONE(FactorTypeEnum.COLLECTION.getCode(), "COLLECTION_CONTAIN_ANY_ONE", "containAnyOne(%s,%s)", "包含任意"),
-    COLLECTION_CONTAIN_ALL(FactorTypeEnum.COLLECTION.getCode(), "COLLECTION_CONTAIN_ALL", "containsAll(%s,%s)", "包含全部"),
+    COLLECTION_CONTAIN_ANY_ONE(FactorTypeEnum.COLLECTION.getCode(), "COLLECTION_CONTAIN_ANY_ONE", "containAnyOne(%s,changeArrayToList(%s))", "包含任意"),
+    COLLECTION_CONTAIN_ALL(FactorTypeEnum.COLLECTION.getCode(), "COLLECTION_CONTAIN_ALL", "containsAll(%s,changeArrayToList(%s))", "包含全部"),
 
 
     /**

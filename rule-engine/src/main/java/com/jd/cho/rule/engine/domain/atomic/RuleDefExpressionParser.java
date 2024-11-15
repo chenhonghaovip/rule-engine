@@ -1,7 +1,6 @@
 package com.jd.cho.rule.engine.domain.atomic;
 
 import com.alibaba.fastjson.JSON;
-import com.google.common.collect.Maps;
 import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
 import com.jd.cho.rule.engine.common.enums.FactorTypeEnum;
@@ -27,10 +26,6 @@ import java.util.Objects;
  */
 @Slf4j
 public class RuleDefExpressionParser {
-
-
-    private static final String ORIGINAL_VALUE = "original";
-
 
     public static void checkRuleCondition(RuleCondition ruleCondition, Map<String, RuleFactor> ruleFactorMap) {
         try {
@@ -76,16 +71,6 @@ public class RuleDefExpressionParser {
 
     }
 
-    public static void main(String[] args) {
-        String s1 = "{\n" + "    \"children\":\n" + "    [\n" + "        {\n" + "            \"children\":\n" + "            [\n" + "                {\n" + "                    \"compareOperation\": \"TEXT_NULL\",\n" + "                    \"factorCode\": \"c\",\n" + "                    \"originalFactorCode\": \"c_c\",\n" + "                    \"value\": \"20\"\n" + "                },\n" + "                {\n" + "                    \"compareOperation\": \"DATE_IS_NULL\",\n" + "                    \"factorCode\": \"d\",\n" + "                    \"originalFactorCode\": \"d\",\n" + "                    \"value\": \"null\"\n" + "                }\n" + "            ],\n" + "            \"logicOperation\": \"or\"\n" + "        },\n" + "        {\n" + "            \"compareOperation\": \"COLLECTION_CONTAIN_ANY_ONE\",\n" + "            \"factorCode\": \"a\",\n" + "            \"originalFactorCode\": \"a\",\n" + "            \"value\":\n" + "            [\n" + "                \"11\",\n" + "                \"23\"\n" + "            ]\n" + "        },\n" + "        {\n" + "            \"compareOperation\": \"DATE_AFTER\",\n" + "            \"factorCode\": \"b\",\n" + "            \"originalFactorCode\": \"b\",\n" + "            \"value\": \"2021-03-11 11:11:11\"\n" + "        }\n" + "    ],\n" + "    \"logicOperation\": \"and\"\n" + "}";
-
-        RuleCondition ruleCondition = JSON.parseObject(s1, RuleCondition.class);
-
-        checkRuleCondition(ruleCondition, Maps.newHashMap());
-        String s = buildWhenExpression(ruleCondition, Maps.newHashMap(), Maps.newHashMap());
-        System.out.println(s);
-    }
-
 
     /**
      * 构建当表达式
@@ -95,7 +80,7 @@ public class RuleDefExpressionParser {
      * @param ruleCondition 逻辑表达式对象，包含构建当表达式所需的信息
      * @return 返回构建好的当表达式字符串
      */
-    public static String buildWhenExpression(RuleCondition ruleCondition, Map<String, Object> rightValues, Map<String, String> fieldMapping) {
+    public static String buildWhenExpression(RuleCondition ruleCondition, Map<String, String> fieldMapping) {
         if (Objects.isNull(ruleCondition)) {
             return Dict.SYMBOL_EMPTY;
         }
@@ -112,7 +97,7 @@ public class RuleDefExpressionParser {
                 }
                 Object fieldValue = ruleCondition.getValue();
                 String compareOperation = ruleCondition.getCompareOperation();
-                mvelExpression.append(buildOperatorExpress(compareOperation, factorCode, fieldValue, rightValues));
+                mvelExpression.append(buildOperatorExpress(compareOperation, factorCode, fieldValue));
                 break;
             case Dict.RELATION_TYPE:
                 List<RuleCondition> children = ruleCondition.getChildren();
@@ -126,7 +111,7 @@ public class RuleDefExpressionParser {
                 StringBuilder currentExpression = new StringBuilder();
                 for (RuleCondition child : children) {
                     // 递归构建单个规则条件
-                    String childExpression = buildWhenExpression(child, rightValues, fieldMapping);
+                    String childExpression = buildWhenExpression(child, fieldMapping);
                     if (!childExpression.isEmpty()) {
                         if (currentExpression.length() > 0) {
                             currentExpression.append(Dict.SYMBOL_SPACE).append(relationTypeEnum.getExpression()).append(Dict.SYMBOL_SPACE);
@@ -146,31 +131,18 @@ public class RuleDefExpressionParser {
     /**
      * 构建QLExpress脚本
      *
-     * @param operator    操作符
-     * @param fieldName   字段名称
-     * @param value       字段值
-     * @param rightValues 右侧参数
+     * @param operator  操作符
+     * @param fieldName 字段名称
+     * @param value     字段值
      * @return 构建好的表达式
      */
-    public static String buildOperatorExpress(String operator, String fieldName, Object value, Map<String, Object> rightValues) {
+    public static String buildOperatorExpress(String operator, String fieldName, Object value) {
         ExpressOperationEnum operation = ExpressOperationEnum.getByCode(operator);
         AssertUtil.isNotNull(operation);
 
-        String originalFieldName = buildValueExpress(fieldName);
-        if (Objects.nonNull(value)) {
-            rightValues.put(originalFieldName, value);
-        }
         String expression = operation.getExpression();
-        return String.format(expression, fieldName, originalFieldName);
+        return String.format(expression, fieldName, value);
     }
 
-    /**
-     * 构建mvel取值表达式
-     *
-     * @param fieldName 字段名称
-     */
-    private static String buildValueExpress(String fieldName) {
-        return String.format("%s_%s", ORIGINAL_VALUE, fieldName);
-    }
 
 }

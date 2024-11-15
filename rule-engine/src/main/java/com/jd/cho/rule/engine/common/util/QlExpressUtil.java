@@ -9,7 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * （1）打通了spring容器，通过扩展IExpressContext->QLExpressContext
@@ -31,6 +30,7 @@ public class QlExpressUtil {
             RUNNER.addFunctionOfClassMethod("isNotEmpty", CollectionUtils.class, "isNotEmpty", new Class[]{Collection.class}, null);
             RUNNER.addFunctionOfClassMethod("containAnyOne", CollectionUtil.class, "containAnyOne", new Class[]{Collection.class, Collection.class}, null);
             RUNNER.addFunctionOfClassMethod("containsAll", CollectionUtil.class, "containsAll", new Class[]{Collection.class, Collection.class}, null);
+            RUNNER.addFunctionOfClassMethod("changeArrayToList", CollectionUtil.class, "changeArrayToList", new Class[]{Object[].class}, null);
             RUNNER.addFunctionOfClassMethod("dateBefore", DateUtil.class, "dateBefore", new Class[]{Date.class, Date.class}, null);
             RUNNER.addFunctionOfClassMethod("dateAfter", DateUtil.class, "dateAfter", new Class[]{Date.class, Date.class}, null);
             RUNNER.addFunctionOfClassMethod("dateEqualDay", DateUtil.class, "dateEqualDay", new Class[]{Date.class, Date.class}, null);
@@ -45,11 +45,8 @@ public class QlExpressUtil {
      * @param context   上下文
      */
     @SuppressWarnings("unchecked")
-    public static Object execute(String statement, Map<String, Object> context, Map<String, Object> rightValues, Map<String, String> fieldMapping) {
+    public static Object execute(String statement, Map<String, Object> context, Map<String, String> fieldMapping) {
         try {
-            if (Objects.nonNull(rightValues) && !rightValues.isEmpty()) {
-                context.putAll(rightValues);
-            }
             return RUNNER.execute(statement, new QLExpressContext(context, fieldMapping), null, false, false);
         } catch (Exception e) {
             log.error("QlExpressUtil::execute error,statement={},context:{}", statement, JSON.toJSONString(context));
