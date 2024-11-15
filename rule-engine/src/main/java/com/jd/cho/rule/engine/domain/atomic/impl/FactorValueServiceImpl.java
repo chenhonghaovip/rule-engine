@@ -1,5 +1,6 @@
 package com.jd.cho.rule.engine.domain.atomic.impl;
 
+import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.util.QlExpressUtil;
 import com.jd.cho.rule.engine.dal.DO.RuleFactorDO;
 import com.jd.cho.rule.engine.dal.mapper.RuleFactorDynamicSqlSupport;
@@ -29,19 +30,17 @@ public class FactorValueServiceImpl implements FactorValueService {
 
 
     @Override
-    public Object getFieldValue(Object fieldName, Map<String, Object> param, Map<String, String> fieldMapping) {
-        log.info("FactorValueService::getFieldValue,fieldName:{},param:{},fieldMapping:{}", fieldName, param, fieldMapping);
-        String factorName = (String) fieldName;
-        if (fieldMapping.containsKey(factorName)) {
-            factorName = fieldMapping.get(factorName);
-        }
-        String realFactorName = factorName;
+    public Object getFieldValue(Object fieldName, Map<String, Object> context, Map<String, String> fieldMapping) {
+        log.info("FactorValueService::getFieldValue,fieldName:{},param:{},fieldMapping:{}", fieldName, context, fieldMapping);
+        String factorCode = (String) fieldName;
+        String realFactorCode = fieldMapping.getOrDefault(factorCode, factorCode);
 
-        List<RuleFactorDO> ruleFactors = ruleFactorMapper.select(s -> s.where(RuleFactorDynamicSqlSupport.factorCode, isEqualTo(realFactorName)));
+        context.put(Dict.FACTOR_CODE, factorCode);
+        List<RuleFactorDO> ruleFactors = ruleFactorMapper.select(s -> s.where(RuleFactorDynamicSqlSupport.factorCode, isEqualTo(realFactorCode)));
         RuleFactorDO ruleFactorDO = ruleFactors.stream().findFirst().orElse(null);
 
         if (Objects.nonNull(ruleFactorDO) && StringUtils.isNotBlank(ruleFactorDO.getFactorScript())) {
-            return QlExpressUtil.execute(ruleFactorDO.getFactorScript(), param);
+            return QlExpressUtil.execute(ruleFactorDO.getFactorScript(), context);
         }
 
         return null;

@@ -12,8 +12,8 @@ public interface FactorValueService {
      * 通过字段脚本获取当前字段对应的值
      *
      * @param fieldName 字段code
-     * @param param     请求参数
+     * @param context   请求参数
      * @return 字段值
      */
-    Object getFieldValue(Object fieldName, Map<String, Object> param, Map<String, String> fieldMapping);
+    Object getFieldValue(Object fieldName, Map<String, Object> context, Map<String, String> fieldMapping);
 }
