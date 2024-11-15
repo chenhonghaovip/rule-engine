@@ -45,5 +45,4 @@ public class FactorValueServiceImpl implements FactorValueService {
 
         return null;
     }
-
 }

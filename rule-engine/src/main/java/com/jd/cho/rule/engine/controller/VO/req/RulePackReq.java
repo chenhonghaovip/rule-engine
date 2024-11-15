@@ -1,6 +1,6 @@
 package com.jd.cho.rule.engine.controller.VO.req;
 
-import com.alibaba.fastjson.annotation.JSONField;
+import com.jd.cho.rule.engine.spi.RuleGroupExtendService;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -15,27 +15,56 @@ public class RulePackReq implements Serializable {
 
     private Long id;
 
-    @JSONField(name = "rulePackName")
+    /**
+     * 规则包名称
+     */
     private String rulePackName;
-    @JSONField(name = "rulePackCode")
+
+    /**
+     * 规则包code
+     */
     private String rulePackCode;
-    @JSONField(name = "rulePackType")
+
+    /**
+     * 规则包类型
+     *
+     * @see com.jd.cho.rule.engine.common.enums.RulePackTypeEnum
+     */
     private String rulePackType;
-    @JSONField(name = "ruleArrangeStrategy")
+
+    /**
+     * 包内规则调度策略
+     *
+     * @see RuleGroupExtendService
+     */
     private String ruleArrangeStrategy;
-    @JSONField(name = "remark")
+
+    /**
+     * 备注
+     */
     private String remark;
-    @JSONField(name = "rules")
+
+    /**
+     * 规则列表
+     */
     private List<RulesBean> rules;
 
     @Data
     public static class RulesBean implements Serializable {
 
-        @JSONField(name = "ruleCondition")
+        /**
+         * 规则条件
+         */
         private RuleConditionBean ruleCondition;
-        @JSONField(name = "priority")
+
+        /**
+         * 优先级
+         */
         private Integer priority;
-        @JSONField(name = "ruleAction")
+
+        /**
+         * 规则动作
+         */
         private List<RuleActionBean> ruleActions;
 
         @Data
@@ -43,14 +72,17 @@ public class RulePackReq implements Serializable {
 
             /**
              * 逻辑运算
+             *
+             * @see com.jd.cho.rule.engine.common.enums.RelationTypeEnum
              */
             private String logicOperation;
 
             /**
              * 比较运算
+             *
+             * @see com.jd.cho.rule.engine.common.enums.ExpressOperationEnum
              */
             private String compareOperation;
-
 
             /**
              * 因子code
@@ -67,7 +99,6 @@ public class RulePackReq implements Serializable {
              */
             private Object value;
 
-
             /**
              * 子规则列表
              */
@@ -76,14 +107,15 @@ public class RulePackReq implements Serializable {
 
         @Data
         public static class RuleActionBean implements Serializable {
-            /**
-             * fieldCode : field1
-             * values : [11,22]
-             */
 
-            @JSONField(name = "fieldCode")
+            /**
+             * 字段code
+             */
             private String fieldCode;
-            @JSONField(name = "values")
+
+            /**
+             * 字段值
+             */
             private Object values;
         }
     }

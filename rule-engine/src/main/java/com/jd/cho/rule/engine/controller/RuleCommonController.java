@@ -33,9 +33,9 @@ public class RuleCommonController {
 
 
     /**
-     * 获取因子类型列表
+     * 获取因子类型支持的操作符号
      *
-     * @return 因子支持类型
+     * @return 因子支持操作符号
      */
     @GetMapping("/factor/express")
     public List<ExpressOperationEnum> expressOperationEnums(@RequestParam("type") String type) {

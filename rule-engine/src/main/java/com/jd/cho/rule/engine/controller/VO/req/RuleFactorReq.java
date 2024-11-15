@@ -42,7 +42,6 @@ public class RuleFactorReq implements Serializable {
      */
     private String constantValue;
 
-
     /**
      * 取值脚本参数
      */

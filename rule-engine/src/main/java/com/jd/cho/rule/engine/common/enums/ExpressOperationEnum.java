@@ -58,6 +58,9 @@ public enum ExpressOperationEnum {
     COLLECTION_CONTAIN_ALL(FactorTypeEnum.COLLECTION.getCode(), "COLLECTION_CONTAIN_ALL", "containsAll(%s,%s)", "包含全部"),
 
 
+    /**
+     * 布尔类型
+     */
     BOOLEAN_IS_TRUE(FactorTypeEnum.BOOLEAN.getCode(), "BOOLEAN_IS_TRUE", "Boolean.TRUE.equals(s%)", "true"),
     BOOLEAN_IS_FALSE(FactorTypeEnum.BOOLEAN.getCode(), "BOOLEAN_IS_FALSE", "Boolean.FALSE.equals(s%)", "false"),
     ;

@@ -23,6 +23,7 @@ public enum RulePackTypeEnum {
      * 决策集
      */
     DECISION_SET("DECISION_SET", "决策集"),
+
     /**
      * 决策表
      */

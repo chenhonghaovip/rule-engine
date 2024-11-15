@@ -13,6 +13,7 @@ public class RuleSceneResp {
 
 
     private Long id;
+
     /**
      * 场景编码
      */
@@ -34,7 +35,7 @@ public class RuleSceneResp {
     private List<RuleFactorGroupResp> ruleFactorGroups;
 
     /**
-     *
+     * 规则场景动作
      */
     private List<RuleSceneActionResp> ruleSceneActions;
 

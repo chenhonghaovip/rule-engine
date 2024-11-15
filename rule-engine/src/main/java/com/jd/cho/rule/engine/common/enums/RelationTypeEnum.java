@@ -15,6 +15,7 @@ public enum RelationTypeEnum {
      * 且
      */
     AND("AND", "&&", "且"),
+
     /**
      * 或
      */

@@ -14,6 +14,7 @@ import java.util.Objects;
 @Getter
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum FactorTypeEnum {
+
     /**
      * 文本类型
      */
@@ -23,17 +24,16 @@ public enum FactorTypeEnum {
      * 数值类型
      */
     NUM("num", "数值类型"),
+
     /**
      * 日期类型
      */
     DATE("date", "日期类型"),
 
-
     /**
      * 集合类型
      */
     COLLECTION("collection", "集合类型"),
-
 
     /**
      * 布尔类型

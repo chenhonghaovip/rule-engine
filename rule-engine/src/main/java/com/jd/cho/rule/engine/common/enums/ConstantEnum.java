@@ -23,6 +23,7 @@ public enum ConstantEnum {
      * 枚举类型
      */
     ENUM("Enum", "枚举类型"),
+
     /**
      * 脚本类型
      */
