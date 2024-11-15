@@ -22,9 +22,9 @@ public enum ExpressOperationEnum {
      */
     TEXT_NULL(FactorTypeEnum.TEXT.getCode(), "TEXT_NULL", "isBlank(%s)", "为空"),
     TEXT_NOT_NULL(FactorTypeEnum.TEXT.getCode(), "TEXT_NOT_NULL", "isNotBlank(%s)", "不为空"),
-    TEXT_EQUAL(FactorTypeEnum.TEXT.getCode(), "TEXT_EQUAL", "%s == %s", "等于"),
-    TEXT_UNEQUAL(FactorTypeEnum.TEXT.getCode(), "TEXT_UNEQUAL", "%s != %s", "不等于"),
-    TEXT_LIKE(FactorTypeEnum.TEXT.getCode(), "TEXT_LIKE", "%s like %s", "包含"),
+    TEXT_EQUAL(FactorTypeEnum.TEXT.getCode(), "TEXT_EQUAL", "%s == \"%s\"", "等于"),
+    TEXT_UNEQUAL(FactorTypeEnum.TEXT.getCode(), "TEXT_UNEQUAL", "%s != \"%s\"", "不等于"),
+    TEXT_LIKE(FactorTypeEnum.TEXT.getCode(), "TEXT_LIKE", "%s like \"%s\"", "包含"),
 
     /**
      * 数值类型
@@ -35,8 +35,8 @@ public enum ExpressOperationEnum {
     NUM_LESS_THAN_EQUAL(FactorTypeEnum.NUM.getCode(), "NUM_LESS_THAN_EQUAL", "%s <= %s", "小于等于"),
     NUM_EQUAL(FactorTypeEnum.NUM.getCode(), "NUM_EQUAL", "%s == %s", "等于"),
     NUM_UNEQUAL(FactorTypeEnum.NUM.getCode(), "NUM_UNEQUAL", "%s != %s", "不等于"),
-    NUM_IS_NULL(FactorTypeEnum.NUM.getCode(), "NUM_IS_NULL", "%s == null", "为空"),
-    NUM_NOT_NULL(FactorTypeEnum.NUM.getCode(), "NUM_NOT_NULL", "%s != null", "不为空"),
+//    NUM_IS_NULL(FactorTypeEnum.NUM.getCode(), "NUM_IS_NULL", "%s == null", "为空"),
+//    NUM_NOT_NULL(FactorTypeEnum.NUM.getCode(), "NUM_NOT_NULL", "%s != null", "不为空"),
 
     /**
      * 日期类型
@@ -61,8 +61,8 @@ public enum ExpressOperationEnum {
     /**
      * 布尔类型
      */
-    BOOLEAN_IS_TRUE(FactorTypeEnum.BOOLEAN.getCode(), "BOOLEAN_IS_TRUE", "Boolean.TRUE.equals(s%)", "true"),
-    BOOLEAN_IS_FALSE(FactorTypeEnum.BOOLEAN.getCode(), "BOOLEAN_IS_FALSE", "Boolean.FALSE.equals(s%)", "false"),
+    BOOLEAN_IS_TRUE(FactorTypeEnum.BOOLEAN.getCode(), "BOOLEAN_IS_TRUE", "Boolean.TRUE.equals(%s)", "true"),
+    BOOLEAN_IS_FALSE(FactorTypeEnum.BOOLEAN.getCode(), "BOOLEAN_IS_FALSE", "Boolean.FALSE.equals(%s)", "false"),
     ;
 
 
