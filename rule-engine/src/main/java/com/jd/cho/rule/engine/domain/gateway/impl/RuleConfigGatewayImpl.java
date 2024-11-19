@@ -46,6 +46,8 @@ import static org.mybatis.dynamic.sql.SqlBuilder.isIn;
 @Service
 public class RuleConfigGatewayImpl implements RuleConfigGateway {
 
+    public static final Map<String, RuleFactor> RULE_CODE_MAP = Maps.newHashMap();
+
     @Resource
     private RuleDefMapper ruleDefMapper;
 
@@ -213,6 +215,8 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
         RuleFactorDO ruleFactorDO = RuleFactorConvert.INSTANCE.doToDO(ruleFactor);
         AtomicLoginUserComponent.packCreateBaseInfo(ruleFactorDO);
         ruleFactorMapper.insertSelective(ruleFactorDO);
+
+        RULE_CODE_MAP.put(ruleFactor.getFactorCode(), ruleFactor);
     }
 
     @Override
@@ -226,6 +230,8 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
         ruleFactorDO.setFactorCode(null);
         ruleFactorDO.setFactorType(null);
         ruleFactorMapper.updateByPrimaryKeySelective(ruleFactorDO);
+
+        RULE_CODE_MAP.put(ruleFactor.getFactorCode(), ruleFactor);
     }
 
     @Override
@@ -253,6 +259,17 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
         }).collect(Collectors.toList());
 
         return AtomicRuleFactorComponent.extendFactors(ruleFactorList);
+    }
+
+    @Override
+    public List<RuleFactor> queryFactorCodes() {
+        if (RULE_CODE_MAP.isEmpty()) {
+            List<RuleFactorDO> ruleFactors = ruleFactorMapper.select(s -> s.where(RuleFactorDynamicSqlSupport.tenant, isEqualTo(AtomicLoginUserComponent.getLoginUserInfo().getTenant())).and(RuleFactorDynamicSqlSupport.yn, isEqualTo(true)));
+            List<RuleFactor> ruleFactorList = ruleFactors.stream().map(RuleFactorConvert.INSTANCE::doToEntity).collect(Collectors.toList());
+            RULE_CODE_MAP.putAll(ruleFactorList.stream().collect(Collectors.toMap(RuleFactor::getFactorCode, Function.identity())));
+            return ruleFactorList;
+        }
+        return new ArrayList<>(RULE_CODE_MAP.values());
     }
 
     @Override
@@ -415,7 +432,6 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
 
         ruleConditions.forEach(ruleCondition -> RuleDefExpressionParser.checkRuleCondition(ruleCondition, factorMaps));
 
-
         List<RuleDefDO> ruleDefs = rulePackDTO.getRules().stream().map(o -> RuleDefDO.builder().ruleAction(JSON.toJSONString(o.getRuleActions())).ruleCondition(JSON.toJSONString(o.getRuleCondition())).priority(o.getPriority()).creator(loginUserInfo.getLoginUser()).tenant(loginUserInfo.getTenant()).build()).collect(Collectors.toList());
         ruleDefMapper.insertMultipleSelective(ruleDefs);
 
@@ -428,23 +444,6 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
         rulePackMapper.insertSelective(rulePackDO);
         return rulePackDTO.getRulePackCode();
     }
-
-//    /**
-//     * 检查规则包中配置的规则因子是否存在
-//     *
-//     * @param factorScriptParam 规则因子集合
-//     */
-//    private void ruleFactorCheck(Map<String, List<String>> factorScriptParam) {
-//        if (Objects.nonNull(factorScriptParam)) {
-//            List<String> factorCodes = new ArrayList<>(factorScriptParam.keySet());
-//            long validCount = ruleFactorMapper.count(s -> s.where(RuleFactorDynamicSqlSupport.factorCode, isIn(factorCodes))
-//                    .and(RuleFactorDynamicSqlSupport.yn, isEqualTo(true)));
-//            if (validCount != factorCodes.size()) {
-//                throw new BusinessException(BizErrorEnum.FACTOR_CODE_IS_NOT_EXIST);
-//            }
-//        }
-//    }
-
 
     /**
      * 递归获取表达式中的字段

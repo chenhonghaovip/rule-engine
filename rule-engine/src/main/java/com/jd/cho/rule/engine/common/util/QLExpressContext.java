@@ -1,7 +1,7 @@
 package com.jd.cho.rule.engine.common.util;
 
-import com.jd.cho.rule.engine.common.exceptions.BusinessException;
 import com.jd.cho.rule.engine.domain.atomic.FactorValueService;
+import com.jd.cho.rule.engine.domain.model.RuleFactor;
 import com.ql.util.express.IExpressContext;
 import org.springframework.context.ApplicationContext;
 
@@ -17,7 +17,9 @@ public class QLExpressContext extends HashMap<String, Object> implements IExpres
 
     private final ApplicationContext context;
 
-    private Map<String, String> fieldMapping;
+    private final Map<String, String> fieldMapping;
+
+    private final Map<String, RuleFactor> ruleFactorMap = null;
 
     private final FactorValueService factorValueService;
 
@@ -33,19 +35,16 @@ public class QLExpressContext extends HashMap<String, Object> implements IExpres
      */
     @Override
     public Object get(Object name) {
-        Object result;
-        result = super.get(name);
-        if (Objects.isNull(result) && Objects.nonNull(context) && context.containsBean((String) name)) {
+        boolean containsKey = super.containsKey(name);
+        if (containsKey) {
+            return super.get(name);
+        }
+
+        if (Objects.nonNull(context) && context.containsBean((String) name)) {
             // 如果在Spring容器中包含bean，则返回String的Bean
-            result = context.getBean((String) name);
+            return context.getBean((String) name);
         }
-        if (result == null && Objects.nonNull(factorValueService)) {
-            return factorValueService.getFieldValue(name, this, fieldMapping);
-        }
-        if (Objects.isNull(result)) {
-            throw new BusinessException(String.format("未找到属性[%s]", name));
-        }
-        return result;
+        return factorValueService.getFieldValue(name, this, fieldMapping);
     }
 
 

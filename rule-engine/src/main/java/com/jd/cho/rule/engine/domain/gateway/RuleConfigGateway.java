@@ -103,6 +103,14 @@ public interface RuleConfigGateway {
     List<RuleFactor> queryBySceneCode(String sceneCode, Map<String, Object> context);
 
     /**
+     * 查询当前租户下全部的规则因子
+     *
+     * @return 规则因子
+     */
+    List<RuleFactor> queryFactorCodes();
+
+
+    /**
      * 获取规则因子的下拉列表值
      *
      * @param context 场景code、规则因子常量值所需参数等

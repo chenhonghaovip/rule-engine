@@ -27,6 +27,12 @@ import java.util.Objects;
 @Slf4j
 public class RuleDefExpressionParser {
 
+    /**
+     * 校验规则是否合法
+     *
+     * @param ruleCondition 规则协议
+     * @param ruleFactorMap 规则因子信息
+     */
     public static void checkRuleCondition(RuleCondition ruleCondition, Map<String, RuleFactor> ruleFactorMap) {
         try {
             checkRuleConditionInner(ruleCondition, ruleFactorMap);
