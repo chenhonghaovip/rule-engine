@@ -18,15 +18,15 @@ public interface RuleFactorExtendService {
      */
     List<RuleFactor> extendFactors(List<RuleFactor> ruleFactors);
 
-
-    /**
-     * 获取被增强后的因子的值
-     *
-     * @param factorCode 增强后因子code
-     * @param value
-     * @return 因子值
-     */
-    Object getFactorValue(String factorCode, Object value);
+//
+//    /**
+//     * 获取被增强后的因子的值
+//     *
+//     * @param factorCode 增强后因子code
+//     * @param value
+//     * @return 因子值
+//     */
+//    Object getFactorValue(String factorCode, Map<String, Object> context);
 
 
 }

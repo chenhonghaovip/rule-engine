@@ -21,6 +21,9 @@ public interface RuleFactorConvert {
     RuleFactor doToEntity(RuleFactorDO ruleFactorDO);
 
 
+    RuleFactor doToEntity(RuleFactor ruleFactor);
+
+
     RuleFactorDTO doToDTO(RuleFactor ruleFactor);
 
 
