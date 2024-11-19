@@ -22,14 +22,14 @@ public interface RulePackService {
 
 
     /**
-     * 更新规则信息
+     * 更新规则包信息
      *
      * @param rulePackDTO 规则定义
      */
     void updateRule(RulePackDTO rulePackDTO);
 
     /**
-     * 查询全部最新的规则
+     * 查询规则包的最新信息
      *
      * @param rulePackCodes 规则code集合
      * @return 规则列表
@@ -38,7 +38,7 @@ public interface RulePackService {
 
 
     /**
-     * 查询当前规则的历史信息
+     * 查询当前规则包的历史信息
      *
      * @param rulePackCode ruleCode
      * @return 规则列表
@@ -47,7 +47,7 @@ public interface RulePackService {
 
 
     /**
-     * 查询这些规则中需要的参数
+     * 查询规则包中需要的参数
      *
      * @param rulePackCode 规则包code
      * @return 参数集合

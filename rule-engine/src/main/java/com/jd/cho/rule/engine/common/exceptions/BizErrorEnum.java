@@ -26,6 +26,7 @@ public enum BizErrorEnum implements CommonException {
     RULE_FACTOR_DOES_NOT_EXIST(-14, "规则因子数据不存在"),
     PLEASE_CHECK_SPI_ACHIEVING(-15, "请检查LoginUserExtendService类是否被实现"),
     EXPRESS_OPERATION_DOES_NOT_EXIST(-16, "逻辑运算符非法"),
+    RULE_PACK_CODE_IS_BLANK(-17, "规则包code不能为空"),
 
     ;
 

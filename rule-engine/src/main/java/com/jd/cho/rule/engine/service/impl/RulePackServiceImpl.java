@@ -1,6 +1,8 @@
 package com.jd.cho.rule.engine.service.impl;
 
 import com.jd.cho.rule.engine.common.convert.RulePackConvert;
+import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
+import com.jd.cho.rule.engine.common.util.AssertUtil;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.domain.model.RulePack;
 import com.jd.cho.rule.engine.group.PriorityOrderMatchRuleGroup;
@@ -11,7 +13,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -50,18 +54,22 @@ public class RulePackServiceImpl implements RulePackService {
 
     @Override
     public RulePackDTO onlineRulePack(String rulePackCode) {
+        AssertUtil.isNotBlank(rulePackCode, BizErrorEnum.RULE_PACK_CODE_IS_BLANK);
         RulePack rulePack = ruleConfigGateway.rulePackInfo(rulePackCode);
         return RulePackConvert.INSTANCE.doToDTO(rulePack);
     }
 
     @Override
     public List<RulePackDTO> rulePackHistory(String rulePackCode) {
+        AssertUtil.isNotBlank(rulePackCode, BizErrorEnum.RULE_PACK_CODE_IS_BLANK);
         List<RulePack> rulePacks = ruleConfigGateway.historyRulePackInfo(rulePackCode);
         return rulePacks.stream().map(RulePackConvert.INSTANCE::doToDTO).collect(Collectors.toList());
     }
 
     @Override
     public List<String> queryParams(String rulePackCode) {
-        return null;
+        AssertUtil.isNotBlank(rulePackCode, BizErrorEnum.RULE_PACK_CODE_IS_BLANK);
+        Set<String> params = ruleConfigGateway.queryFactorParams(rulePackCode);
+        return new ArrayList<>(params);
     }
 }
