@@ -1,4 +1,4 @@
-package com.jd.cho.rule.engine.domain.atomic;
+package com.jd.cho.rule.engine.common.util;
 
 import com.google.common.collect.Lists;
 import com.jd.cho.rule.engine.domain.model.RuleFactor;
@@ -11,7 +11,7 @@ import java.util.ServiceLoader;
  * @author chenhonghao12
  * @version 1.0
  */
-public class AtomicRuleFactorComponent {
+public class AtomicRuleFactorUtil {
     private static final List<RuleFactorExtendService> EXTEND_SERVICES = Lists.newArrayList();
 
     static {

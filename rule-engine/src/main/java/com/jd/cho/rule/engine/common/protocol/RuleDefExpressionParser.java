@@ -1,4 +1,4 @@
-package com.jd.cho.rule.engine.domain.atomic;
+package com.jd.cho.rule.engine.common.protocol;
 
 import com.alibaba.fastjson.JSON;
 import com.jd.cho.rule.engine.common.dict.Dict;
@@ -119,7 +119,7 @@ public class RuleDefExpressionParser {
                     // 递归构建单个规则条件
                     String childExpression = buildWhenExpression(child, fieldMapping);
                     if (!childExpression.isEmpty()) {
-                        if (currentExpression.length() > 0) {
+                        if (StringUtils.isNotBlank(currentExpression)) {
                             currentExpression.append(Dict.SYMBOL_SPACE).append(relationTypeEnum.getExpression()).append(Dict.SYMBOL_SPACE);
                         }
                         currentExpression.append(Dict.LEFT_BRACKETS).append(childExpression).append(Dict.RIGHT_BRACKETS);

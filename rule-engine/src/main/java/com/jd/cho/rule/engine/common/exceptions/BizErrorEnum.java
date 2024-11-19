@@ -28,6 +28,8 @@ public enum BizErrorEnum implements CommonException {
     EXPRESS_OPERATION_DOES_NOT_EXIST(-16, "逻辑运算符非法"),
     RULE_PACK_CODE_IS_BLANK(-17, "规则包code不能为空"),
 
+    RULE_GROUP_CODE_IS_EXIST(-18, "规则组code已经存在，请修改后重试"),
+
     ;
 
     /**

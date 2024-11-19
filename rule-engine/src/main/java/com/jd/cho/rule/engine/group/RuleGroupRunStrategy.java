@@ -26,8 +26,8 @@ public class RuleGroupRunStrategy {
         for (RuleGroupExtendService abstractRuleGroup : load) {
             String code = abstractRuleGroup.getCode();
             if (SERVICE_HASH_MAP.containsKey(code)) {
-                log.error("{}已经存在，请修改避免重复", code);
-                throw new BusinessException(BizErrorEnum.CODE_IS_EXIST);
+                log.error("规则组code{}已经存在，请修改避免重复", code);
+                throw new BusinessException(BizErrorEnum.RULE_GROUP_CODE_IS_EXIST);
             }
             SERVICE_HASH_MAP.put(code, abstractRuleGroup);
         }

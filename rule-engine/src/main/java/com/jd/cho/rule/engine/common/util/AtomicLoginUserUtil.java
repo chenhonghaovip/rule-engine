@@ -1,4 +1,4 @@
-package com.jd.cho.rule.engine.domain.atomic;
+package com.jd.cho.rule.engine.common.util;
 
 import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
 import com.jd.cho.rule.engine.common.exceptions.BusinessException;
@@ -14,7 +14,7 @@ import java.util.ServiceLoader;
  * @author chenhonghao12
  * @version 1.0
  */
-public class AtomicLoginUserComponent {
+public class AtomicLoginUserUtil {
     /**
      * 获取用户信息
      *

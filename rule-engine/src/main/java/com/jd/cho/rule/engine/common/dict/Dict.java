@@ -7,6 +7,10 @@ package com.jd.cho.rule.engine.common.dict;
 public class Dict {
 
     /**
+     * 租户code
+     */
+    public static final String TENANT = "tenant";
+    /**
      * 场景code
      */
     public static final String SCENE_CODE = "sceneCode";
