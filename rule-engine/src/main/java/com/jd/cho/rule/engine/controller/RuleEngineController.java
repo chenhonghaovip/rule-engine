@@ -1,21 +1,20 @@
 package com.jd.cho.rule.engine.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jd.cho.rule.engine.common.dict.Dict;
-import com.jd.cho.rule.engine.common.util.QlExpressUtil;
 import com.jd.cho.rule.engine.service.RuleEngineService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.Map;
 import java.util.Objects;
-
-import static com.jd.cho.rule.engine.common.enums.ExpressOperationEnum.BOOLEAN_IS_TRUE;
 
 /**
  * @author chenhonghao12
@@ -47,26 +46,6 @@ public class RuleEngineController {
         return null;
     }
 
-    /**
-     * stencil
-     * 值传递和引用传递
-     */
-    @GetMapping("/transfer")
-    public void transfer() {
-        try {
-            Object value = 100;
-            String format1 = String.format(BOOLEAN_IS_TRUE.getExpression(), "a", value);
-            Map<String, Object> maps = Maps.newHashMap();
-            maps.put("a", false);
-            String[] outVarNames = QlExpressUtil.getOutVarNames(format1);
-            System.out.println("outVarNames:" + outVarNames);
-
-            Object execute = QlExpressUtil.execute(format1, maps);
-            System.out.println(execute);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 
 
 }

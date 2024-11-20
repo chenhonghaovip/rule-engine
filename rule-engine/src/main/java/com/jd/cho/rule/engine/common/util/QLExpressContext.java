@@ -1,7 +1,6 @@
 package com.jd.cho.rule.engine.common.util;
 
 import com.jd.cho.rule.engine.domain.atomic.FactorValueService;
-import com.jd.cho.rule.engine.domain.model.RuleFactor;
 import com.ql.util.express.IExpressContext;
 import org.springframework.context.ApplicationContext;
 
@@ -18,8 +17,6 @@ public class QLExpressContext extends HashMap<String, Object> implements IExpres
     private final ApplicationContext context;
 
     private final Map<String, String> fieldMapping;
-
-    private final Map<String, RuleFactor> ruleFactorMap = null;
 
     private final FactorValueService factorValueService;
 
