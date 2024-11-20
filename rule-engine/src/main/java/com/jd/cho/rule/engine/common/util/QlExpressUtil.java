@@ -1,13 +1,17 @@
 package com.jd.cho.rule.engine.common.util;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Lists;
+import com.jd.cho.rule.engine.domain.model.CustomMethod;
 import com.ql.util.express.ExpressRunner;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,6 +24,7 @@ import java.util.Map;
  */
 @Slf4j
 public class QlExpressUtil {
+    public static final List<CustomMethod> CUSTOM_METHODS = Lists.newArrayList();
     private static final ExpressRunner RUNNER = new ExpressRunner();
 
     static {
@@ -35,10 +40,32 @@ public class QlExpressUtil {
             RUNNER.addFunctionOfClassMethod("dateAfter", DateUtil.class, "dateAfter", new Class[]{Date.class, Date.class}, null);
             RUNNER.addFunctionOfClassMethod("dateEqualDay", DateUtil.class, "dateEqualDay", new Class[]{Date.class, Date.class}, null);
             RUNNER.addFunctionOfClassMethod("dateEqual", DateUtil.class, "dateEqual", new Class[]{Date.class, Date.class}, null);
+
+            List<Method> customFunctions = AtomicCustomFunctionUtil.getCustomFunction();
+            addFunction(customFunctions);
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+
+
+    public static void addFunction(List<Method> methods) throws Exception {
+        List<CustomMethod> result = Lists.newArrayList();
+
+        for (Method method : methods) {
+            Class<?> declaringClass = method.getDeclaringClass();
+            String methodName = method.getName();
+
+            CustomMethod resolve = MethodUtil.resolve(method);
+            Class<?>[] parameterTypes = method.getParameterTypes();
+            RUNNER.addFunctionOfClassMethod(resolve.getMethodCode(), declaringClass, methodName, parameterTypes, null);
+            result.add(resolve);
+        }
+
+        CUSTOM_METHODS.addAll(result);
+    }
+
 
     /**
      * @param statement 执行语句

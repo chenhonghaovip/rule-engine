@@ -1,17 +1,18 @@
 package com.jd.cho.rule.engine.controller;
 
 import com.jd.cho.rule.engine.common.base.CommonDict;
-import com.jd.cho.rule.engine.common.enums.ConstantEnum;
-import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
-import com.jd.cho.rule.engine.common.enums.FactorTypeEnum;
-import com.jd.cho.rule.engine.common.enums.RulePackTypeEnum;
+import com.jd.cho.rule.engine.common.enums.*;
+import com.jd.cho.rule.engine.common.util.QlExpressUtil;
+import com.jd.cho.rule.engine.domain.model.CustomMethod;
 import com.jd.cho.rule.engine.group.RuleGroupRunStrategy;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author chenhonghao12
@@ -39,7 +40,7 @@ public class RuleCommonController {
      */
     @GetMapping("/factor/express")
     public List<ExpressOperationEnum> expressOperationEnums(@RequestParam("type") String type) {
-        return ExpressOperationEnum.getOperationByType(type);
+        return ExpressOperationEnum.getOperationByGroup(type);
     }
 
 
@@ -72,6 +73,28 @@ public class RuleCommonController {
     @GetMapping("/rule/type")
     public List<RulePackTypeEnum> rulePackTypeEnums() {
         return RulePackTypeEnum.RULE_PACK_TYPE_ENUMS;
+    }
+
+
+    /**
+     * 获取支持类型
+     *
+     * @return 可支持类型
+     */
+    @GetMapping("ruleTypeEnums")
+    public List<RuleTypeEnum> ruleTypeEnums() {
+        return Arrays.stream(RuleTypeEnum.values()).collect(Collectors.toList());
+    }
+
+    /**
+     * 获取全局自定义函数方法
+     *
+     * @return 函数方法
+     */
+    @GetMapping("/methods")
+    public List<CustomMethod> getMethod() {
+//        Map<String, CustomFunction> functionMap = QlExpressUtil.FUNCTION_MAP;
+        return QlExpressUtil.CUSTOM_METHODS;
     }
 
 

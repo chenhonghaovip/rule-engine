@@ -84,8 +84,8 @@ public enum ExpressOperationEnum {
         return Arrays.stream(ExpressOperationEnum.values()).filter(each -> Objects.equals(operator, each.getOperator())).findFirst().orElse(null);
     }
 
-    public static List<ExpressOperationEnum> getOperationByType(String type) {
-        return MAP.getOrDefault(type, Lists.newArrayList());
+    public static List<ExpressOperationEnum> getOperationByGroup(String group) {
+        return MAP.getOrDefault(group, Lists.newArrayList());
     }
 
 
