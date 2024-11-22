@@ -29,6 +29,7 @@ public enum BizErrorEnum implements CommonException {
     RULE_PACK_CODE_IS_BLANK(-17, "规则包code不能为空"),
 
     RULE_GROUP_CODE_IS_EXIST(-18, "规则组code已经存在，请修改后重试"),
+    FACTOR_CODE_RUN_ERROR(-19, "规则执行异常"),
 
     ;
 

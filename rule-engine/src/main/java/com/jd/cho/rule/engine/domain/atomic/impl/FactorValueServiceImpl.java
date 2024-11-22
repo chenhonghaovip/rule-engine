@@ -2,6 +2,8 @@ package com.jd.cho.rule.engine.domain.atomic.impl;
 
 import com.jd.cho.rule.engine.common.cache.ContextHolder;
 import com.jd.cho.rule.engine.common.dict.Dict;
+import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
+import com.jd.cho.rule.engine.common.exceptions.BusinessException;
 import com.jd.cho.rule.engine.common.util.QlExpressUtil;
 import com.jd.cho.rule.engine.domain.atomic.FactorValueService;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
@@ -42,6 +44,7 @@ public class FactorValueServiceImpl implements FactorValueService {
             return QlExpressUtil.execute(ruleFactor.getFactorScript(), context);
         }
 
-        return null;
+        log.error("规则因子{}执行异常，不存在全局上下文且不存在因子脚本", factorCode);
+        throw new BusinessException(BizErrorEnum.FACTOR_CODE_RUN_ERROR);
     }
 }
