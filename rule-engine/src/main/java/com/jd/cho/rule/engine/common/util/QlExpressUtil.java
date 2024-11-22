@@ -24,8 +24,16 @@ import java.util.Map;
  */
 @Slf4j
 public class QlExpressUtil {
-    public static final List<CustomMethod> CUSTOM_METHODS = Lists.newArrayList();
+    /**
+     * 运行器
+     */
     private static final ExpressRunner RUNNER = new ExpressRunner();
+
+    /**
+     * 自定义函数
+     */
+    public static final List<CustomMethod> CUSTOM_METHODS = Lists.newArrayList();
+
 
     static {
         try {

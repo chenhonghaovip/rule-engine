@@ -37,6 +37,11 @@ public class CustomMethod {
     private String returnType;
 
     /**
+     * 方法表达式(QLExpress)
+     */
+    private String methodExpression;
+
+    /**
      * 参数列表
      */
     private List<CustomMethodParam> customMethodParams;

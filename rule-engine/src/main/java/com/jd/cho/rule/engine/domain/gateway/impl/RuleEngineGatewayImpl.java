@@ -7,10 +7,12 @@ import com.google.gson.reflect.TypeToken;
 import com.jd.cho.rule.engine.common.cache.ContextHolder;
 import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.protocol.RuleDefExpressionParser;
+import com.jd.cho.rule.engine.common.protocol.RuleDefExpressionParserTest;
 import com.jd.cho.rule.engine.common.util.QlExpressUtil;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.domain.gateway.RuleEngineGateway;
 import com.jd.cho.rule.engine.domain.model.RuleAction;
+import com.jd.cho.rule.engine.domain.model.RuleConditionTest;
 import com.jd.cho.rule.engine.domain.model.RuleDef;
 import com.jd.cho.rule.engine.domain.model.RulePack;
 import com.jd.cho.rule.engine.group.RuleGroupRunStrategy;
@@ -73,6 +75,22 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
     private boolean executeCondition(String expression, Map<String, Object> context, Map<String, String> fieldMapping) {
         log.info("current express:{},context:{}", expression, JSON.toJSONString(context));
         return (Boolean) QlExpressUtil.execute(expression, context, fieldMapping);
+    }
+
+    /**
+     * 执行条件
+     *
+     * @param expression 表达式
+     * @param context    上下文
+     * @return 执行结果
+     */
+    private boolean executeConditionTest(String expression, Map<String, Object> context, Map<String, String> fieldMapping) {
+        String s = "{\n" + "    \"children\":\n" + "    [\n" + "        {\n" + "            \"children\":\n" + "            [\n" + "                {\n" + "                    \"leftVar\":\n" + "                    {\n" + "                        \"ruleType\": \"METHOD\",\n" + "                        \"code\": \"getInfo\",\n" + "                        \"originalFactorCode\": \"\",\n" + "                        \"params\":\n" + "                        [\n" + "                            {\n" + "                                \"ruleType\": \"CONSTANT\",\n" + "                                \"values\": \"456\"\n" + "                            },\n" + "                            {\n" + "                                \"ruleType\": \"CONSTANT\",\n" + "                                \"values\": \"123\"\n" + "                            }\n" + "                        ]\n" + "                    },\n" + "                    \"rightVar\":\n" + "                    {\n" + "                        \"ruleType\": \"CONSTANT\",\n" + "                        \"values\": \"4564\"\n" + "                    },\n" + "                    \"compareOperation\": \"TEXT_EQUAL\"\n" + "                },\n" + "                {\n" + "                    \"leftVar\":\n" + "                    {\n" + "                        \"ruleType\": \"FACTOR\",\n" + "                        \"code\": \"d\",\n" + "                        \"originalFactorCode\": \"d\"\n" + "                    },\n" + "                    \"rightVar\":\n" + "                    {},\n" + "                    \"compareOperation\": \"DATE_IS_NULL\"\n" + "                }\n" + "            ],\n" + "            \"logicOperation\": \"or\"\n" + "        },\n" + "        {\n" + "            \"compareOperation\": \"COLLECTION_CONTAIN_ANY_ONE\",\n" + "            \"leftVar\":\n" + "            {\n" + "                \"ruleType\": \"FACTOR\",\n" + "                \"code\": \"a\",\n" + "                \"originalFactorCode\": \"a\"\n" + "            },\n" + "            \"rightVar\":\n" + "            {\n" + "                \"ruleType\": \"CONSTANT\",\n" + "                \"values\":\n" + "                [\n" + "                    11,\n" + "                    23\n" + "                ]\n" + "            }\n" + "        },\n" + "        {\n" + "            \"compareOperation\": \"DATE_AFTER\",\n" + "            \"factorCode\": \"b\",\n" + "            \"originalFactorCode\": \"b\",\n" + "            \"leftVar\":\n" + "            {\n" + "                \"ruleType\": \"FACTOR\",\n" + "                \"code\": \"b\",\n" + "                \"originalFactorCode\": \"b\"\n" + "            },\n" + "            \"rightVar\":\n" + "            {\n" + "                \"ruleType\": \"CONSTANT\",\n" + "                \"values\": 1731551168000\n" + "            }\n" + "        }\n" + "    ],\n" + "    \"logicOperation\": \"and\"\n" + "}";
+        RuleConditionTest ruleConditionTest = JSON.parseObject(s, RuleConditionTest.class);
+        Map<String, String> objectObjectHashMap = Maps.newHashMap();
+        String expression1 = RuleDefExpressionParserTest.buildWhenExpression(ruleConditionTest, objectObjectHashMap);
+        System.out.println(expression1);
+        return (Boolean) QlExpressUtil.execute(expression1, context, fieldMapping);
     }
 
 

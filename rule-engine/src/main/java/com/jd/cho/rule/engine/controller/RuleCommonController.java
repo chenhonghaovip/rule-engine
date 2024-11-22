@@ -80,8 +80,8 @@ public class RuleCommonController {
      * @return 可支持类型
      */
     @GetMapping("ruleTypeEnums")
-    public List<RuleTypeEnum> ruleTypeEnums() {
-        return RuleTypeEnum.RULE_PACK_TYPE_ENUMS;
+    public List<VarTypeEnum> ruleTypeEnums() {
+        return VarTypeEnum.RULE_PACK_TYPE_ENUMS;
     }
 
     /**

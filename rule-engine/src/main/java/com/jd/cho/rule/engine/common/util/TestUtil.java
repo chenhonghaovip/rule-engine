@@ -13,6 +13,7 @@ public class TestUtil {
     @ApiMethod(code = "getInfo", name = "获取信息")
     public static String getInfo(@ApiParam(name = "节点编码") String nodeCode, @ApiParam(name = "因子") String factorCode) {
 
-        return "111";
+        System.out.println("fafafdaefafae");
+        return "4564";
     }
 }
