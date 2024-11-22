@@ -12,17 +12,22 @@ import java.util.List;
  */
 @Getter
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
-public enum RuleTypeEnum {
+public enum VarTypeEnum {
 
     /**
      * 函数
      */
-    FUNCTION("FUNCTION", "函数"),
+    FUNCTION("METHOD", "函数"),
 
     /**
      * 因子
      */
     FACTOR("FACTOR", "规则因子"),
+
+    /**
+     * 常量
+     */
+    CONSTANT("CONSTANT", "常量"),
 
 
     ;
@@ -30,14 +35,14 @@ public enum RuleTypeEnum {
     private final String code;
     private final String desc;
 
-    RuleTypeEnum(String code, String desc) {
+    VarTypeEnum(String code, String desc) {
         this.code = code;
         this.desc = desc;
     }
 
-    public static final List<RuleTypeEnum> RULE_PACK_TYPE_ENUMS = Arrays.asList(RuleTypeEnum.values());
+    public static final List<VarTypeEnum> RULE_PACK_TYPE_ENUMS = Arrays.asList(VarTypeEnum.values());
 
-    public static RuleTypeEnum getByCode(String code) {
-        return Arrays.stream(RuleTypeEnum.values()).filter(each -> each.getCode().equals(code)).findFirst().orElse(null);
+    public static VarTypeEnum getByCode(String code) {
+        return Arrays.stream(VarTypeEnum.values()).filter(each -> each.getCode().equals(code)).findFirst().orElse(null);
     }
 }
