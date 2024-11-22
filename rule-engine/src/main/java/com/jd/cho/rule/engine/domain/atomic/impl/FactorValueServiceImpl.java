@@ -1,5 +1,6 @@
 package com.jd.cho.rule.engine.domain.atomic.impl;
 
+import com.jd.cho.rule.engine.common.cache.ContextHolder;
 import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.util.QlExpressUtil;
 import com.jd.cho.rule.engine.domain.atomic.FactorValueService;
@@ -32,6 +33,7 @@ public class FactorValueServiceImpl implements FactorValueService {
         String realFactorCode = fieldMapping.getOrDefault(factorCode, factorCode);
 
         context.put(Dict.FACTOR_CODE, factorCode);
+        ContextHolder.setContext(context);
 
         List<RuleFactor> ruleFactors = ruleConfigGateway.queryFactorCodes();
         RuleFactor ruleFactor = ruleFactors.stream().filter(each -> each.getFactorCode().equals(realFactorCode)).findFirst().orElse(null);
