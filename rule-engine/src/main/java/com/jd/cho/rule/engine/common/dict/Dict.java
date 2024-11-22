@@ -26,16 +26,6 @@ public class Dict {
     public static final String RESULT_ALIAS = "result";
 
     /**
-     * and关系
-     */
-    public static final String RELATION_AND = "and";
-
-    /**
-     * or关系
-     */
-    public static final String RELATION_OR = "or";
-
-    /**
      * 表达式类型-EXPRESSION
      */
     public static final String EXPRESSION_TYPE = "EXPRESSION";
@@ -64,16 +54,6 @@ public class Dict {
      * 空
      */
     public static final String SYMBOL_EMPTY = "";
-
-    /**
-     * 逻辑与
-     */
-    public static final String LOGICAL_AND = "&&";
-
-    /**
-     * 逻辑或
-     */
-    public static final String LOGICAL_OR = "||";
 
     /**
      * 逗号

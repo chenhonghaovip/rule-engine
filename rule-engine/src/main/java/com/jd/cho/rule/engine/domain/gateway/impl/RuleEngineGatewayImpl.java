@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.jd.cho.rule.engine.common.cache.ContextHolder;
 import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.protocol.RuleDefExpressionParser;
 import com.jd.cho.rule.engine.common.util.QlExpressUtil;
@@ -97,6 +98,7 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
         }
         contextResult.putAll(resultMap);
         context.put(Dict.RESULT_ALIAS, contextResult);
+        ContextHolder.setContext(context);
     }
 
 
