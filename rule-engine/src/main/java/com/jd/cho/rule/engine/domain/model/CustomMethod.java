@@ -44,8 +44,14 @@ public class CustomMethod {
     @Data
     public static class CustomMethodParam {
 
+        /**
+         * 参数名称
+         */
         private String paramName;
 
+        /**
+         * 参数类型
+         */
         private Class<?> paramType;
     }
 }

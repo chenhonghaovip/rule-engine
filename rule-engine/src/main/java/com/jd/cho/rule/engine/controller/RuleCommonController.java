@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author chenhonghao12
@@ -83,7 +81,7 @@ public class RuleCommonController {
      */
     @GetMapping("ruleTypeEnums")
     public List<RuleTypeEnum> ruleTypeEnums() {
-        return Arrays.stream(RuleTypeEnum.values()).collect(Collectors.toList());
+        return RuleTypeEnum.RULE_PACK_TYPE_ENUMS;
     }
 
     /**
@@ -93,7 +91,6 @@ public class RuleCommonController {
      */
     @GetMapping("/methods")
     public List<CustomMethod> getMethod() {
-//        Map<String, CustomFunction> functionMap = QlExpressUtil.FUNCTION_MAP;
         return QlExpressUtil.CUSTOM_METHODS;
     }
 

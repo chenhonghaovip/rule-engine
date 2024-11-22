@@ -22,7 +22,7 @@ public enum RuleTypeEnum {
     /**
      * 因子
      */
-    FACTOR("FACTOR", "因子"),
+    FACTOR("FACTOR", "规则因子"),
 
 
     ;
