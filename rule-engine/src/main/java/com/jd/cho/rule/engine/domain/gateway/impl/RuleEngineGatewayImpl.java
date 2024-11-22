@@ -74,18 +74,111 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
      */
     private boolean executeCondition(String expression, Map<String, Object> context, Map<String, String> fieldMapping) {
         log.info("current express:{},context:{}", expression, JSON.toJSONString(context));
+        boolean b = executeConditionTest(context, fieldMapping);
+        System.out.println(b);
         return (Boolean) QlExpressUtil.execute(expression, context, fieldMapping);
     }
 
     /**
      * 执行条件
      *
-     * @param expression 表达式
-     * @param context    上下文
+     * @param context 上下文
      * @return 执行结果
      */
-    private boolean executeConditionTest(String expression, Map<String, Object> context, Map<String, String> fieldMapping) {
-        String s = "{\n" + "    \"children\":\n" + "    [\n" + "        {\n" + "            \"children\":\n" + "            [\n" + "                {\n" + "                    \"leftVar\":\n" + "                    {\n" + "                        \"ruleType\": \"METHOD\",\n" + "                        \"code\": \"getInfo\",\n" + "                        \"originalFactorCode\": \"\",\n" + "                        \"params\":\n" + "                        [\n" + "                            {\n" + "                                \"ruleType\": \"CONSTANT\",\n" + "                                \"values\": \"456\"\n" + "                            },\n" + "                            {\n" + "                                \"ruleType\": \"CONSTANT\",\n" + "                                \"values\": \"123\"\n" + "                            }\n" + "                        ]\n" + "                    },\n" + "                    \"rightVar\":\n" + "                    {\n" + "                        \"ruleType\": \"CONSTANT\",\n" + "                        \"values\": \"4564\"\n" + "                    },\n" + "                    \"compareOperation\": \"TEXT_EQUAL\"\n" + "                },\n" + "                {\n" + "                    \"leftVar\":\n" + "                    {\n" + "                        \"ruleType\": \"FACTOR\",\n" + "                        \"code\": \"d\",\n" + "                        \"originalFactorCode\": \"d\"\n" + "                    },\n" + "                    \"rightVar\":\n" + "                    {},\n" + "                    \"compareOperation\": \"DATE_IS_NULL\"\n" + "                }\n" + "            ],\n" + "            \"logicOperation\": \"or\"\n" + "        },\n" + "        {\n" + "            \"compareOperation\": \"COLLECTION_CONTAIN_ANY_ONE\",\n" + "            \"leftVar\":\n" + "            {\n" + "                \"ruleType\": \"FACTOR\",\n" + "                \"code\": \"a\",\n" + "                \"originalFactorCode\": \"a\"\n" + "            },\n" + "            \"rightVar\":\n" + "            {\n" + "                \"ruleType\": \"CONSTANT\",\n" + "                \"values\":\n" + "                [\n" + "                    11,\n" + "                    23\n" + "                ]\n" + "            }\n" + "        },\n" + "        {\n" + "            \"compareOperation\": \"DATE_AFTER\",\n" + "            \"factorCode\": \"b\",\n" + "            \"originalFactorCode\": \"b\",\n" + "            \"leftVar\":\n" + "            {\n" + "                \"ruleType\": \"FACTOR\",\n" + "                \"code\": \"b\",\n" + "                \"originalFactorCode\": \"b\"\n" + "            },\n" + "            \"rightVar\":\n" + "            {\n" + "                \"ruleType\": \"CONSTANT\",\n" + "                \"values\": 1731551168000\n" + "            }\n" + "        }\n" + "    ],\n" + "    \"logicOperation\": \"and\"\n" + "}";
+    private boolean executeConditionTest(Map<String, Object> context, Map<String, String> fieldMapping) {
+        //language=JSON
+        String s = "{\n" +
+                "    \"children\":\n" +
+                "    [\n" +
+                "        {\n" +
+                "            \"children\":\n" +
+                "            [\n" +
+                "                {\n" +
+                "                    \"leftVar\":\n" +
+                "                    {\n" +
+                "                        \"ruleType\": \"METHOD\",\n" +
+                "                        \"code\": \"getInfo\",\n" +
+                "                        \"originalFactorCode\": \"\",\n" +
+                "                        \"params\":\n" +
+                "                        [\n" +
+                "                            {\n" +
+                "                                \"ruleType\": \"METHOD\",\n" +
+                "                                \"code\": \"getInfo\",\n" +
+                "                                \"originalFactorCode\": \"\",\n" +
+                "                                \"params\":\n" +
+                "                                [\n" +
+                "                                    {\n" +
+                "                                        \"ruleType\": \"CONSTANT\",\n" +
+                "                                        \"values\": \"111\"\n" +
+                "                                    },\n" +
+                "                                    {\n" +
+                "                                        \"ruleType\": \"CONSTANT\",\n" +
+                "                                        \"values\": \"222\"\n" +
+                "                                    }\n" +
+                "                                ]\n" +
+                "                            },\n" +
+                "                            {\n" +
+                "                                \"ruleType\": \"CONSTANT\",\n" +
+                "                                \"values\": \"123\"\n" +
+                "                            }\n" +
+                "                        ]\n" +
+                "                    },\n" +
+                "                    \"rightVar\":\n" +
+                "                    {\n" +
+                "                        \"ruleType\": \"CONSTANT\",\n" +
+                "                        \"values\": \"4564\"\n" +
+                "                    },\n" +
+                "                    \"compareOperation\": \"TEXT_EQUAL\"\n" +
+                "                },\n" +
+                "                {\n" +
+                "                    \"leftVar\":\n" +
+                "                    {\n" +
+                "                        \"ruleType\": \"FACTOR\",\n" +
+                "                        \"code\": \"d\",\n" +
+                "                        \"originalFactorCode\": \"d\"\n" +
+                "                    },\n" +
+                "                    \"rightVar\":\n" +
+                "                    {},\n" +
+                "                    \"compareOperation\": \"DATE_IS_NULL\"\n" +
+                "                }\n" +
+                "            ],\n" +
+                "            \"logicOperation\": \"or\"\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"compareOperation\": \"COLLECTION_CONTAIN_ANY_ONE\",\n" +
+                "            \"leftVar\":\n" +
+                "            {\n" +
+                "                \"ruleType\": \"FACTOR\",\n" +
+                "                \"code\": \"a\",\n" +
+                "                \"originalFactorCode\": \"a\"\n" +
+                "            },\n" +
+                "            \"rightVar\":\n" +
+                "            {\n" +
+                "                \"ruleType\": \"CONSTANT\",\n" +
+                "                \"values\":\n" +
+                "                [\n" +
+                "                    11,\n" +
+                "                    23\n" +
+                "                ]\n" +
+                "            }\n" +
+                "        },\n" +
+                "        {\n" +
+                "            \"compareOperation\": \"DATE_AFTER\",\n" +
+                "            \"leftVar\":\n" +
+                "            {\n" +
+                "                \"ruleType\": \"FACTOR\",\n" +
+                "                \"code\": \"b\",\n" +
+                "                \"originalFactorCode\": \"b\"\n" +
+                "            },\n" +
+                "            \"rightVar\":\n" +
+                "            {\n" +
+                "                \"ruleType\": \"CONSTANT\",\n" +
+                "                \"values\": 1731551168000\n" +
+                "            }\n" +
+                "        }\n" +
+                "    ],\n" +
+                "    \"logicOperation\": \"and\"\n" +
+                "}";
         RuleConditionTest ruleConditionTest = JSON.parseObject(s, RuleConditionTest.class);
         Map<String, String> objectObjectHashMap = Maps.newHashMap();
         String expression1 = RuleDefExpressionParserTest.buildWhenExpression(ruleConditionTest, objectObjectHashMap);

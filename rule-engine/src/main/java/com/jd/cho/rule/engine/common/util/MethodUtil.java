@@ -65,8 +65,8 @@ public class MethodUtil {
     /**
      * 解析方法参数类型转换为QL表达式
      *
-     * @param paramType
-     * @return
+     * @param paramType 参数类型
+     * @return ql表达式
      */
 
     private static String getMethodExpression(Class<?> paramType) {
@@ -79,18 +79,13 @@ public class MethodUtil {
         if (paramType.isAssignableFrom(Collection.class)) {
             return "changeArrayToList(%s)";
         }
-        if (paramType.isAssignableFrom(Collection.class)) {
-            return "changeArrayToList(%s)";
-        }
         if (paramType.isAssignableFrom(String.class)) {
-            return "\"%s\"";
+            return "toString(%s)";
         }
         if (paramType.isAssignableFrom(Boolean.class)) {
             return "Boolean.TRUE.equals(%s)";
         }
-
         throw new RuntimeException("不支持的类型");
-
     }
 
     @Test

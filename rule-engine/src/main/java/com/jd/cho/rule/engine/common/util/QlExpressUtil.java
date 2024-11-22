@@ -48,6 +48,7 @@ public class QlExpressUtil {
             RUNNER.addFunctionOfClassMethod("dateAfter", DateUtil.class, "dateAfter", new Class[]{Date.class, Date.class}, null);
             RUNNER.addFunctionOfClassMethod("dateEqualDay", DateUtil.class, "dateEqualDay", new Class[]{Date.class, Date.class}, null);
             RUNNER.addFunctionOfClassMethod("dateEqual", DateUtil.class, "dateEqual", new Class[]{Date.class, Date.class}, null);
+            RUNNER.addFunctionOfClassMethod("toString", String.class, "valueOf", new Class[]{Object.class}, null);
 
             List<Method> customFunctions = AtomicCustomFunctionUtil.getCustomFunction();
             addFunction(customFunctions);

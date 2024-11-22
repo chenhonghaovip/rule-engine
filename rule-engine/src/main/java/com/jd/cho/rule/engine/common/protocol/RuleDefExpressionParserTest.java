@@ -145,7 +145,6 @@ public class RuleDefExpressionParserTest {
             AssertUtil.isNotNull(customMethod);
             Object[] array = basicVar.getParams().stream().map(each -> resolveBasicVar(each, fieldMapping)).toArray();
             return String.format(customMethod.getMethodExpression(), array);
-
         }
         return key;
     }
