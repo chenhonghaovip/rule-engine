@@ -106,4 +106,15 @@ public class QlExpressUtil {
             throw new RuntimeException(e);
         }
     }
+
+    @SuppressWarnings("unchecked")
+    public static String[] getOutFunctionNames(String statement) {
+        try {
+            return RUNNER.getOutFunctionNames(statement);
+        } catch (Exception e) {
+            log.error("QlExpressUtil::execute error,statement={}", statement);
+            throw new RuntimeException(e);
+        }
+    }
+
 }
