@@ -74,8 +74,8 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
      */
     private boolean executeCondition(String expression, Map<String, Object> context, Map<String, String> fieldMapping) {
         log.info("current express:{},context:{}", expression, JSON.toJSONString(context));
-        boolean b = executeConditionTest(context, fieldMapping);
-        System.out.println(b);
+//        boolean b = executeConditionTest(context, fieldMapping);
+//        System.out.println(b);
         return (Boolean) QlExpressUtil.execute(expression, context, fieldMapping);
     }
 
