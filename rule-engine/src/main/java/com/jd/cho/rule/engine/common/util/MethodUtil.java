@@ -1,9 +1,12 @@
 package com.jd.cho.rule.engine.common.util;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.jd.cho.rule.engine.common.anno.ApiMethod;
 import com.jd.cho.rule.engine.common.anno.ApiParam;
+import com.jd.cho.rule.engine.common.base.CommonDict;
 import com.jd.cho.rule.engine.common.dict.Dict;
+import com.jd.cho.rule.engine.common.enums.ConstantEnum;
 import com.jd.cho.rule.engine.domain.model.CustomMethod;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
@@ -11,6 +14,8 @@ import org.junit.Test;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.*;
+
+import static com.jd.cho.rule.engine.common.util.QlExpressUtil.CUSTOM_METHODS;
 
 /**
  * @author chenhonghao12
@@ -24,6 +29,10 @@ public class MethodUtil {
         if (Objects.nonNull(apiMethod)) {
             customMethod.setMethodName(apiMethod.name());
             customMethod.setMethodCode(apiMethod.code());
+            customMethod.setConstantType(apiMethod.valueMode());
+            customMethod.setReturnType(apiMethod.returnType());
+            customMethod.setConstantValues(apiMethod.values());
+
         } else {
             customMethod.setMethodName(method.getName());
             customMethod.setMethodCode(method.getName());
@@ -32,7 +41,6 @@ public class MethodUtil {
         StringBuilder express = new StringBuilder();
         Class<?>[] parameterTypes = method.getParameterTypes();
         customMethod.setParamCount(parameterTypes.length);
-        customMethod.setReturnType(method.getReturnType().getName());
         express.append(customMethod.getMethodCode()).append(Dict.LEFT_BRACKETS);
 
         List<CustomMethod.CustomMethodParam> result = Lists.newArrayList();
@@ -86,6 +94,36 @@ public class MethodUtil {
             return "Boolean.TRUE.equals(%s)";
         }
         throw new RuntimeException("不支持的类型");
+    }
+
+    public static List<CommonDict> getMethodConstants(Map<String, Object> context) {
+        String methodCode = (String) context.get(Dict.METHOD_CODE);
+        CustomMethod customMethod = CUSTOM_METHODS.stream().filter(each -> Objects.equals(each.getMethodCode(), methodCode)).findFirst().orElse(null);
+        Optional.ofNullable(customMethod).ifPresent(each -> {
+
+        });
+
+        if (Objects.nonNull(customMethod)) {
+            return getDict(customMethod.getConstantType().getCode(), customMethod.getConstantValues(), context);
+        }
+        return Lists.newArrayList();
+    }
+
+
+    /**
+     * 获取字典
+     *
+     * @param constantType  常量类型
+     * @param constantValue 常量值
+     * @return 字典
+     */
+    public static List<CommonDict> getDict(String constantType, String constantValue, Map<String, Object> context) {
+        if (ConstantEnum.INPUT.getCode().equals(constantType)) {
+            return Lists.newArrayList();
+        } else if (ConstantEnum.SCRIPT.getCode().equals(constantType)) {
+            constantValue = JSON.toJSONString(QlExpressUtil.execute(constantValue, context));
+        }
+        return JSON.parseArray(constantValue, CommonDict.class);
     }
 
     @Test

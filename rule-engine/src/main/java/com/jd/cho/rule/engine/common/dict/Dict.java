@@ -20,6 +20,12 @@ public class Dict {
      */
     public static final String FACTOR_CODE = "factorCode";
 
+
+    /**
+     * 方法code
+     */
+    public static final String METHOD_CODE = "methodCode";
+
     /**
      * 结果别名
      */

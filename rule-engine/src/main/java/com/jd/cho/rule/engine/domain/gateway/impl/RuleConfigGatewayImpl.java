@@ -9,7 +9,6 @@ import com.google.gson.reflect.TypeToken;
 import com.jd.cho.rule.engine.common.base.CommonDict;
 import com.jd.cho.rule.engine.common.convert.*;
 import com.jd.cho.rule.engine.common.dict.Dict;
-import com.jd.cho.rule.engine.common.enums.ConstantEnum;
 import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
 import com.jd.cho.rule.engine.common.enums.RulePackTypeEnum;
 import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
@@ -18,7 +17,7 @@ import com.jd.cho.rule.engine.common.protocol.RuleDefExpressionParser;
 import com.jd.cho.rule.engine.common.util.AssertUtil;
 import com.jd.cho.rule.engine.common.util.AtomicLoginUserUtil;
 import com.jd.cho.rule.engine.common.util.AtomicRuleFactorUtil;
-import com.jd.cho.rule.engine.common.util.QlExpressUtil;
+import com.jd.cho.rule.engine.common.util.MethodUtil;
 import com.jd.cho.rule.engine.dal.DO.*;
 import com.jd.cho.rule.engine.dal.mapper.*;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
@@ -253,7 +252,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
         List<RuleFactor> ruleFactorList = ruleFactors.stream().map(each -> {
             RuleFactor ruleFactor = RuleFactorConvert.INSTANCE.doToEntity(each);
             ruleFactor.setGroupName(groupMaps.get(each.getGroupCode()));
-            ruleFactor.setConstantValues(getDict(each.getConstantType(), each.getConstantValue(), context));
+            ruleFactor.setConstantValues(MethodUtil.getDict(each.getConstantType(), each.getConstantValue(), context));
             ruleFactor.setExpressOperationList(ExpressOperationEnum.MAP.get(each.getFactorType()));
             return ruleFactor;
         }).collect(Collectors.toList());
@@ -280,7 +279,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
             throw new BusinessException(BizErrorEnum.DOES_NOT_EXIST);
         }
         RuleFactorDO ruleFactorDO = ruleFactorList.get(0);
-        return getDict(ruleFactorDO.getConstantType(), ruleFactorDO.getConstantValue(), context);
+        return MethodUtil.getDict(ruleFactorDO.getConstantType(), ruleFactorDO.getConstantValue(), context);
     }
 
     @Override
@@ -458,22 +457,6 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
         } else if (CollectionUtils.isNotEmpty(ruleCondition.getChildren())) {
             ruleCondition.getChildren().forEach(each -> findFactorCodes(each, resultCodes));
         }
-    }
-
-    /**
-     * 获取字典
-     *
-     * @param constantType  常量类型
-     * @param constantValue 常量值
-     * @return 字典
-     */
-    private List<CommonDict> getDict(String constantType, String constantValue, Map<String, Object> context) {
-        if (ConstantEnum.INPUT.getCode().equals(constantType)) {
-            return Lists.newArrayList();
-        } else if (ConstantEnum.SCRIPT.getCode().equals(constantType)) {
-            constantValue = JSON.toJSONString(QlExpressUtil.execute(constantValue, context));
-        }
-        return JSON.parseArray(constantValue, CommonDict.class);
     }
 
 
