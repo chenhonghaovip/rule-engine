@@ -140,7 +140,7 @@ public class RuleDefExpressionParserTest {
             return key;
         } else if (VarTypeEnum.CONSTANT.getCode().equals(basicVar.getRuleType())) {
             return basicVar.getValues();
-        } else if (VarTypeEnum.FUNCTION.getCode().equals(basicVar.getRuleType())) {
+        } else if (VarTypeEnum.METHOD.getCode().equals(basicVar.getRuleType())) {
             CustomMethod customMethod = QlExpressUtil.CUSTOM_METHODS.stream().filter(each -> each.getMethodCode().equals(basicVar.getCode())).findFirst().orElse(null);
             AssertUtil.isNotNull(customMethod);
             Object[] array = basicVar.getParams().stream().map(each -> resolveBasicVar(each, fieldMapping)).toArray();

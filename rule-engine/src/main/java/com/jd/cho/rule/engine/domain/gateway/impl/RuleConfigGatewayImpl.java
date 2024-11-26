@@ -11,6 +11,7 @@ import com.jd.cho.rule.engine.common.convert.*;
 import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
 import com.jd.cho.rule.engine.common.enums.RulePackTypeEnum;
+import com.jd.cho.rule.engine.common.enums.VarTypeEnum;
 import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
 import com.jd.cho.rule.engine.common.exceptions.BusinessException;
 import com.jd.cho.rule.engine.common.protocol.RuleDefExpressionParser;
@@ -451,10 +452,17 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
      * @param resultCodes   结果
      */
     private void findFactorCodes(RuleCondition ruleCondition, Set<String> resultCodes) {
-        boolean isExpress = StringUtils.isNotBlank(ruleCondition.getFactorCode()) && StringUtils.isNotBlank(ruleCondition.getCompareOperation()) && StringUtils.isBlank(ruleCondition.getLogicOperation());
-        if (isExpress) {
-            resultCodes.add(ruleCondition.getOriginalFactorCode());
-        } else if (CollectionUtils.isNotEmpty(ruleCondition.getChildren())) {
+        Optional.ofNullable(ruleCondition.getLeftVar()).ifPresent(leftVar -> {
+            if (VarTypeEnum.FACTOR.getCode().equals(leftVar.getRuleType())) {
+                resultCodes.add(leftVar.getCode());
+            }
+        });
+        Optional.ofNullable(ruleCondition.getRightVar()).ifPresent(rightVar -> {
+            if (VarTypeEnum.FACTOR.getCode().equals(rightVar.getRuleType())) {
+                resultCodes.add(rightVar.getCode());
+            }
+        });
+        if (CollectionUtils.isNotEmpty(ruleCondition.getChildren())) {
             ruleCondition.getChildren().forEach(each -> findFactorCodes(each, resultCodes));
         }
     }

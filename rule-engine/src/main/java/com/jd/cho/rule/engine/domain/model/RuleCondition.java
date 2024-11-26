@@ -10,7 +10,7 @@ import java.util.List;
  */
 @Data
 public class RuleCondition {
-    /**
+     /**
      * 逻辑运算
      */
     private String logicOperation;
@@ -21,19 +21,14 @@ public class RuleCondition {
     private String compareOperation;
 
     /**
-     * 因子code
+     * 左值表达式
      */
-    private String factorCode;
+    private BasicVar leftVar;
 
     /**
-     * 原始因子code
+     * 右值表达式
      */
-    private String originalFactorCode;
-
-    /**
-     * 字段值
-     */
-    private Object value;
+    private BasicVar rightVar;
 
     /**
      * 子规则列表

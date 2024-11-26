@@ -1,5 +1,6 @@
 package com.jd.cho.rule.engine.controller.VO.req;
 
+import com.jd.cho.rule.engine.domain.model.BasicVar;
 import com.jd.cho.rule.engine.spi.RuleGroupExtendService;
 import lombok.Data;
 
@@ -85,19 +86,14 @@ public class RulePackReq implements Serializable {
             private String compareOperation;
 
             /**
-             * 因子code
+             * 左值表达式
              */
-            private String factorCode;
+            private BasicVar leftVar;
 
             /**
-             * 原始因子code
+             * 右值表达式
              */
-            private String originalFactorCode;
-
-            /**
-             * 字段值
-             */
-            private Object value;
+            private BasicVar rightVar;
 
             /**
              * 子规则列表

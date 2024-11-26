@@ -17,7 +17,7 @@ public enum VarTypeEnum {
     /**
      * 函数
      */
-    FUNCTION("METHOD", "函数"),
+    METHOD("METHOD", "函数"),
 
     /**
      * 因子

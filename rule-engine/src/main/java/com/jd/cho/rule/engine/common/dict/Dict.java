@@ -10,6 +10,12 @@ public class Dict {
      * 租户code
      */
     public static final String TENANT = "tenant";
+
+    /**
+     * 内置变量
+     */
+    public static final String INNER_CONTEXT = "applicationContext";
+
     /**
      * 场景code
      */

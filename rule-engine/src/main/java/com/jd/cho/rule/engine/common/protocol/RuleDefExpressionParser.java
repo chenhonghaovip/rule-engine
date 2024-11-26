@@ -5,9 +5,13 @@ import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
 import com.jd.cho.rule.engine.common.enums.FactorTypeEnum;
 import com.jd.cho.rule.engine.common.enums.RelationTypeEnum;
+import com.jd.cho.rule.engine.common.enums.VarTypeEnum;
 import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
 import com.jd.cho.rule.engine.common.exceptions.BusinessException;
 import com.jd.cho.rule.engine.common.util.AssertUtil;
+import com.jd.cho.rule.engine.common.util.QlExpressUtil;
+import com.jd.cho.rule.engine.domain.model.BasicVar;
+import com.jd.cho.rule.engine.domain.model.CustomMethod;
 import com.jd.cho.rule.engine.domain.model.RuleCondition;
 import com.jd.cho.rule.engine.domain.model.RuleFactor;
 import lombok.extern.slf4j.Slf4j;
@@ -60,21 +64,34 @@ public class RuleDefExpressionParser {
                     ruleCondition.getChildren().forEach(each -> checkRuleConditionInner(each, ruleFactorMap));
                 }
             } else {
-                // 判断规则是否异常
-                AssertUtil.isNotBlank(ruleCondition.getOriginalFactorCode(), BizErrorEnum.ORIGINAL_FACTOR_CODE_IS_NOT_EXIST);
-                AssertUtil.isNotBlank(ruleCondition.getFactorCode(), BizErrorEnum.FACTOR_CODE_IS_NOT_EXIST);
-                RuleFactor ruleFactor = ruleFactorMap.get(ruleCondition.getOriginalFactorCode());
-                AssertUtil.isNotNull(ruleFactor, BizErrorEnum.RULE_FACTOR_DOES_NOT_EXIST);
+                // 判断规则code是否合法存在
+                RuleFactor leftFactor = factorExist(ruleCondition.getLeftVar(), ruleFactorMap);
+                if (Objects.nonNull(ruleCondition.getRightVar())) {
+                    factorExist(ruleCondition.getRightVar(), ruleFactorMap);
+                }
 
-                FactorTypeEnum factorType = ruleFactor.getFactorType();
-                AssertUtil.isNotNull(factorType, BizErrorEnum.FACTOR_TYPE_IS_NOT_EXIST);
+                // 如果是规则因子，判断因子类型和操作符是否相匹配
+                if (Objects.nonNull(leftFactor)) {
+                    FactorTypeEnum factorType = leftFactor.getFactorType();
+                    AssertUtil.isNotNull(factorType, BizErrorEnum.FACTOR_TYPE_IS_NOT_EXIST);
 
-                ExpressOperationEnum byCode = ExpressOperationEnum.getByCode(ruleCondition.getCompareOperation());
-                AssertUtil.isTrue(byCode.getGroup().equals(factorType.getCode()), BizErrorEnum.FACTOR_TYPE_AND_OPERATE_NOT_MATCH);
+                    ExpressOperationEnum byCode = ExpressOperationEnum.getByCode(ruleCondition.getCompareOperation());
+                    AssertUtil.isTrue(byCode.getGroup().equals(factorType.getCode()), BizErrorEnum.FACTOR_TYPE_AND_OPERATE_NOT_MATCH);
+                }
             }
         }
+    }
 
-
+    public static RuleFactor factorExist(BasicVar leftVar, Map<String, RuleFactor> ruleFactorMap) {
+        AssertUtil.isNotNull(leftVar, BizErrorEnum.LEFT_VAR_IS_NOT_EXIST);
+        if (VarTypeEnum.FACTOR.getCode().equals(leftVar.getRuleType())) {
+            AssertUtil.isNotBlank(leftVar.getCode(), BizErrorEnum.FACTOR_CODE_IS_NOT_EXIST);
+            AssertUtil.isNotBlank(leftVar.getOriginalFactorCode(), BizErrorEnum.ORIGINAL_FACTOR_CODE_IS_NOT_EXIST);
+            RuleFactor ruleFactor = ruleFactorMap.get(leftVar.getOriginalFactorCode());
+            AssertUtil.isNotNull(ruleFactor, BizErrorEnum.RULE_FACTOR_DOES_NOT_EXIST);
+            return ruleFactor;
+        }
+        return null;
     }
 
 
@@ -96,14 +113,10 @@ public class RuleDefExpressionParser {
 
         switch (type) {
             case Dict.EXPRESSION_TYPE:
-                String factorCode = ruleCondition.getFactorCode();
-                String originalFactorCode = ruleCondition.getOriginalFactorCode();
-                if (!Objects.equals(originalFactorCode, factorCode)) {
-                    fieldMapping.put(factorCode, originalFactorCode);
-                }
-                Object fieldValue = ruleCondition.getValue();
+                BasicVar leftVar = ruleCondition.getLeftVar();
+                AssertUtil.isNotNull(leftVar);
                 String compareOperation = ruleCondition.getCompareOperation();
-                mvelExpression.append(buildOperatorExpress(compareOperation, factorCode, fieldValue));
+                mvelExpression.append(buildOperatorExpress(compareOperation, ruleCondition.getLeftVar(), ruleCondition.getRightVar(), fieldMapping));
                 break;
             case Dict.RELATION_TYPE:
                 List<RuleCondition> children = ruleCondition.getChildren();
@@ -137,18 +150,39 @@ public class RuleDefExpressionParser {
     /**
      * 构建QLExpress脚本
      *
-     * @param operator  操作符
-     * @param fieldName 字段名称
-     * @param value     字段值
+     * @param operator 操作符
      * @return 构建好的表达式
      */
-    public static String buildOperatorExpress(String operator, String fieldName, Object value) {
+    public static String buildOperatorExpress(String operator, BasicVar leftVar, BasicVar rightVar, Map<String, String> fieldMapping) {
         ExpressOperationEnum operation = ExpressOperationEnum.getByCode(operator);
         AssertUtil.isNotNull(operation);
 
+
         String expression = operation.getExpression();
-        return String.format(expression, fieldName, value);
+        return String.format(expression, resolveBasicVar(leftVar, fieldMapping), resolveBasicVar(rightVar, fieldMapping));
     }
 
+    private static Object resolveBasicVar(BasicVar basicVar, Map<String, String> fieldMapping) {
+        String key = null;
+        if (Objects.isNull(basicVar)) {
+            return null;
+        }
+        if (VarTypeEnum.FACTOR.getCode().equals(basicVar.getRuleType())) {
+            key = basicVar.getCode();
+            String originalFactorCode = basicVar.getOriginalFactorCode();
+            if (!Objects.equals(originalFactorCode, key)) {
+                fieldMapping.put(key, originalFactorCode);
+            }
+            return key;
+        } else if (VarTypeEnum.CONSTANT.getCode().equals(basicVar.getRuleType())) {
+            return basicVar.getValues();
+        } else if (VarTypeEnum.METHOD.getCode().equals(basicVar.getRuleType())) {
+            CustomMethod customMethod = QlExpressUtil.CUSTOM_METHODS.stream().filter(each -> each.getMethodCode().equals(basicVar.getCode())).findFirst().orElse(null);
+            AssertUtil.isNotNull(customMethod);
+            Object[] array = basicVar.getParams().stream().map(each -> resolveBasicVar(each, fieldMapping)).toArray();
+            return String.format(customMethod.getMethodExpression(), array);
+        }
+        return key;
+    }
 
 }
