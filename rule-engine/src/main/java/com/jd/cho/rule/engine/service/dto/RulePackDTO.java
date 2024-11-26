@@ -42,6 +42,11 @@ public class RulePackDTO implements Serializable {
     /**
      * 包内规则信息
      */
+    private String ruleContent;
+
+    /**
+     * 包内规则信息
+     */
     private List<RulesBean> rules;
 
     @Data

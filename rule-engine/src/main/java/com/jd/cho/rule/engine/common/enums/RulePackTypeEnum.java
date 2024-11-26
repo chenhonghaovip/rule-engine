@@ -1,6 +1,7 @@
 package com.jd.cho.rule.engine.common.enums;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jd.cho.rule.engine.domain.model.RuleDef;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -17,27 +18,25 @@ public enum RulePackTypeEnum {
     /**
      * 普通规则
      */
-    NORMAL("NORMAL", "普通规则"),
+    NORMAL("NORMAL", "普通规则", RuleDef.class),
 
     /**
      * 决策集
      */
-    DECISION_SET("DECISION_SET", "决策集"),
-
-    /**
-     * 决策表
-     */
-    DECISION_TABLES("DECISION_TABLES", "决策表"),
+    DECISION_SET("DECISION_SET", "决策集", RuleDef.class),
 
     ;
 
     private final String code;
     private final String desc;
+    private final Class<?> aClass;
 
-    RulePackTypeEnum(String code, String desc) {
+    RulePackTypeEnum(String code, String desc, Class<?> aClass) {
         this.code = code;
         this.desc = desc;
+        this.aClass = aClass;
     }
+
 
     public static final List<RulePackTypeEnum> RULE_PACK_TYPE_ENUMS = Arrays.asList(RulePackTypeEnum.values());
 
