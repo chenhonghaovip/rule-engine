@@ -1,6 +1,5 @@
 package com.jd.cho.rule.engine.common.util;
 
-import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.jd.cho.rule.engine.domain.model.CustomMethod;
 import com.ql.util.express.ExpressRunner;
@@ -85,7 +84,7 @@ public class QlExpressUtil {
         try {
             return RUNNER.execute(statement, new QLExpressContext(context, fieldMapping), null, false, false);
         } catch (Exception e) {
-            log.error("QlExpressUtil::execute error,statement={},context:{}", statement, JSON.toJSONString(context));
+            log.error("QlExpressUtil::execute error,context:{}", statement);
             throw new RuntimeException(e);
         }
     }
@@ -100,7 +99,7 @@ public class QlExpressUtil {
         try {
             return RUNNER.execute(statement, new QLExpressContext(context, null), null, false, false);
         } catch (Exception e) {
-            log.error("QlExpressUtil::execute error,statement={},context:{}", statement, JSON.toJSONString(context));
+            log.error("QlExpressUtil::execute error,statement={}", statement);
             throw new RuntimeException(e);
         }
     }
