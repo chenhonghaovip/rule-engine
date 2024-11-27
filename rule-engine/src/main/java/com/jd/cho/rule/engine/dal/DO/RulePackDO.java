@@ -95,6 +95,13 @@ public class RulePackDO extends BaseEntity {
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_pack.pack_params")
     private String packParams;
 
+    /**
+     * Database Column Remarks:
+     * 规则内容
+     */
+    @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_pack.rule_content")
+    private String ruleContent;
+
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_pack")
     public RulePackDO withId(Long id) {
         this.setId(id);
@@ -158,6 +165,12 @@ public class RulePackDO extends BaseEntity {
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_pack")
     public RulePackDO withPackParams(String packParams) {
         this.setPackParams(packParams);
+        return this;
+    }
+
+    @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_pack")
+    public RulePackDO withRuleContent(String ruleContent) {
+        this.setRuleContent(ruleContent);
         return this;
     }
 }

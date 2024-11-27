@@ -2,12 +2,14 @@ package com.jd.cho.rule.engine.controller;
 
 import com.jd.cho.rule.engine.common.convert.RulePackConvert;
 import com.jd.cho.rule.engine.controller.VO.req.RulePackReq;
+import com.jd.cho.rule.engine.controller.VO.resp.RulePackResp;
 import com.jd.cho.rule.engine.service.RulePackService;
 import com.jd.cho.rule.engine.service.dto.RulePackDTO;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author chenhonghao12
@@ -21,7 +23,7 @@ public class RuleCoreController {
     private RulePackService rulePackService;
 
     /**
-     * 规则创建
+     * 规则集合创建
      *
      * @param rulePackReq 入参信息
      * @return 规则code
@@ -33,7 +35,7 @@ public class RuleCoreController {
     }
 
     /**
-     * 规则编辑
+     * 规则集合编辑
      *
      * @param rulePackReq 入参信息
      */
@@ -50,8 +52,9 @@ public class RuleCoreController {
      * @return 规则配置信息
      */
     @GetMapping(value = "/onlineRulePack")
-    public RulePackDTO onlineRulePack(@RequestParam("rulePackCode") String rulePackCode) {
-        return rulePackService.onlineRulePack(rulePackCode);
+    public RulePackResp onlineRulePack(@RequestParam("rulePackCode") String rulePackCode) {
+        RulePackDTO rulePackDTO = rulePackService.onlineRulePack(rulePackCode);
+        return RulePackConvert.INSTANCE.doToResp(rulePackDTO);
     }
 
 
@@ -62,7 +65,9 @@ public class RuleCoreController {
      * @return 规则配置信息
      */
     @GetMapping(value = "/rulePackHistory")
-    public List<RulePackDTO> rulePackHistory(@RequestParam("rulePackCode") String rulePackCode) {
-        return rulePackService.rulePackHistory(rulePackCode);
+    public List<RulePackResp> rulePackHistory(@RequestParam("rulePackCode") String rulePackCode) {
+        List<RulePackDTO> rulePackList = rulePackService.rulePackHistory(rulePackCode);
+        return rulePackList.stream().map(RulePackConvert.INSTANCE::doToResp).collect(Collectors.toList());
+
     }
 }

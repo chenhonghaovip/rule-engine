@@ -38,6 +38,8 @@ public class RulePackServiceImpl implements RulePackService {
         Assert.notNull(rulePackDTO.getRulePackType(), "规则类型不能为空");
         String ruleArrangeStrategy = StringUtils.isBlank(rulePackDTO.getRuleArrangeStrategy()) ? PriorityOrderMatchRuleGroup.CODE : rulePackDTO.getRuleArrangeStrategy();
         rulePackDTO.setRuleArrangeStrategy(ruleArrangeStrategy);
+        AssertUtil.isNotBlank(rulePackDTO.getRuleContent());
+
 
         return ruleConfigGateway.createRulePack(rulePackDTO);
     }
@@ -46,6 +48,7 @@ public class RulePackServiceImpl implements RulePackService {
     public void updateRule(RulePackDTO rulePackDTO) {
         Assert.notNull(rulePackDTO, "规则数据不能为空");
         Assert.notNull(rulePackDTO.getId(), "规则包id不能为空");
+        AssertUtil.isNotBlank(rulePackDTO.getRuleContent());
         String ruleArrangeStrategy = StringUtils.isBlank(rulePackDTO.getRuleArrangeStrategy()) ? PriorityOrderMatchRuleGroup.CODE : rulePackDTO.getRuleArrangeStrategy();
         rulePackDTO.setRuleArrangeStrategy(ruleArrangeStrategy);
         ruleConfigGateway.updateRulePack(rulePackDTO);

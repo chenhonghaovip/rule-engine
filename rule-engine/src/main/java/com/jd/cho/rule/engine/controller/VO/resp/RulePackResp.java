@@ -1,7 +1,7 @@
-package com.jd.cho.rule.engine.controller.VO.req;
+package com.jd.cho.rule.engine.controller.VO.resp;
 
+import com.jd.cho.rule.engine.common.enums.RulePackTypeEnum;
 import com.jd.cho.rule.engine.controller.VO.common.RulesBean;
-import com.jd.cho.rule.engine.spi.RuleGroupExtendService;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,7 +12,7 @@ import java.util.List;
  * @version 1.0
  */
 @Data
-public class RulePackReq implements Serializable {
+public class RulePackResp implements Serializable {
 
     private Long id;
 
@@ -25,28 +25,27 @@ public class RulePackReq implements Serializable {
      * 规则包code
      */
     private String rulePackCode;
-
     /**
      * 规则包类型
-     *
-     * @see com.jd.cho.rule.engine.common.enums.RulePackTypeEnum
      */
-    private String rulePackType;
+    private RulePackTypeEnum rulePackType;
 
     /**
-     * 包内规则调度策略
-     *
-     * @see RuleGroupExtendService
+     * 包内规则执行策略
      */
     private String ruleArrangeStrategy;
-
     /**
-     * 备注
+     * 规则包描述
      */
     private String remark;
 
     /**
-     * 规则列表
+     * 包内规则信息
+     */
+    private String ruleContent;
+
+    /**
+     * 包内规则信息
      */
     private List<RulesBean> rules;
 

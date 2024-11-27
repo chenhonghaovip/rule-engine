@@ -29,7 +29,7 @@ import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
 @Mapper
 public interface RulePackMapper {
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_pack")
-    BasicColumn[] selectList = BasicColumn.columnList(id, rulePackCode, rulePackName, rulePackType, ruleArrangeStrategy, ruleIds, version, latest, remark, status, yn, createTime, modifyTime, creator, modifier, tenant, packParams);
+    BasicColumn[] selectList = BasicColumn.columnList(id, rulePackCode, rulePackName, rulePackType, ruleArrangeStrategy, ruleIds, version, latest, remark, status, yn, createTime, modifyTime, creator, modifier, tenant, packParams, ruleContent);
 
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_pack")
     @SelectProvider(type = SqlProviderAdapter.class, method = "select")
@@ -71,7 +71,8 @@ public interface RulePackMapper {
             @Result(column = "creator", property = "creator", jdbcType = JdbcType.VARCHAR),
             @Result(column = "modifier", property = "modifier", jdbcType = JdbcType.VARCHAR),
             @Result(column = "tenant", property = "tenant", jdbcType = JdbcType.VARCHAR),
-            @Result(column = "pack_params", property = "packParams", jdbcType = JdbcType.LONGVARCHAR)
+            @Result(column = "pack_params", property = "packParams", jdbcType = JdbcType.LONGVARCHAR),
+            @Result(column = "rule_content", property = "ruleContent", jdbcType = JdbcType.LONGVARCHAR)
     })
     List<RulePackDO> selectMany(SelectStatementProvider selectStatement);
 
@@ -116,6 +117,7 @@ public interface RulePackMapper {
                         .map(modifier).toProperty("modifier")
                         .map(tenant).toProperty("tenant")
                         .map(packParams).toProperty("packParams")
+                        .map(ruleContent).toProperty("ruleContent")
         );
     }
 
@@ -139,6 +141,7 @@ public interface RulePackMapper {
                         .map(modifier).toProperty("modifier")
                         .map(tenant).toProperty("tenant")
                         .map(packParams).toProperty("packParams")
+                        .map(ruleContent).toProperty("ruleContent")
         );
     }
 
@@ -161,6 +164,7 @@ public interface RulePackMapper {
                         .map(modifier).toPropertyWhenPresent("modifier", record::getModifier)
                         .map(tenant).toPropertyWhenPresent("tenant", record::getTenant)
                         .map(packParams).toPropertyWhenPresent("packParams", record::getPackParams)
+                        .map(ruleContent).toPropertyWhenPresent("ruleContent", record::getRuleContent)
         );
     }
 
@@ -209,7 +213,8 @@ public interface RulePackMapper {
                 .set(creator).equalTo(record::getCreator)
                 .set(modifier).equalTo(record::getModifier)
                 .set(tenant).equalTo(record::getTenant)
-                .set(packParams).equalTo(record::getPackParams);
+                .set(packParams).equalTo(record::getPackParams)
+                .set(ruleContent).equalTo(record::getRuleContent);
     }
 
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_pack")
@@ -230,7 +235,8 @@ public interface RulePackMapper {
                 .set(creator).equalToWhenPresent(record::getCreator)
                 .set(modifier).equalToWhenPresent(record::getModifier)
                 .set(tenant).equalToWhenPresent(record::getTenant)
-                .set(packParams).equalToWhenPresent(record::getPackParams);
+                .set(packParams).equalToWhenPresent(record::getPackParams)
+                .set(ruleContent).equalToWhenPresent(record::getRuleContent);
     }
 
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_pack")
@@ -252,6 +258,7 @@ public interface RulePackMapper {
                         .set(modifier).equalTo(record::getModifier)
                         .set(tenant).equalTo(record::getTenant)
                         .set(packParams).equalTo(record::getPackParams)
+                        .set(ruleContent).equalTo(record::getRuleContent)
                         .where(id, isEqualTo(record::getId))
         );
     }
@@ -275,6 +282,7 @@ public interface RulePackMapper {
                         .set(modifier).equalToWhenPresent(record::getModifier)
                         .set(tenant).equalToWhenPresent(record::getTenant)
                         .set(packParams).equalToWhenPresent(record::getPackParams)
+                        .set(ruleContent).equalToWhenPresent(record::getRuleContent)
                         .where(id, isEqualTo(record::getId))
         );
     }

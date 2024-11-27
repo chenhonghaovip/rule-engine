@@ -1,6 +1,7 @@
 package com.jd.cho.rule.engine.common.protocol;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Sets;
 import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
 import com.jd.cho.rule.engine.common.enums.FactorTypeEnum;
@@ -10,26 +11,63 @@ import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
 import com.jd.cho.rule.engine.common.exceptions.BusinessException;
 import com.jd.cho.rule.engine.common.util.AssertUtil;
 import com.jd.cho.rule.engine.common.util.QlExpressUtil;
-import com.jd.cho.rule.engine.domain.model.BasicVar;
-import com.jd.cho.rule.engine.domain.model.CustomMethod;
-import com.jd.cho.rule.engine.domain.model.RuleCondition;
-import com.jd.cho.rule.engine.domain.model.RuleFactor;
+import com.jd.cho.rule.engine.domain.model.*;
+import com.jd.cho.rule.engine.service.dto.RulePackDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
- * 规则协议解析器
+ * 规则协议解析器-规则集合
  *
  * @author chenhonghao12
  * @version 1.0
  */
 @Slf4j
-public class RuleDefExpressionParser {
+public class RuleDefExpressionParser extends CommonExpressionParser {
+
+
+    @Override
+    void checkRuleConditionInner(RulePackDTO rulePackDTO, Map<String, RuleFactor> ruleFactorMap) {
+        List<RuleDef> ruleDefs = JSON.parseArray(rulePackDTO.getRuleContent(), RuleDef.class);
+        ruleDefs.stream().map(RuleDef::getRuleCondition).forEach(each -> checkRuleCondition(each, ruleFactorMap));
+    }
+
+    @Override
+    Set<String> getFactorScriptParamInner(RulePackDTO rulePackDTO) {
+        List<RuleDef> ruleDefs = JSON.parseArray(rulePackDTO.getRuleContent(), RuleDef.class);
+        List<RuleCondition> conditions = ruleDefs.stream().map(RuleDef::getRuleCondition).collect(Collectors.toList());
+
+        Set<String> factorCodes = Sets.newHashSet();
+        conditions.forEach(each -> findFactorCodes(each, factorCodes));
+        return factorCodes;
+    }
+
+
+    /**
+     * 递归获取表达式中的字段
+     *
+     * @param ruleCondition 规则条件
+     * @param resultCodes   结果
+     */
+    private static void findFactorCodes(RuleCondition ruleCondition, Set<String> resultCodes) {
+        Optional.ofNullable(ruleCondition.getLeftVar()).ifPresent(leftVar -> {
+            if (VarTypeEnum.FACTOR.getCode().equals(leftVar.getRuleType())) {
+                resultCodes.add(leftVar.getCode());
+            }
+        });
+        Optional.ofNullable(ruleCondition.getRightVar()).ifPresent(rightVar -> {
+            if (VarTypeEnum.FACTOR.getCode().equals(rightVar.getRuleType())) {
+                resultCodes.add(rightVar.getCode());
+            }
+        });
+        if (CollectionUtils.isNotEmpty(ruleCondition.getChildren())) {
+            ruleCondition.getChildren().forEach(each -> findFactorCodes(each, resultCodes));
+        }
+    }
 
     /**
      * 校验规则是否合法

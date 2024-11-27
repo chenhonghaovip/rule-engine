@@ -130,6 +130,13 @@ public final class RulePackDynamicSqlSupport {
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_pack.pack_params")
     public static final SqlColumn<String> packParams = rulePack.packParams;
 
+    /**
+     * Database Column Remarks:
+     * 规则内容
+     */
+    @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_pack.rule_content")
+    public static final SqlColumn<String> ruleContent = rulePack.ruleContent;
+
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_pack")
     public static final class RulePack extends SqlTable {
         public final SqlColumn<Long> id = column("id", JDBCType.BIGINT);
@@ -165,6 +172,8 @@ public final class RulePackDynamicSqlSupport {
         public final SqlColumn<String> tenant = column("tenant", JDBCType.VARCHAR);
 
         public final SqlColumn<String> packParams = column("pack_params", JDBCType.LONGVARCHAR);
+
+        public final SqlColumn<String> ruleContent = column("rule_content", JDBCType.LONGVARCHAR);
 
         public RulePack() {
             super("rule_pack");

@@ -53,6 +53,11 @@ public class RulePack {
     private String remark;
 
     /**
+     * 规则内容
+     */
+    private String ruleContent;
+
+    /**
      * 规则包规则
      */
     private List<RuleDef> rules;

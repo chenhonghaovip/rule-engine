@@ -7,14 +7,15 @@ import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jd.cho.rule.engine.common.base.CommonDict;
-import com.jd.cho.rule.engine.common.convert.*;
+import com.jd.cho.rule.engine.common.convert.RuleFactorConvert;
+import com.jd.cho.rule.engine.common.convert.RulePackConvert;
+import com.jd.cho.rule.engine.common.convert.RuleSceneActionConvert;
+import com.jd.cho.rule.engine.common.convert.RuleSceneConvert;
 import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
-import com.jd.cho.rule.engine.common.enums.RulePackTypeEnum;
-import com.jd.cho.rule.engine.common.enums.VarTypeEnum;
 import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
 import com.jd.cho.rule.engine.common.exceptions.BusinessException;
-import com.jd.cho.rule.engine.common.protocol.RuleDefExpressionParser;
+import com.jd.cho.rule.engine.common.protocol.ProtocolStrategy;
 import com.jd.cho.rule.engine.common.util.AssertUtil;
 import com.jd.cho.rule.engine.common.util.AtomicLoginUserUtil;
 import com.jd.cho.rule.engine.common.util.AtomicRuleFactorUtil;
@@ -47,9 +48,6 @@ import static org.mybatis.dynamic.sql.SqlBuilder.isIn;
 public class RuleConfigGatewayImpl implements RuleConfigGateway {
 
     public static final Map<String, RuleFactor> RULE_CODE_MAP = Maps.newHashMap();
-
-    @Resource
-    private RuleDefMapper ruleDefMapper;
 
     @Resource
     private RulePackMapper rulePackMapper;
@@ -288,13 +286,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
         Optional<RulePackDO> optionalRulePackDO = rulePackMapper.selectOne(s -> s.where(RulePackDynamicSqlSupport.rulePackCode, isEqualTo(rulePackCode)).and(RulePackDynamicSqlSupport.yn, isEqualTo(true)).and(RulePackDynamicSqlSupport.latest, isEqualTo(1)));
         if (optionalRulePackDO.isPresent()) {
             RulePackDO rulePackDO = optionalRulePackDO.get();
-            List<Long> ids = Arrays.stream(rulePackDO.getRuleIds().split(Dict.SPLIT)).map(Long::valueOf).collect(Collectors.toList());
-            List<RuleDef> ruleDefs = getRulePackInfo(ids);
-
-            RulePack rulePack = RulePackConvert.INSTANCE.doToEntity(rulePackDO);
-            rulePack.setRulePackType(RulePackTypeEnum.getByCode(rulePackDO.getRulePackType()));
-            rulePack.setRules(ruleDefs);
-            return rulePack;
+            return RulePackConvert.INSTANCE.doToEntity(rulePackDO);
         }
         return null;
     }
@@ -302,19 +294,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     @Override
     public List<RulePack> historyRulePackInfo(String rulePackCode) {
         List<RulePackDO> history = rulePackMapper.select(s -> s.where(RulePackDynamicSqlSupport.rulePackCode, isEqualTo(rulePackCode)).and(RulePackDynamicSqlSupport.yn, isEqualTo(true)).orderBy(RulePackDynamicSqlSupport.version.descending()));
-
-        List<Long> ruleIds = Lists.newArrayList();
-        history.forEach(each -> ruleIds.addAll(Arrays.stream(each.getRuleIds().split(Dict.SPLIT)).map(Long::valueOf).collect(Collectors.toList())));
-        List<RuleDef> ruleDefs = getRulePackInfo(ruleIds);
-        Map<Long, RuleDef> ruleDefMaps = ruleDefs.stream().collect(Collectors.toMap(RuleDef::getId, Function.identity()));
-
-        return history.stream().map(each -> {
-            RulePack rulePack = RulePackConvert.INSTANCE.doToEntity(each);
-            rulePack.setRulePackType(RulePackTypeEnum.getByCode(each.getRulePackType()));
-            List<RuleDef> currentRuleDefs = Arrays.stream(each.getRuleIds().split(Dict.SPLIT)).map(Long::valueOf).map(ruleDefMaps::get).filter(Objects::nonNull).collect(Collectors.toList());
-            rulePack.setRules(currentRuleDefs);
-            return rulePack;
-        }).collect(Collectors.toList());
+        return history.stream().map(RulePackConvert.INSTANCE::doToEntity).collect(Collectors.toList());
     }
 
     @Override
@@ -325,10 +305,10 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
             if (count > 0) {
                 throw new BusinessException("规则包code重复");
             }
-            UserInfo loginUserInfo = AtomicLoginUserUtil.getLoginUserInfo();
+
             String rulePackCode = StringUtils.isNotBlank(rulePackDTO.getRulePackCode()) ? rulePackDTO.getRulePackCode() : UUID.randomUUID().toString();
             rulePackDTO.setRulePackCode(rulePackCode);
-            return insertRuleGroup(rulePackDTO, 1, loginUserInfo);
+            return insertRuleGroup(rulePackDTO, 1);
         }
         return null;
     }
@@ -336,7 +316,6 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateRulePack(RulePackDTO rulePackDTO) {
-
         if (Objects.nonNull(rulePackDTO)) {
             // 修改旧版本信息
             Long id = rulePackDTO.getId();
@@ -349,9 +328,11 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
                     throw new BusinessException(DATA_HAS_CHANGE);
                 }
 
+                List<RulePackDO> allVersionList = rulePackMapper.select(s -> s.where(RulePackDynamicSqlSupport.rulePackCode, isEqualTo(each.getRulePackCode())));
+                Integer maxVersion = allVersionList.stream().map(RulePackDO::getVersion).max(Integer::compareTo).orElse(1);
+
                 rulePackDTO.setRulePackCode(each.getRulePackCode());
-                int version = optionalRulePackDO.get().getVersion() + 1;
-                insertRuleGroup(rulePackDTO, version, loginUserInfo);
+                insertRuleGroup(rulePackDTO, maxVersion + 1);
             });
         }
     }
@@ -393,20 +374,14 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
         return factorCodes;
     }
 
-    private List<RuleDef> getRulePackInfo(List<Long> ruleIds) {
-        List<RuleDefDO> ruleDefs = ruleDefMapper.select(s -> s.where(RuleDefDynamicSqlSupport.id, isIn(ruleIds)));
-        return ruleDefs.stream().map(RuleDefConvert.INSTANCE::doToEntity).collect(Collectors.toList());
-    }
-
     /**
      * 获取当前包中所需变量信息
      *
-     * @param rules 变量信息
+     * @param rulePackDTO 变量信息
      * @return key:因子-value:因子入参
      */
-    private Map<String, RuleFactor> getFactorScriptParam(List<RuleCondition> rules) {
-        Set<String> factorCodes = Sets.newHashSet();
-        rules.forEach(each -> findFactorCodes(each, factorCodes));
+    private Map<String, RuleFactor> getFactorScriptParam(RulePackDTO rulePackDTO) {
+        Set<String> factorCodes = ProtocolStrategy.getFactorScriptParam(rulePackDTO);
 
         List<RuleFactorDO> ruleFactors = ruleFactorMapper.select(s -> s.where(RuleFactorDynamicSqlSupport.yn, isEqualTo(true)).and(RuleFactorDynamicSqlSupport.factorCode, isIn(factorCodes)));
         if (ruleFactors.size() != factorCodes.size()) {
@@ -420,52 +395,24 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     /**
      * 添加规则包信息
      *
-     * @param rulePackDTO   规则包
-     * @param version       规则包版本
-     * @param loginUserInfo 登录人
+     * @param rulePackDTO 规则包
+     * @param version     规则包版本
      * @return 规则包编号
      */
-    private String insertRuleGroup(RulePackDTO rulePackDTO, int version, UserInfo loginUserInfo) {
-        List<RuleCondition> ruleConditions = rulePackDTO.getRules().stream().map(each -> JSON.parseObject(JSON.toJSONString(each.getRuleCondition()), RuleCondition.class)).collect(Collectors.toList());
-        final Map<String, RuleFactor> factorMaps = getFactorScriptParam(ruleConditions);
+    private String insertRuleGroup(RulePackDTO rulePackDTO, int version) {
+        final Map<String, RuleFactor> factorMaps = getFactorScriptParam(rulePackDTO);
+
+        ProtocolStrategy.checkRuleCondition(rulePackDTO, factorMaps);
+
         Map<String, List<String>> factorScriptParam = factorMaps.values().stream().collect(Collectors.toMap(RuleFactor::getFactorCode, each -> Arrays.stream(each.getFactorScriptParam().split(Dict.SPLIT)).collect(Collectors.toList())));
 
-        ruleConditions.forEach(ruleCondition -> RuleDefExpressionParser.checkRuleCondition(ruleCondition, factorMaps));
-
-        List<RuleDefDO> ruleDefs = rulePackDTO.getRules().stream().map(o -> RuleDefDO.builder().ruleAction(JSON.toJSONString(o.getRuleActions())).ruleCondition(JSON.toJSONString(o.getRuleCondition())).priority(o.getPriority()).creator(loginUserInfo.getLoginUser()).tenant(loginUserInfo.getTenant()).build()).collect(Collectors.toList());
-        ruleDefMapper.insertMultipleSelective(ruleDefs);
-
-        String ruleIds = ruleDefs.stream().filter(each -> Objects.nonNull(each.getId())).map(o -> String.valueOf(o.getId())).collect(Collectors.joining(Dict.SPLIT));
         RulePackDO rulePackDO = RulePackConvert.INSTANCE.doToDO(rulePackDTO);
-        rulePackDO.setRuleIds(ruleIds);
+        rulePackDO.setRuleIds("");
         rulePackDO.setVersion(version);
         rulePackDO.setPackParams(JSON.toJSONString(factorScriptParam));
         AtomicLoginUserUtil.packCreateBaseInfo(rulePackDO);
         rulePackMapper.insertSelective(rulePackDO);
         return rulePackDTO.getRulePackCode();
     }
-
-    /**
-     * 递归获取表达式中的字段
-     *
-     * @param ruleCondition 规则条件
-     * @param resultCodes   结果
-     */
-    private void findFactorCodes(RuleCondition ruleCondition, Set<String> resultCodes) {
-        Optional.ofNullable(ruleCondition.getLeftVar()).ifPresent(leftVar -> {
-            if (VarTypeEnum.FACTOR.getCode().equals(leftVar.getRuleType())) {
-                resultCodes.add(leftVar.getCode());
-            }
-        });
-        Optional.ofNullable(ruleCondition.getRightVar()).ifPresent(rightVar -> {
-            if (VarTypeEnum.FACTOR.getCode().equals(rightVar.getRuleType())) {
-                resultCodes.add(rightVar.getCode());
-            }
-        });
-        if (CollectionUtils.isNotEmpty(ruleCondition.getChildren())) {
-            ruleCondition.getChildren().forEach(each -> findFactorCodes(each, resultCodes));
-        }
-    }
-
 
 }

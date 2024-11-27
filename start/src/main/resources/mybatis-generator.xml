@@ -29,7 +29,7 @@
 
         <!--jdbc的数据库连接 -->
         <jdbcConnection
-                driverClass="com.mysql.jdbc.Driver"
+                driverClass="com.mysql.cj.jdbc.Driver"
                 connectionURL="jdbc:mysql://10.170.230.102:3306/jd_wutong_test?useSSL=false"
                 userId="qytest_rw"
                 password="qytest_passwd">
@@ -72,8 +72,8 @@
         <!-- 数据库表 -->
         <!--        <table tableName="rule_factor" modelType="conditional">-->
         <!--        </table>-->
-        <table tableName="rule_def" modelType="conditional">
-        </table>
+        <!--        <table tableName="rule_def" modelType="conditional">-->
+        <!--        </table>-->
         <table tableName="rule_pack" modelType="conditional">
         </table>
 
