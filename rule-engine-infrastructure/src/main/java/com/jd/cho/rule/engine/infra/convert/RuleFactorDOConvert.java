@@ -1,4 +1,4 @@
-package com.jd.cho.rule.engine.common.convert;
+package com.jd.cho.rule.engine.infra.convert;
 
 import com.jd.cho.rule.engine.dal.DO.RuleFactorDO;
 import com.jd.cho.rule.engine.domain.model.RuleFactor;
@@ -10,8 +10,8 @@ import org.mapstruct.factory.Mappers;
  * @author chenhonghao12
  */
 @Mapper(componentModel = "spring")
-public interface RuleFactorConvert3 {
-    RuleFactorConvert3 INSTANCE = Mappers.getMapper(RuleFactorConvert3.class);
+public interface RuleFactorDOConvert {
+    RuleFactorDOConvert INSTANCE = Mappers.getMapper(RuleFactorDOConvert.class);
 
     @Mapping(source = "factorCode", target = "originalFactorCode")
     @Mapping(target = "factorType", expression = "java(com.jd.cho.rule.engine.common.enums.FactorTypeEnum.getByCode(ruleFactorDO.getFactorType()))")

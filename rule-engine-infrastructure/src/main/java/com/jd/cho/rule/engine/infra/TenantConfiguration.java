@@ -1,4 +1,4 @@
-package com.jd.cho.rule.engine.common.config;
+package com.jd.cho.rule.engine.infra;
 
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
@@ -22,7 +22,7 @@ import java.util.List;
  * @version 1.0
  */
 @Configuration
-public class TenantConfig {
+public class TenantConfiguration {
 
     private static final List<String> TABLE_NAME = Lists.newArrayList("rule_pack", "rule_factor", "rule_factor_group", "rule_scene", "rule_scene_action");
 

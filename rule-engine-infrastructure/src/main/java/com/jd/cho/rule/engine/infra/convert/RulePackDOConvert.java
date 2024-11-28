@@ -1,4 +1,4 @@
-package com.jd.cho.rule.engine.common.convert;
+package com.jd.cho.rule.engine.infra.convert;
 
 import com.jd.cho.rule.engine.dal.DO.RulePackDO;
 import com.jd.cho.rule.engine.domain.model.RulePack;
@@ -11,15 +11,10 @@ import org.mapstruct.factory.Mappers;
  * @author chenhonghao12
  */
 @Mapper(componentModel = "spring")
-public interface RulePackConvert3 {
-    RulePackConvert3 INSTANCE = Mappers.getMapper(RulePackConvert3.class);
-
-    RulePack doToEntity(RulePackDTO rulePackDTO);
+public interface RulePackDOConvert {
+    RulePackDOConvert INSTANCE = Mappers.getMapper(RulePackDOConvert.class);
 
     RulePackDO doToDO(RulePackDTO rulePackDTO);
-
-
-    RulePackDTO doToDTO(RulePack rulePack);
 
     @Mapping(target = "rulePackType", expression = "java(com.jd.cho.rule.engine.common.enums.RulePackTypeEnum.getByCode(rulePackDO.getRulePackType()))")
     RulePack doToEntity(RulePackDO rulePackDO);
