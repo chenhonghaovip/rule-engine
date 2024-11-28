@@ -24,7 +24,7 @@ import java.util.List;
 @Configuration
 public class TenantConfig {
 
-    private static final List<String> TABLE_NAME = Lists.newArrayList("rule_pack", "rule_def", "rule_factor", "rule_factor_group", "rule_scene", "rule_scene_action");
+    private static final List<String> TABLE_NAME = Lists.newArrayList("rule_pack", "rule_factor", "rule_factor_group", "rule_scene", "rule_scene_action");
 
     @Bean
     public MybatisPlusInterceptor tenantInterceptor() {
