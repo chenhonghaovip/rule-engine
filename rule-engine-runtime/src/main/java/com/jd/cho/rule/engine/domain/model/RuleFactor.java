@@ -102,6 +102,11 @@ public class RuleFactor {
      */
     private Boolean status;
 
+    /**
+     * 拓展信息
+     */
+    private String extInfo;
+
     public static RuleFactor copyEntity(RuleFactor ruleFactor) {
         return RuleFactorConvert2.INSTANCE.doToEntity(ruleFactor);
     }

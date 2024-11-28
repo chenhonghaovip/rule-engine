@@ -46,12 +46,6 @@ public final class RulePackDynamicSqlSupport {
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_pack.rule_arrange_strategy")
     public static final SqlColumn<String> ruleArrangeStrategy = rulePack.ruleArrangeStrategy;
 
-    /**
-     * Database Column Remarks:
-     * 规则ID集合
-     */
-    @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_pack.rule_ids")
-    public static final SqlColumn<String> ruleIds = rulePack.ruleIds;
 
     /**
      * Database Column Remarks:
@@ -148,8 +142,6 @@ public final class RulePackDynamicSqlSupport {
         public final SqlColumn<String> rulePackType = column("rule_pack_type", JDBCType.VARCHAR);
 
         public final SqlColumn<String> ruleArrangeStrategy = column("rule_arrange_strategy", JDBCType.VARCHAR);
-
-        public final SqlColumn<String> ruleIds = column("rule_ids", JDBCType.VARCHAR);
 
         public final SqlColumn<Integer> version = column("version", JDBCType.INTEGER);
 

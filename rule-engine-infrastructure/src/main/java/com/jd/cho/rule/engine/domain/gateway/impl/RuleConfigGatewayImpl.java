@@ -256,7 +256,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
             return ruleFactor;
         }).collect(Collectors.toList());
 
-        return AtomicRuleFactorUtil.extendFactors(ruleFactorList);
+        return AtomicRuleFactorUtil.extendFactors(ruleFactorList, context);
     }
 
     @Override
@@ -407,7 +407,6 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
         Map<String, List<String>> factorScriptParam = factorMaps.values().stream().collect(Collectors.toMap(RuleFactor::getFactorCode, each -> Arrays.stream(each.getFactorScriptParam().split(Dict.SPLIT)).collect(Collectors.toList())));
 
         RulePackDO rulePackDO = RulePackConvert3.INSTANCE.doToDO(rulePackDTO);
-        rulePackDO.setRuleIds("");
         rulePackDO.setVersion(version);
         rulePackDO.setPackParams(JSON.toJSONString(factorScriptParam));
         AtomicLoginUserUtil.packCreateBaseInfo(rulePackDO);

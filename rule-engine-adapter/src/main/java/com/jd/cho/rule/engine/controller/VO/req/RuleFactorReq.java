@@ -56,4 +56,9 @@ public class RuleFactorReq implements Serializable {
      * 备注
      */
     private String remark;
+
+    /**
+     * 拓展信息
+     */
+    private String extInfo;
 }

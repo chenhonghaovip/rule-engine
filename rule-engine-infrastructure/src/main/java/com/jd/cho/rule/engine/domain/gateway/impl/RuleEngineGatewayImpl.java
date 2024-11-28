@@ -83,7 +83,6 @@ public class RuleEngineGatewayImpl implements RuleEngineGateway {
         return (Boolean) QlExpressUtil.execute(expression, context, fieldMapping);
     }
 
-
     /**
      * 执行动作
      *

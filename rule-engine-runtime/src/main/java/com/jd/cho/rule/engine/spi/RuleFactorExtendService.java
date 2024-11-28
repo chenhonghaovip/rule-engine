@@ -3,6 +3,7 @@ package com.jd.cho.rule.engine.spi;
 import com.jd.cho.rule.engine.domain.model.RuleFactor;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author chenhonghao12
@@ -16,17 +17,7 @@ public interface RuleFactorExtendService {
      * @param ruleFactors 原始规则因子
      * @return 增强后的规则因子
      */
-    List<RuleFactor> extendFactors(List<RuleFactor> ruleFactors);
-
-//
-//    /**
-//     * 获取被增强后的因子的值
-//     *
-//     * @param factorCode 增强后因子code
-//     * @param value
-//     * @return 因子值
-//     */
-//    Object getFactorValue(String factorCode, Map<String, Object> context);
+    List<RuleFactor> extendFactors(List<RuleFactor> ruleFactors, Map<String, Object> context);
 
 
 }

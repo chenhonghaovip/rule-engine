@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
  * @version 1.0
  */
 @RestController
-@RequestMapping("/rule/def")
-public class RuleCoreController {
+@RequestMapping("/rule/decision_set/def")
+public class RuleDecisionSetController {
 
     @Resource
     private RulePackService rulePackService;
@@ -68,6 +68,5 @@ public class RuleCoreController {
     public List<RulePackResp> rulePackHistory(@RequestParam("rulePackCode") String rulePackCode) {
         List<RulePackDTO> rulePackList = rulePackService.rulePackHistory(rulePackCode);
         return rulePackList.stream().map(RulePackConvert.INSTANCE::doToResp).collect(Collectors.toList());
-
     }
 }

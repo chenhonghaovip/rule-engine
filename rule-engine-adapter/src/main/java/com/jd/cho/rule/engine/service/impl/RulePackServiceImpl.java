@@ -40,7 +40,6 @@ public class RulePackServiceImpl implements RulePackService {
         rulePackDTO.setRuleArrangeStrategy(ruleArrangeStrategy);
         AssertUtil.isNotBlank(rulePackDTO.getRuleContent());
 
-
         return ruleConfigGateway.createRulePack(rulePackDTO);
     }
 

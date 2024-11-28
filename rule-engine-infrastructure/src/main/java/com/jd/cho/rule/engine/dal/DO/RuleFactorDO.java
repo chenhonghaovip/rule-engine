@@ -95,6 +95,13 @@ public class RuleFactorDO extends BaseEntity {
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor.factor_script")
     private String factorScript;
 
+    /**
+     * Database Column Remarks:
+     * 拓展信息
+     */
+    @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor.ext_info")
+    private String extInfo;
+
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_factor")
     public RuleFactorDO withId(Long id) {
         this.setId(id);
@@ -158,6 +165,12 @@ public class RuleFactorDO extends BaseEntity {
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_factor")
     public RuleFactorDO withFactorScript(String factorScript) {
         this.setFactorScript(factorScript);
+        return this;
+    }
+
+    @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_factor")
+    public RuleFactorDO withExtInfo(String extInfo) {
+        this.setExtInfo(extInfo);
         return this;
     }
 }

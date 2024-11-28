@@ -8,6 +8,13 @@ import lombok.Data;
  */
 @Data
 public class RuleAction {
+
+    /**
+     * @see com.jd.cho.rule.engine.common.enums.ActionType
+     * 执行类型
+     */
+    private String executeType;
+
     /**
      * 字段code
      */

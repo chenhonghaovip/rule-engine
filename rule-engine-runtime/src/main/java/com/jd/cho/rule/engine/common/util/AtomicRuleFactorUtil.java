@@ -5,6 +5,7 @@ import com.jd.cho.rule.engine.domain.model.RuleFactor;
 import com.jd.cho.rule.engine.spi.RuleFactorExtendService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.ServiceLoader;
 
 /**
@@ -27,9 +28,9 @@ public class AtomicRuleFactorUtil {
      * @param ruleFactorList 原始因子列表
      * @return 扩展因子列表
      */
-    public static List<RuleFactor> extendFactors(List<RuleFactor> ruleFactorList) {
+    public static List<RuleFactor> extendFactors(List<RuleFactor> ruleFactorList, Map<String, Object> context) {
         for (RuleFactorExtendService extendService : EXTEND_SERVICES) {
-            ruleFactorList = extendService.extendFactors(ruleFactorList);
+            ruleFactorList = extendService.extendFactors(ruleFactorList, context);
         }
         return ruleFactorList;
     }

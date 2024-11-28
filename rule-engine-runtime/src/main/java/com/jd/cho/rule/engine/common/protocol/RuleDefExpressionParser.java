@@ -56,12 +56,12 @@ public class RuleDefExpressionParser extends CommonExpressionParser {
     private static void findFactorCodes(RuleCondition ruleCondition, Set<String> resultCodes) {
         Optional.ofNullable(ruleCondition.getLeftVar()).ifPresent(leftVar -> {
             if (VarTypeEnum.FACTOR.getCode().equals(leftVar.getRuleType())) {
-                resultCodes.add(leftVar.getCode());
+                resultCodes.add(leftVar.getOriginalFactorCode());
             }
         });
         Optional.ofNullable(ruleCondition.getRightVar()).ifPresent(rightVar -> {
             if (VarTypeEnum.FACTOR.getCode().equals(rightVar.getRuleType())) {
-                resultCodes.add(rightVar.getCode());
+                resultCodes.add(rightVar.getOriginalFactorCode());
             }
         });
         if (CollectionUtils.isNotEmpty(ruleCondition.getChildren())) {

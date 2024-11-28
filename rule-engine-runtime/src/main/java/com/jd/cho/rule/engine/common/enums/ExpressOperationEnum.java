@@ -22,9 +22,9 @@ public enum ExpressOperationEnum {
      */
     TEXT_NULL(FactorTypeEnum.TEXT.getCode(), "TEXT_NULL", "isBlank(%s)", "为空"),
     TEXT_NOT_NULL(FactorTypeEnum.TEXT.getCode(), "TEXT_NOT_NULL", "isNotBlank(%s)", "不为空"),
-    TEXT_EQUAL(FactorTypeEnum.TEXT.getCode(), "TEXT_EQUAL", "%s == %s", "等于"),
-    TEXT_UNEQUAL(FactorTypeEnum.TEXT.getCode(), "TEXT_UNEQUAL", "%s != %s", "不等于"),
-    TEXT_LIKE(FactorTypeEnum.TEXT.getCode(), "TEXT_LIKE", "%s like %s", "包含"),
+    TEXT_EQUAL(FactorTypeEnum.TEXT.getCode(), "TEXT_EQUAL", "%s == \"%s\"", "等于"),
+    TEXT_UNEQUAL(FactorTypeEnum.TEXT.getCode(), "TEXT_UNEQUAL", "%s != \"%s\"", "不等于"),
+    TEXT_LIKE(FactorTypeEnum.TEXT.getCode(), "TEXT_LIKE", "%s like \"%s\"", "包含"),
 
     /**
      * 数值类型

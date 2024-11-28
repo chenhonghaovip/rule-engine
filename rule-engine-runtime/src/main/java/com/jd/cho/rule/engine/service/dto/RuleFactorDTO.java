@@ -83,4 +83,9 @@ public class RuleFactorDTO implements Serializable {
      */
     private String remark;
 
+    /**
+     * 拓展信息
+     */
+    private String extInfo;
+
 }

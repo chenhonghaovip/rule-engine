@@ -29,7 +29,7 @@ import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
 @Mapper
 public interface RuleFactorMapper {
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_factor")
-    BasicColumn[] selectList = BasicColumn.columnList(id, factorCode, factorName, groupCode, factorType, constantType, constantValue, factorScriptParam, remark, status, yn, createTime, modifyTime, creator, modifier, tenant, factorScript);
+    BasicColumn[] selectList = BasicColumn.columnList(id, factorCode, factorName, groupCode, factorType, constantType, factorScriptParam, remark, status, yn, createTime, modifyTime, creator, modifier, tenant, constantValue, factorScript, extInfo);
 
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_factor")
     @SelectProvider(type = SqlProviderAdapter.class, method = "select")
@@ -61,7 +61,6 @@ public interface RuleFactorMapper {
             @Result(column = "group_code", property = "groupCode", jdbcType = JdbcType.VARCHAR),
             @Result(column = "factor_type", property = "factorType", jdbcType = JdbcType.VARCHAR),
             @Result(column = "constant_type", property = "constantType", jdbcType = JdbcType.VARCHAR),
-            @Result(column = "constant_value", property = "constantValue", jdbcType = JdbcType.VARCHAR),
             @Result(column = "factor_script_param", property = "factorScriptParam", jdbcType = JdbcType.VARCHAR),
             @Result(column = "remark", property = "remark", jdbcType = JdbcType.VARCHAR),
             @Result(column = "status", property = "status", jdbcType = JdbcType.BIT),
@@ -71,7 +70,9 @@ public interface RuleFactorMapper {
             @Result(column = "creator", property = "creator", jdbcType = JdbcType.VARCHAR),
             @Result(column = "modifier", property = "modifier", jdbcType = JdbcType.VARCHAR),
             @Result(column = "tenant", property = "tenant", jdbcType = JdbcType.VARCHAR),
-            @Result(column = "factor_script", property = "factorScript", jdbcType = JdbcType.LONGVARCHAR)
+            @Result(column = "constant_value", property = "constantValue", jdbcType = JdbcType.LONGVARCHAR),
+            @Result(column = "factor_script", property = "factorScript", jdbcType = JdbcType.LONGVARCHAR),
+            @Result(column = "ext_info", property = "extInfo", jdbcType = JdbcType.LONGVARCHAR)
     })
     List<RuleFactorDO> selectMany(SelectStatementProvider selectStatement);
 
@@ -105,7 +106,6 @@ public interface RuleFactorMapper {
                         .map(groupCode).toProperty("groupCode")
                         .map(factorType).toProperty("factorType")
                         .map(constantType).toProperty("constantType")
-                        .map(constantValue).toProperty("constantValue")
                         .map(factorScriptParam).toProperty("factorScriptParam")
                         .map(remark).toProperty("remark")
                         .map(status).toProperty("status")
@@ -115,7 +115,9 @@ public interface RuleFactorMapper {
                         .map(creator).toProperty("creator")
                         .map(modifier).toProperty("modifier")
                         .map(tenant).toProperty("tenant")
+                        .map(constantValue).toProperty("constantValue")
                         .map(factorScript).toProperty("factorScript")
+                        .map(extInfo).toProperty("extInfo")
         );
     }
 
@@ -128,7 +130,6 @@ public interface RuleFactorMapper {
                         .map(groupCode).toProperty("groupCode")
                         .map(factorType).toProperty("factorType")
                         .map(constantType).toProperty("constantType")
-                        .map(constantValue).toProperty("constantValue")
                         .map(factorScriptParam).toProperty("factorScriptParam")
                         .map(remark).toProperty("remark")
                         .map(status).toProperty("status")
@@ -138,7 +139,9 @@ public interface RuleFactorMapper {
                         .map(creator).toProperty("creator")
                         .map(modifier).toProperty("modifier")
                         .map(tenant).toProperty("tenant")
+                        .map(constantValue).toProperty("constantValue")
                         .map(factorScript).toProperty("factorScript")
+                        .map(extInfo).toProperty("extInfo")
         );
     }
 
@@ -151,7 +154,6 @@ public interface RuleFactorMapper {
                         .map(groupCode).toPropertyWhenPresent("groupCode", record::getGroupCode)
                         .map(factorType).toPropertyWhenPresent("factorType", record::getFactorType)
                         .map(constantType).toPropertyWhenPresent("constantType", record::getConstantType)
-                        .map(constantValue).toPropertyWhenPresent("constantValue", record::getConstantValue)
                         .map(factorScriptParam).toPropertyWhenPresent("factorScriptParam", record::getFactorScriptParam)
                         .map(remark).toPropertyWhenPresent("remark", record::getRemark)
                         .map(status).toPropertyWhenPresent("status", record::getStatus)
@@ -161,7 +163,9 @@ public interface RuleFactorMapper {
                         .map(creator).toPropertyWhenPresent("creator", record::getCreator)
                         .map(modifier).toPropertyWhenPresent("modifier", record::getModifier)
                         .map(tenant).toPropertyWhenPresent("tenant", record::getTenant)
+                        .map(constantValue).toPropertyWhenPresent("constantValue", record::getConstantValue)
                         .map(factorScript).toPropertyWhenPresent("factorScript", record::getFactorScript)
+                        .map(extInfo).toPropertyWhenPresent("extInfo", record::getExtInfo)
         );
     }
 
@@ -200,7 +204,6 @@ public interface RuleFactorMapper {
                 .set(groupCode).equalTo(record::getGroupCode)
                 .set(factorType).equalTo(record::getFactorType)
                 .set(constantType).equalTo(record::getConstantType)
-                .set(constantValue).equalTo(record::getConstantValue)
                 .set(factorScriptParam).equalTo(record::getFactorScriptParam)
                 .set(remark).equalTo(record::getRemark)
                 .set(status).equalTo(record::getStatus)
@@ -210,7 +213,9 @@ public interface RuleFactorMapper {
                 .set(creator).equalTo(record::getCreator)
                 .set(modifier).equalTo(record::getModifier)
                 .set(tenant).equalTo(record::getTenant)
-                .set(factorScript).equalTo(record::getFactorScript);
+                .set(constantValue).equalTo(record::getConstantValue)
+                .set(factorScript).equalTo(record::getFactorScript)
+                .set(extInfo).equalTo(record::getExtInfo);
     }
 
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_factor")
@@ -221,7 +226,6 @@ public interface RuleFactorMapper {
                 .set(groupCode).equalToWhenPresent(record::getGroupCode)
                 .set(factorType).equalToWhenPresent(record::getFactorType)
                 .set(constantType).equalToWhenPresent(record::getConstantType)
-                .set(constantValue).equalToWhenPresent(record::getConstantValue)
                 .set(factorScriptParam).equalToWhenPresent(record::getFactorScriptParam)
                 .set(remark).equalToWhenPresent(record::getRemark)
                 .set(status).equalToWhenPresent(record::getStatus)
@@ -231,7 +235,9 @@ public interface RuleFactorMapper {
                 .set(creator).equalToWhenPresent(record::getCreator)
                 .set(modifier).equalToWhenPresent(record::getModifier)
                 .set(tenant).equalToWhenPresent(record::getTenant)
-                .set(factorScript).equalToWhenPresent(record::getFactorScript);
+                .set(constantValue).equalToWhenPresent(record::getConstantValue)
+                .set(factorScript).equalToWhenPresent(record::getFactorScript)
+                .set(extInfo).equalToWhenPresent(record::getExtInfo);
     }
 
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_factor")
@@ -242,7 +248,6 @@ public interface RuleFactorMapper {
                         .set(groupCode).equalTo(record::getGroupCode)
                         .set(factorType).equalTo(record::getFactorType)
                         .set(constantType).equalTo(record::getConstantType)
-                        .set(constantValue).equalTo(record::getConstantValue)
                         .set(factorScriptParam).equalTo(record::getFactorScriptParam)
                         .set(remark).equalTo(record::getRemark)
                         .set(status).equalTo(record::getStatus)
@@ -252,7 +257,9 @@ public interface RuleFactorMapper {
                         .set(creator).equalTo(record::getCreator)
                         .set(modifier).equalTo(record::getModifier)
                         .set(tenant).equalTo(record::getTenant)
+                        .set(constantValue).equalTo(record::getConstantValue)
                         .set(factorScript).equalTo(record::getFactorScript)
+                        .set(extInfo).equalTo(record::getExtInfo)
                         .where(id, isEqualTo(record::getId))
         );
     }
@@ -265,7 +272,6 @@ public interface RuleFactorMapper {
                         .set(groupCode).equalToWhenPresent(record::getGroupCode)
                         .set(factorType).equalToWhenPresent(record::getFactorType)
                         .set(constantType).equalToWhenPresent(record::getConstantType)
-                        .set(constantValue).equalToWhenPresent(record::getConstantValue)
                         .set(factorScriptParam).equalToWhenPresent(record::getFactorScriptParam)
                         .set(remark).equalToWhenPresent(record::getRemark)
                         .set(status).equalToWhenPresent(record::getStatus)
@@ -275,7 +281,9 @@ public interface RuleFactorMapper {
                         .set(creator).equalToWhenPresent(record::getCreator)
                         .set(modifier).equalToWhenPresent(record::getModifier)
                         .set(tenant).equalToWhenPresent(record::getTenant)
+                        .set(constantValue).equalToWhenPresent(record::getConstantValue)
                         .set(factorScript).equalToWhenPresent(record::getFactorScript)
+                        .set(extInfo).equalToWhenPresent(record::getExtInfo)
                         .where(id, isEqualTo(record::getId))
         );
     }

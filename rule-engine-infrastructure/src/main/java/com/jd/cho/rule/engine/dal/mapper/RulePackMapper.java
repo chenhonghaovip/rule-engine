@@ -29,7 +29,7 @@ import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
 @Mapper
 public interface RulePackMapper {
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_pack")
-    BasicColumn[] selectList = BasicColumn.columnList(id, rulePackCode, rulePackName, rulePackType, ruleArrangeStrategy, ruleIds, version, latest, remark, status, yn, createTime, modifyTime, creator, modifier, tenant, packParams, ruleContent);
+    BasicColumn[] selectList = BasicColumn.columnList(id, rulePackCode, rulePackName, rulePackType, ruleArrangeStrategy, version, latest, remark, status, yn, createTime, modifyTime, creator, modifier, tenant, packParams, ruleContent);
 
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_pack")
     @SelectProvider(type = SqlProviderAdapter.class, method = "select")
@@ -60,7 +60,6 @@ public interface RulePackMapper {
             @Result(column = "rule_pack_name", property = "rulePackName", jdbcType = JdbcType.VARCHAR),
             @Result(column = "rule_pack_type", property = "rulePackType", jdbcType = JdbcType.VARCHAR),
             @Result(column = "rule_arrange_strategy", property = "ruleArrangeStrategy", jdbcType = JdbcType.VARCHAR),
-            @Result(column = "rule_ids", property = "ruleIds", jdbcType = JdbcType.VARCHAR),
             @Result(column = "version", property = "version", jdbcType = JdbcType.INTEGER),
             @Result(column = "latest", property = "latest", jdbcType = JdbcType.INTEGER),
             @Result(column = "remark", property = "remark", jdbcType = JdbcType.VARCHAR),
@@ -105,7 +104,6 @@ public interface RulePackMapper {
                         .map(rulePackName).toProperty("rulePackName")
                         .map(rulePackType).toProperty("rulePackType")
                         .map(ruleArrangeStrategy).toProperty("ruleArrangeStrategy")
-                        .map(ruleIds).toProperty("ruleIds")
                         .map(version).toProperty("version")
                         .map(latest).toProperty("latest")
                         .map(remark).toProperty("remark")
@@ -129,7 +127,6 @@ public interface RulePackMapper {
                         .map(rulePackName).toProperty("rulePackName")
                         .map(rulePackType).toProperty("rulePackType")
                         .map(ruleArrangeStrategy).toProperty("ruleArrangeStrategy")
-                        .map(ruleIds).toProperty("ruleIds")
                         .map(version).toProperty("version")
                         .map(latest).toProperty("latest")
                         .map(remark).toProperty("remark")
@@ -152,7 +149,6 @@ public interface RulePackMapper {
                         .map(rulePackName).toPropertyWhenPresent("rulePackName", record::getRulePackName)
                         .map(rulePackType).toPropertyWhenPresent("rulePackType", record::getRulePackType)
                         .map(ruleArrangeStrategy).toPropertyWhenPresent("ruleArrangeStrategy", record::getRuleArrangeStrategy)
-                        .map(ruleIds).toPropertyWhenPresent("ruleIds", record::getRuleIds)
                         .map(version).toPropertyWhenPresent("version", record::getVersion)
                         .map(latest).toPropertyWhenPresent("latest", record::getLatest)
                         .map(remark).toPropertyWhenPresent("remark", record::getRemark)
@@ -202,7 +198,6 @@ public interface RulePackMapper {
                 .set(rulePackName).equalTo(record::getRulePackName)
                 .set(rulePackType).equalTo(record::getRulePackType)
                 .set(ruleArrangeStrategy).equalTo(record::getRuleArrangeStrategy)
-                .set(ruleIds).equalTo(record::getRuleIds)
                 .set(version).equalTo(record::getVersion)
                 .set(latest).equalTo(record::getLatest)
                 .set(remark).equalTo(record::getRemark)
@@ -224,7 +219,6 @@ public interface RulePackMapper {
                 .set(rulePackName).equalToWhenPresent(record::getRulePackName)
                 .set(rulePackType).equalToWhenPresent(record::getRulePackType)
                 .set(ruleArrangeStrategy).equalToWhenPresent(record::getRuleArrangeStrategy)
-                .set(ruleIds).equalToWhenPresent(record::getRuleIds)
                 .set(version).equalToWhenPresent(record::getVersion)
                 .set(latest).equalToWhenPresent(record::getLatest)
                 .set(remark).equalToWhenPresent(record::getRemark)
@@ -246,7 +240,6 @@ public interface RulePackMapper {
                         .set(rulePackName).equalTo(record::getRulePackName)
                         .set(rulePackType).equalTo(record::getRulePackType)
                         .set(ruleArrangeStrategy).equalTo(record::getRuleArrangeStrategy)
-                        .set(ruleIds).equalTo(record::getRuleIds)
                         .set(version).equalTo(record::getVersion)
                         .set(latest).equalTo(record::getLatest)
                         .set(remark).equalTo(record::getRemark)
@@ -270,7 +263,6 @@ public interface RulePackMapper {
                         .set(rulePackName).equalToWhenPresent(record::getRulePackName)
                         .set(rulePackType).equalToWhenPresent(record::getRulePackType)
                         .set(ruleArrangeStrategy).equalToWhenPresent(record::getRuleArrangeStrategy)
-                        .set(ruleIds).equalToWhenPresent(record::getRuleIds)
                         .set(version).equalToWhenPresent(record::getVersion)
                         .set(latest).equalToWhenPresent(record::getLatest)
                         .set(remark).equalToWhenPresent(record::getRemark)

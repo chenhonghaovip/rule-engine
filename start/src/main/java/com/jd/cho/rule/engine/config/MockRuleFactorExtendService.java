@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class MockRuleFactorExtendService implements RuleFactorExtendService {
 
     @Override
-    public List<RuleFactor> extendFactors(List<RuleFactor> ruleFactors) {
+    public List<RuleFactor> extendFactors(List<RuleFactor> ruleFactors, Map<String, Object> context) {
         List<RuleFactor> result = Lists.newArrayList();
         Map<String, List<RuleFactor>> ruleFactorMaps = ruleFactors.stream().collect(Collectors.groupingBy(RuleFactor::getGroupCode));
         List<RuleFactor> ruleFactors1 = ruleFactorMaps.get("11");

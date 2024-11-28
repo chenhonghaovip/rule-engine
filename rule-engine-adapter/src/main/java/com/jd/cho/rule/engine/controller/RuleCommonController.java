@@ -42,7 +42,6 @@ public class RuleCommonController {
         return ExpressOperationEnum.getOperationByGroup(type);
     }
 
-
     /**
      * 获取因子常量类型列表
      *

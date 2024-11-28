@@ -41,7 +41,9 @@ public class FactorValueServiceImpl implements FactorValueService {
         RuleFactor ruleFactor = ruleFactors.stream().filter(each -> each.getFactorCode().equals(realFactorCode)).findFirst().orElse(null);
 
         if (Objects.nonNull(ruleFactor) && StringUtils.isNotBlank(ruleFactor.getFactorScript())) {
-            return QlExpressUtil.execute(ruleFactor.getFactorScript(), context);
+            Object execute = QlExpressUtil.execute(ruleFactor.getFactorScript(), context);
+            log.info("FactorValueService::getFieldValue,fieldName:{},value:{}", fieldName, execute);
+            return execute;
         }
 
         log.error("规则因子{}执行异常，不存在全局上下文且不存在因子脚本", factorCode);

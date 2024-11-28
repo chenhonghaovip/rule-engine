@@ -39,4 +39,8 @@ public class ApplicationUtils implements ApplicationContextInitializer<Configura
     public static <T> Map<String, T> getBeanByType(Class<T> t) {
         return applicationContext.getBeansOfType(t);
     }
+
+    public static Object getBeanByName(String beanName) {
+        return applicationContext.getBean(beanName);
+    }
 }

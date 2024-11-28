@@ -35,8 +35,6 @@ public class RuleEngineController {
     @PostMapping("/run")
     public Map<String, Object> execute(@RequestBody Map<String, Object> context) {
         String rulePackCode = (String) context.get("rulePackCode");
-        context.put("b", new Date());
-        context.put("d", null);
         ruleEngineService.execute(rulePackCode, context);
         if (Objects.nonNull(context.get(Dict.RESULT_ALIAS))) {
             Type type = new TypeToken<Map<String, Object>>() {
@@ -45,7 +43,4 @@ public class RuleEngineController {
         }
         return null;
     }
-
-
-
 }
