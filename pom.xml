@@ -5,11 +5,11 @@
 
     <groupId>com.jd.cho</groupId>
     <artifactId>rule-engine-parent</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>${revision}</version>
     <packaging>pom</packaging>
-    <name>rule-engine</name>
 
     <properties>
+        <revision>1.0.0-SNAPSHOT</revision>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>${maven.compiler.source}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -27,7 +27,10 @@
     </properties>
 
     <modules>
-        <module>rule-engine</module>
+        <module>rule-engine-runtime</module>
+        <module>rule-engine-infrastructure</module>
+        <module>rule-engine-adapter</module>
+
         <module>rule-engine-starter</module>
         <module>start</module>
     </modules>
@@ -45,17 +48,26 @@
 
     <dependencyManagement>
         <dependencies>
-
             <!--Project modules-->
             <dependency>
                 <groupId>com.jd.cho</groupId>
-                <artifactId>rule-engine</artifactId>
-                <version>${project.version}</version>
+                <artifactId>start</artifactId>
+                <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>com.jd.cho</groupId>
-                <artifactId>start</artifactId>
-                <version>${project.version}</version>
+                <artifactId>rule-engine-runtime</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jd.cho</groupId>
+                <artifactId>rule-engine-infrastructure</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jd.cho</groupId>
+                <artifactId>rule-engine-adapter</artifactId>
+                <version>${revision}</version>
             </dependency>
 
             <dependency>
@@ -149,12 +161,12 @@
         <repository>
             <id>jd-releases</id>
             <name>libs-releases</name>
-            <url>http://artifactory.jd.com/libs-releases-local/</url>
+            <url>https://artifactory.jd.com/libs-releases-local/</url>
         </repository>
         <snapshotRepository>
             <id>jd-snapshots</id>
             <name>libs-snapshots</name>
-            <url>http://artifactory.jd.com/libs-snapshots-local/</url>
+            <url>http2://artifactory.jd.com/libs-snapshots-local/</url>
         </snapshotRepository>
     </distributionManagement>
 
@@ -203,6 +215,32 @@
                 </executions>
             </plugin>
 
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <executions>
+                    <!-- enable flattening -->
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                        <configuration>
+                            <flattenMode>minimum</flattenMode>
+                        </configuration>
+                    </execution>
+                    <!-- ensure proper cleanup -->
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>

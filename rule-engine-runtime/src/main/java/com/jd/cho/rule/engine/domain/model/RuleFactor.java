@@ -1,7 +1,7 @@
 package com.jd.cho.rule.engine.domain.model;
 
 import com.jd.cho.rule.engine.common.base.CommonDict;
-import com.jd.cho.rule.engine.common.convert.RuleFactorConvert;
+import com.jd.cho.rule.engine.common.convert.RuleFactorConvert2;
 import com.jd.cho.rule.engine.common.enums.ConstantEnum;
 import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
 import com.jd.cho.rule.engine.common.enums.FactorTypeEnum;
@@ -103,7 +103,7 @@ public class RuleFactor {
     private Boolean status;
 
     public static RuleFactor copyEntity(RuleFactor ruleFactor) {
-        return RuleFactorConvert.INSTANCE.doToEntity(ruleFactor);
+        return RuleFactorConvert2.INSTANCE.doToEntity(ruleFactor);
     }
 
 }

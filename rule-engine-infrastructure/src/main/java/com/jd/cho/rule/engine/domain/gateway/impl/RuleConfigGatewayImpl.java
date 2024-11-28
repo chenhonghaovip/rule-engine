@@ -7,10 +7,10 @@ import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jd.cho.rule.engine.common.base.CommonDict;
-import com.jd.cho.rule.engine.common.convert.RuleFactorConvert;
-import com.jd.cho.rule.engine.common.convert.RulePackConvert;
-import com.jd.cho.rule.engine.common.convert.RuleSceneActionConvert;
-import com.jd.cho.rule.engine.common.convert.RuleSceneConvert;
+import com.jd.cho.rule.engine.common.convert.RuleFactorConvert3;
+import com.jd.cho.rule.engine.common.convert.RulePackConvert3;
+import com.jd.cho.rule.engine.common.convert.RuleSceneActionConvert3;
+import com.jd.cho.rule.engine.common.convert.RuleSceneConvert3;
 import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
 import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
@@ -76,7 +76,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
         List<String> groupCodes = ruleScene.getRuleFactorGroups().stream().map(RuleFactorGroup::getGroupCode).collect(Collectors.toList());
         groupExistCheck(groupCodes);
 
-        RuleSceneDO ruleSceneDO = RuleSceneConvert.INSTANCE.doToDO(ruleScene);
+        RuleSceneDO ruleSceneDO = RuleSceneConvert3.INSTANCE.doToDO(ruleScene);
         AtomicLoginUserUtil.packCreateBaseInfo(ruleSceneDO);
         ruleSceneMapper.insertSelective(ruleSceneDO);
 
@@ -120,7 +120,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
         Map<String, List<RuleSceneAction>> sceneActionMap = ruleSceneActions.stream().collect(Collectors.groupingBy(RuleSceneAction::getSceneCode));
 
         return ruleSceneList.stream().map(each -> {
-            RuleScene ruleScene = RuleSceneConvert.INSTANCE.doToEntity(each);
+            RuleScene ruleScene = RuleSceneConvert3.INSTANCE.doToEntity(each);
             List<RuleFactorGroup> groups = Arrays.stream(each.getGroupCode().split(Dict.SPLIT)).map(groupMaps::get).collect(Collectors.toList());
             ruleScene.setRuleSceneActions(sceneActionMap.get(each.getSceneCode()));
             ruleScene.setRuleFactorGroups(groups);
@@ -136,7 +136,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
         groupExistCheck(groupCodes);
 
         ruleScene.setSceneCode(null);
-        RuleSceneDO ruleSceneDO = RuleSceneConvert.INSTANCE.doToDO(ruleScene);
+        RuleSceneDO ruleSceneDO = RuleSceneConvert3.INSTANCE.doToDO(ruleScene);
         AtomicLoginUserUtil.packUpdateBaseInfo(ruleSceneDO);
         ruleSceneMapper.updateByPrimaryKeySelective(ruleSceneDO);
 
@@ -150,7 +150,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     @Override
     public List<RuleSceneAction> queryRuleSceneAction(List<String> sceneCodes) {
         List<RuleSceneActionDO> ruleSceneActionDOList = ruleSceneActionMapper.select(s -> s.where(RuleSceneActionDynamicSqlSupport.sceneCode, isIn(sceneCodes)).and(RuleSceneActionDynamicSqlSupport.yn, isEqualTo(true)));
-        return ruleSceneActionDOList.stream().map(RuleSceneActionConvert.INSTANCE::doToEntity).collect(Collectors.toList());
+        return ruleSceneActionDOList.stream().map(RuleSceneActionConvert3.INSTANCE::doToEntity).collect(Collectors.toList());
     }
 
     @Override
@@ -158,7 +158,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     public void createRuleSceneAction(List<RuleSceneAction> ruleSceneActions, String sceneCode) {
         if (CollectionUtils.isNotEmpty(ruleSceneActions)) {
             List<RuleSceneActionDO> insert = ruleSceneActions.stream().map(each -> {
-                RuleSceneActionDO ruleSceneActionDO = RuleSceneActionConvert.INSTANCE.doToDO(each);
+                RuleSceneActionDO ruleSceneActionDO = RuleSceneActionConvert3.INSTANCE.doToDO(each);
                 AtomicLoginUserUtil.packCreateBaseInfo(ruleSceneActionDO);
                 ruleSceneActionDO.setSceneCode(sceneCode);
                 return ruleSceneActionDO;
@@ -210,7 +210,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
 
         groupExistCheck(Lists.newArrayList(ruleFactor.getGroupCode()));
 
-        RuleFactorDO ruleFactorDO = RuleFactorConvert.INSTANCE.doToDO(ruleFactor);
+        RuleFactorDO ruleFactorDO = RuleFactorConvert3.INSTANCE.doToDO(ruleFactor);
         AtomicLoginUserUtil.packCreateBaseInfo(ruleFactorDO);
         ruleFactorMapper.insertSelective(ruleFactorDO);
 
@@ -223,7 +223,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
         AssertUtil.isNotBlank(ruleFactor.getFactorCode(), BizErrorEnum.DOES_NOT_EXIST);
         groupExistCheck(Lists.newArrayList(ruleFactor.getGroupCode()));
 
-        RuleFactorDO ruleFactorDO = RuleFactorConvert.INSTANCE.doToDO(ruleFactor);
+        RuleFactorDO ruleFactorDO = RuleFactorConvert3.INSTANCE.doToDO(ruleFactor);
         AtomicLoginUserUtil.packUpdateBaseInfo(ruleFactorDO);
         ruleFactorDO.setFactorCode(null);
         ruleFactorDO.setFactorType(null);
@@ -249,7 +249,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
         List<RuleFactorDO> ruleFactors = ruleFactorMapper.select(s -> s.where(RuleFactorDynamicSqlSupport.groupCode, isIn(groupCodes)).and(RuleFactorDynamicSqlSupport.yn, isEqualTo(true)));
 
         List<RuleFactor> ruleFactorList = ruleFactors.stream().map(each -> {
-            RuleFactor ruleFactor = RuleFactorConvert.INSTANCE.doToEntity(each);
+            RuleFactor ruleFactor = RuleFactorConvert3.INSTANCE.doToEntity(each);
             ruleFactor.setGroupName(groupMaps.get(each.getGroupCode()));
             ruleFactor.setConstantValues(MethodUtil.getDict(each.getConstantType(), each.getConstantValue(), context));
             ruleFactor.setExpressOperationList(ExpressOperationEnum.MAP.get(each.getFactorType()));
@@ -263,7 +263,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     public List<RuleFactor> queryFactorCodes() {
         if (RULE_CODE_MAP.isEmpty()) {
             List<RuleFactorDO> ruleFactors = ruleFactorMapper.select(s -> s.where(RuleFactorDynamicSqlSupport.tenant, isEqualTo(AtomicLoginUserUtil.getLoginUserInfo().getTenant())).and(RuleFactorDynamicSqlSupport.yn, isEqualTo(true)));
-            List<RuleFactor> ruleFactorList = ruleFactors.stream().map(RuleFactorConvert.INSTANCE::doToEntity).collect(Collectors.toList());
+            List<RuleFactor> ruleFactorList = ruleFactors.stream().map(RuleFactorConvert3.INSTANCE::doToEntity).collect(Collectors.toList());
             RULE_CODE_MAP.putAll(ruleFactorList.stream().collect(Collectors.toMap(RuleFactor::getFactorCode, Function.identity())));
             return ruleFactorList;
         }
@@ -286,7 +286,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
         Optional<RulePackDO> optionalRulePackDO = rulePackMapper.selectOne(s -> s.where(RulePackDynamicSqlSupport.rulePackCode, isEqualTo(rulePackCode)).and(RulePackDynamicSqlSupport.yn, isEqualTo(true)).and(RulePackDynamicSqlSupport.latest, isEqualTo(1)));
         if (optionalRulePackDO.isPresent()) {
             RulePackDO rulePackDO = optionalRulePackDO.get();
-            return RulePackConvert.INSTANCE.doToEntity(rulePackDO);
+            return RulePackConvert3.INSTANCE.doToEntity(rulePackDO);
         }
         return null;
     }
@@ -294,7 +294,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     @Override
     public List<RulePack> historyRulePackInfo(String rulePackCode) {
         List<RulePackDO> history = rulePackMapper.select(s -> s.where(RulePackDynamicSqlSupport.rulePackCode, isEqualTo(rulePackCode)).and(RulePackDynamicSqlSupport.yn, isEqualTo(true)).orderBy(RulePackDynamicSqlSupport.version.descending()));
-        return history.stream().map(RulePackConvert.INSTANCE::doToEntity).collect(Collectors.toList());
+        return history.stream().map(RulePackConvert3.INSTANCE::doToEntity).collect(Collectors.toList());
     }
 
     @Override
@@ -388,7 +388,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
             throw new BusinessException(BizErrorEnum.FACTOR_CODE_IS_NOT_EXIST);
         }
 
-        return ruleFactors.stream().map(RuleFactorConvert.INSTANCE::doToEntity).collect(Collectors.toMap(RuleFactor::getFactorCode, Function.identity()));
+        return ruleFactors.stream().map(RuleFactorConvert3.INSTANCE::doToEntity).collect(Collectors.toMap(RuleFactor::getFactorCode, Function.identity()));
     }
 
 
@@ -406,7 +406,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
 
         Map<String, List<String>> factorScriptParam = factorMaps.values().stream().collect(Collectors.toMap(RuleFactor::getFactorCode, each -> Arrays.stream(each.getFactorScriptParam().split(Dict.SPLIT)).collect(Collectors.toList())));
 
-        RulePackDO rulePackDO = RulePackConvert.INSTANCE.doToDO(rulePackDTO);
+        RulePackDO rulePackDO = RulePackConvert3.INSTANCE.doToDO(rulePackDTO);
         rulePackDO.setRuleIds("");
         rulePackDO.setVersion(version);
         rulePackDO.setPackParams(JSON.toJSONString(factorScriptParam));
