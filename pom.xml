@@ -161,12 +161,12 @@
         <repository>
             <id>jd-releases</id>
             <name>libs-releases</name>
-            <url>https://artifactory.jd.com/libs-releases-local/</url>
+            <url>http://artifactory.jd.com/libs-releases-local/</url>
         </repository>
         <snapshotRepository>
             <id>jd-snapshots</id>
             <name>libs-snapshots</name>
-            <url>http2://artifactory.jd.com/libs-snapshots-local/</url>
+            <url>http://artifactory.jd.com/libs-snapshots-local/</url>
         </snapshotRepository>
     </distributionManagement>
 
