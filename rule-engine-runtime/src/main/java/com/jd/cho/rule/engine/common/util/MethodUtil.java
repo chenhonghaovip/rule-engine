@@ -119,7 +119,7 @@ public class MethodUtil {
         if (paramType.isAssignableFrom(Boolean.class)) {
             return true;
         }
-        return false;
+        return paramType.isAssignableFrom(Integer.class);
     }
 
     public static List<CommonDict> getMethodConstants(Map<String, Object> context) {
