@@ -86,6 +86,10 @@ public class CoreDecisionSetRuleExecutor implements DecisionSetRuleExecutor {
      */
     public void executeAction(List<RuleAction> ruleActionBeans, Map<String, Object> context) {
         log.info("rule engine condition is true,execute action:{}", JSON.toJSONString(ruleActionBeans));
+        if (ruleActionBeans == null || ruleActionBeans.isEmpty()) {
+            return;
+        }
+
         Map<String, Object> resultMap = Maps.newHashMap();
         ruleActionBeans.forEach(each -> resultMap.put(each.getFieldCode(), each.getValues()));
         Object result = context.get(Dict.RESULT_ALIAS);

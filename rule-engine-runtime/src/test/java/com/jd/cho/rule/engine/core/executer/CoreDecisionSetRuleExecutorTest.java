@@ -12,6 +12,7 @@ import com.jd.cho.rule.engine.domain.model.RuleAction;
 import com.jd.cho.rule.engine.domain.model.RuleCondition;
 import com.jd.cho.rule.engine.domain.model.RuleDef;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,9 +38,38 @@ class CoreDecisionSetRuleExecutorTest {
         staticApplicationUtils.when(() -> ApplicationUtils.getBeans(FactorValueService.class)).thenReturn(factorValueService);
     }
 
-    @DisplayName("condition(single expr): 1 = 1, action=assign('resultNum',10)")
+    @AfterEach
+    void tearDown() {
+        staticApplicationUtils.close();
+    }
+
+    @DisplayName("condition(single expr): 1 = 1")
     @Test
     void test_const_eq_const() {
+        final Integer constValue = 1;
+        final RuleDef ruleDef = new RuleDef() {{
+            this.setPriority(1);
+            this.setRuleCondition(new RuleCondition() {{
+                this.setCompareOperation(ExpressOperationEnum.NUM_EQUAL.getOperator());
+                this.setLeftVar(new BasicVar() {{
+                    this.setRuleType(VarTypeEnum.CONSTANT.getCode());
+                    this.setValues(constValue);
+                }});
+                this.setRightVar(new BasicVar() {{
+                    this.setRuleType(VarTypeEnum.CONSTANT.getCode());
+                    this.setValues(constValue);
+                }});
+            }});
+        }};
+
+        final Map<String, Object> context = new HashMap<>();
+        boolean matched = executor.execute(ruleDef, context);
+        Assertions.assertThat(matched).isTrue();
+    }
+
+    @DisplayName("condition(single expr): 1 = 1, action=assign('resultNum',10)")
+    @Test
+    void test_const_eq_const_and_setResult() {
         final Integer constValue = 1;
         final RuleDef ruleDef = new RuleDef() {{
             this.setPriority(1);
