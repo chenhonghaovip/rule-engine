@@ -1,5 +1,6 @@
 package com.jd.cho.rule.engine.common.util;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.jd.cho.rule.engine.domain.model.CustomMethod;
 import com.ql.util.express.ExpressRunner;
@@ -47,10 +48,10 @@ public class QlExpressUtil {
             RUNNER.addFunctionOfClassMethod("dateAfter", DateUtil.class, "dateAfter", new Class[]{Date.class, Date.class}, null);
             RUNNER.addFunctionOfClassMethod("dateEqualDay", DateUtil.class, "dateEqualDay", new Class[]{Date.class, Date.class}, null);
             RUNNER.addFunctionOfClassMethod("dateEqual", DateUtil.class, "dateEqual", new Class[]{Date.class, Date.class}, null);
-            RUNNER.addFunctionOfClassMethod("toString", String.class, "valueOf", new Class[]{Object.class}, null);
+            RUNNER.addFunctionOfClassMethod("toString", JSON.class, "toJSONString", new Class[]{Object.class}, null);
 
             List<Method> customFunctions = AtomicCustomFunctionUtil.getCustomFunction();
-            addFunction(customFunctions);
+            addFunctionOfClassMethod(customFunctions);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -58,7 +59,7 @@ public class QlExpressUtil {
     }
 
 
-    public static void addFunction(List<Method> methods) throws Exception {
+    public static void addFunctionOfClassMethod(List<Method> methods) throws Exception {
         List<CustomMethod> result = Lists.newArrayList();
 
         for (Method method : methods) {
@@ -72,6 +73,14 @@ public class QlExpressUtil {
         }
 
         CUSTOM_METHODS.addAll(result);
+    }
+
+    public static void addFunctionOfServiceMethod(Method method, Object object) throws Exception {
+        String methodName = method.getName();
+        CustomMethod resolve = MethodUtil.resolve(method);
+        Class<?>[] parameterTypes = method.getParameterTypes();
+        RUNNER.addFunctionOfServiceMethod(resolve.getMethodCode(), object, methodName, parameterTypes, null);
+        CUSTOM_METHODS.add(resolve);
     }
 
 

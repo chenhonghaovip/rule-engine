@@ -1,5 +1,9 @@
 package com.jd.cho.rule.engine.domain;
 
+import com.jd.cho.rule.engine.domain.model.RuleFactor;
+
+import java.util.Date;
+
 /**
  * @author chenhonghao12
  * @version 1.0
@@ -7,4 +11,7 @@ package com.jd.cho.rule.engine.domain;
 public interface SignDomainService {
 
     String getSign();
+
+
+    String getSignInfo(String name, Date date, RuleFactor ruleFactor);
 }

@@ -57,11 +57,13 @@ public class RuleDefExpressionParser extends CommonExpressionParser {
     private static void findFactorCodes(RuleCondition ruleCondition, Set<String> resultCodes) {
         Optional.ofNullable(ruleCondition.getLeftVar()).ifPresent(leftVar -> {
             if (VarTypeEnum.FACTOR.getCode().equals(leftVar.getRuleType())) {
+                AssertUtil.isNotBlank(leftVar.getOriginalFactorCode(), BizErrorEnum.FACTOR_CODE_IS_NOT_EXIST);
                 resultCodes.add(leftVar.getOriginalFactorCode());
             }
         });
         Optional.ofNullable(ruleCondition.getRightVar()).ifPresent(rightVar -> {
             if (VarTypeEnum.FACTOR.getCode().equals(rightVar.getRuleType())) {
+                AssertUtil.isNotBlank(rightVar.getOriginalFactorCode(), BizErrorEnum.FACTOR_CODE_IS_NOT_EXIST);
                 resultCodes.add(rightVar.getOriginalFactorCode());
             }
         });
@@ -237,12 +239,6 @@ public class RuleDefExpressionParser extends CommonExpressionParser {
             return String.format(customMethod.getMethodExpression(), params.toArray());
         }
         return null;
-    }
-
-    public static void main(String[] args) {
-        String s = "getInfo(%s,%s)";
-        String format = String.format(s, Lists.newArrayList("toString(\"ab\")", "toString(\"abc\")").toArray());
-        System.out.println(format);
     }
 
 }

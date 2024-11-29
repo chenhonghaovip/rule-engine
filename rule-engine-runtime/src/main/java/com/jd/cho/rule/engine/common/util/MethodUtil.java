@@ -91,7 +91,10 @@ public class MethodUtil {
         if (paramType.isAssignableFrom(Boolean.class)) {
             return "Boolean.TRUE.equals(%s)";
         }
-        throw new RuntimeException("不支持的类型");
+
+        return "toString(%s)";
+
+//        throw new RuntimeException("不支持的类型");
     }
 
     public static List<CommonDict> getMethodConstants(Map<String, Object> context) {

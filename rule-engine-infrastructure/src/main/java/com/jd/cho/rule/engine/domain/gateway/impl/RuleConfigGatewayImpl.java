@@ -7,10 +7,6 @@ import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jd.cho.rule.engine.common.base.CommonDict;
-import com.jd.cho.rule.engine.infra.convert.RuleFactorDOConvert;
-import com.jd.cho.rule.engine.infra.convert.RulePackDOConvert;
-import com.jd.cho.rule.engine.infra.convert.RuleSceneActionDOConvert;
-import com.jd.cho.rule.engine.infra.convert.RuleSceneDOConvert;
 import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
 import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
@@ -24,6 +20,10 @@ import com.jd.cho.rule.engine.dal.DO.*;
 import com.jd.cho.rule.engine.dal.mapper.*;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.domain.model.*;
+import com.jd.cho.rule.engine.infra.convert.RuleFactorDOConvert;
+import com.jd.cho.rule.engine.infra.convert.RulePackDOConvert;
+import com.jd.cho.rule.engine.infra.convert.RuleSceneActionDOConvert;
+import com.jd.cho.rule.engine.infra.convert.RuleSceneDOConvert;
 import com.jd.cho.rule.engine.service.dto.RulePackDTO;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -404,7 +404,9 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
 
         ProtocolStrategy.checkRuleCondition(rulePackDTO, factorMaps);
 
-        Map<String, List<String>> factorScriptParam = factorMaps.values().stream().collect(Collectors.toMap(RuleFactor::getFactorCode, each -> Arrays.stream(each.getFactorScriptParam().split(Dict.SPLIT)).collect(Collectors.toList())));
+        Map<String, List<String>> factorScriptParam = factorMaps.values().stream()
+                .filter(each -> StringUtils.isNotBlank(each.getFactorScriptParam()))
+                .collect(Collectors.toMap(RuleFactor::getFactorCode, each -> Arrays.stream(each.getFactorScriptParam().split(Dict.SPLIT)).collect(Collectors.toList())));
 
         RulePackDO rulePackDO = RulePackDOConvert.INSTANCE.doToDO(rulePackDTO);
         rulePackDO.setVersion(version);
