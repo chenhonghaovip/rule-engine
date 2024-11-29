@@ -10,7 +10,7 @@ import com.jd.cho.rule.engine.common.enums.RulePackTypeEnum;
 import com.jd.cho.rule.engine.common.protocol.ProtocolStrategy;
 import com.jd.cho.rule.engine.common.protocol.RuleDefExpressionParser;
 import com.jd.cho.rule.engine.common.util.QlExpressUtil;
-import com.jd.cho.rule.engine.core.RuleExecutor;
+import com.jd.cho.rule.engine.core.DecisionSetRuleExecutor;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.domain.model.RuleAction;
 import com.jd.cho.rule.engine.domain.model.RuleDef;
@@ -30,7 +30,7 @@ import java.util.Objects;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class CoreRuleExecutor implements RuleExecutor {
+public class CoreDecisionSetRuleExecutor implements DecisionSetRuleExecutor {
 
     private RuleConfigGateway ruleConfigGateway;
 
