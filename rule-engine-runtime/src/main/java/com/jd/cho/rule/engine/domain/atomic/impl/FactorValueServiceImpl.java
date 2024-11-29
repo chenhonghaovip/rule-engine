@@ -8,11 +8,11 @@ import com.jd.cho.rule.engine.common.util.QlExpressUtil;
 import com.jd.cho.rule.engine.domain.atomic.FactorValueService;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.domain.model.RuleFactor;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -23,9 +23,8 @@ import java.util.Objects;
  */
 @Slf4j
 @Service
+@AllArgsConstructor
 public class FactorValueServiceImpl implements FactorValueService {
-
-    @Resource
     private RuleConfigGateway ruleConfigGateway;
 
     @Override

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss},%-5level,%C{1.},%L,%M,%msg%n"/>
+        </Console>
+    </appenders>
+    <loggers>
+        <Logger name="AuditLog" level="INFO" additivity="false">
+            <AppenderRef ref="AuditLogFile"/>
+        </Logger>
+        <root level="INFO">
+            <AppenderRef ref="Console"/>
+        </root>
+    </loggers>
+</configuration>
