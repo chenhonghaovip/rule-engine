@@ -9,7 +9,6 @@ import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.enums.ConstantEnum;
 import com.jd.cho.rule.engine.domain.model.CustomMethod;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Test;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -32,7 +31,6 @@ public class MethodUtil {
             customMethod.setConstantType(apiMethod.valueMode());
             customMethod.setReturnType(apiMethod.returnType());
             customMethod.setConstantValues(apiMethod.values());
-
         } else {
             customMethod.setMethodName(method.getName());
             customMethod.setMethodCode(method.getName());
@@ -88,7 +86,7 @@ public class MethodUtil {
             return "changeArrayToList(%s)";
         }
         if (paramType.isAssignableFrom(String.class)) {
-            return "toString(%s)";
+            return "%s";
         }
         if (paramType.isAssignableFrom(Boolean.class)) {
             return "Boolean.TRUE.equals(%s)";
@@ -124,10 +122,5 @@ public class MethodUtil {
             constantValue = JSON.toJSONString(QlExpressUtil.execute(constantValue, context));
         }
         return JSON.parseArray(constantValue, CommonDict.class);
-    }
-
-    @Test
-    public void test() {
-        System.out.println(Date.class.isAssignableFrom(Date.class));
     }
 }

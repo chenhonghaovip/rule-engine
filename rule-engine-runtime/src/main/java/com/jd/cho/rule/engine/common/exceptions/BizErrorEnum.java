@@ -33,6 +33,7 @@ public enum BizErrorEnum implements CommonException {
     FACTOR_CODE_RUN_ERROR(-19, "规则执行异常"),
 
     LEFT_VAR_IS_NOT_EXIST(-20, "左值不能为空"),
+    PARAM_COUNT_NOT_MATCH(-21, "方法参数不匹配"),
 
     ;
 

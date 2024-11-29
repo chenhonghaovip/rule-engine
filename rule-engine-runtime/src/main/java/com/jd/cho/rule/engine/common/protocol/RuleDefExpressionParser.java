@@ -1,6 +1,7 @@
 package com.jd.cho.rule.engine.common.protocol;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
@@ -194,14 +195,12 @@ public class RuleDefExpressionParser extends CommonExpressionParser {
     public static String buildOperatorExpress(String operator, BasicVar leftVar, BasicVar rightVar, Map<String, String> fieldMapping) {
         ExpressOperationEnum operation = ExpressOperationEnum.getByCode(operator);
         AssertUtil.isNotNull(operation);
-
-
         String expression = operation.getExpression();
         return String.format(expression, resolveBasicVar(leftVar, fieldMapping), resolveBasicVar(rightVar, fieldMapping));
     }
 
     private static Object resolveBasicVar(BasicVar basicVar, Map<String, String> fieldMapping) {
-        String key = null;
+        String key;
         if (Objects.isNull(basicVar)) {
             return null;
         }
@@ -217,10 +216,33 @@ public class RuleDefExpressionParser extends CommonExpressionParser {
         } else if (VarTypeEnum.METHOD.getCode().equals(basicVar.getRuleType())) {
             CustomMethod customMethod = QlExpressUtil.CUSTOM_METHODS.stream().filter(each -> each.getMethodCode().equals(basicVar.getCode())).findFirst().orElse(null);
             AssertUtil.isNotNull(customMethod);
-            Object[] array = basicVar.getParams().stream().map(each -> resolveBasicVar(each, fieldMapping)).toArray();
-            return String.format(customMethod.getMethodExpression(), array);
+            CustomMethod.CustomMethodParam customMethodParam;
+            if (customMethod.getParamCount() != basicVar.getParams().size()) {
+                throw new BusinessException(BizErrorEnum.PARAM_COUNT_NOT_MATCH);
+            }
+
+            List<Object> params = Lists.newArrayList();
+            for (int i = 0; i < customMethod.getCustomMethodParams().size(); i++) {
+                customMethodParam = customMethod.getCustomMethodParams().get(i);
+                BasicVar methodParam = basicVar.getParams().get(i);
+                Object o = resolveBasicVar(methodParam, fieldMapping);
+                if (VarTypeEnum.CONSTANT.getCode().equals(methodParam.getRuleType()) && customMethodParam.getParamType().isAssignableFrom(String.class)) {
+                    String s = "\"" + o + "\"";
+                    params.add(s);
+                } else {
+                    params.add(o);
+                }
+            }
+//            Object[] array = basicVar.getParams().stream().map(each -> resolveBasicVar(each, fieldMapping)).toArray();
+            return String.format(customMethod.getMethodExpression(), params.toArray());
         }
-        return key;
+        return null;
+    }
+
+    public static void main(String[] args) {
+        String s = "getInfo(%s,%s)";
+        String format = String.format(s, Lists.newArrayList("toString(\"ab\")", "toString(\"abc\")").toArray());
+        System.out.println(format);
     }
 
 }
