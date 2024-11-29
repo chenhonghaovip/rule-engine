@@ -309,7 +309,9 @@
                 </executions>
                 <configuration>
                     <excludes>
-                        <exclude>**/exclude/*</exclude>
+                        <exclude>**/dict/*</exclude>
+                        <exclude>**/model/*</exclude>
+                        <exclude>**/convert/*</exclude>
                     </excludes>
                 </configuration>
             </plugin>
