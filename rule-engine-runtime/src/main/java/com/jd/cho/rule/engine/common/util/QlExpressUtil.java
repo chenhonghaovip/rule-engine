@@ -93,7 +93,7 @@ public class QlExpressUtil {
         try {
             return RUNNER.execute(statement, new QLExpressContext(context, fieldMapping), null, false, false);
         } catch (Exception e) {
-            log.error("QlExpressUtil::execute error,context:{}", statement);
+            log.error("QlExpressUtil::execute error,context:{}", statement, e);
             throw new RuntimeException(e);
         }
     }
