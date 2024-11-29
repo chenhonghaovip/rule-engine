@@ -26,8 +26,8 @@ public class MethodUtil {
         CustomMethod customMethod = new CustomMethod();
         ApiMethod apiMethod = method.getAnnotation(ApiMethod.class);
         if (Objects.nonNull(apiMethod)) {
-            customMethod.setMethodName(apiMethod.name());
-            customMethod.setMethodCode(apiMethod.code());
+            customMethod.setMethodName(StringUtils.isNotBlank(apiMethod.name()) ? apiMethod.name() : method.getName());
+            customMethod.setMethodCode(StringUtils.isNotBlank(apiMethod.code()) ? apiMethod.code() : method.getName());
             customMethod.setConstantType(apiMethod.valueMode());
             customMethod.setReturnType(apiMethod.returnType());
             customMethod.setConstantValues(apiMethod.values());
@@ -35,6 +35,7 @@ public class MethodUtil {
             customMethod.setMethodName(method.getName());
             customMethod.setMethodCode(method.getName());
         }
+
 
         StringBuilder express = new StringBuilder();
         Class<?>[] parameterTypes = method.getParameterTypes();
@@ -44,6 +45,7 @@ public class MethodUtil {
         List<CustomMethod.CustomMethodParam> result = Lists.newArrayList();
         Annotation[][] parameterAnnotations = method.getParameterAnnotations();
         for (int i = 0; i < parameterAnnotations.length; i++) {
+            Class<?> parameterType = parameterTypes[i];
             Annotation[] parameterAnnotation = parameterAnnotations[i];
             String name = "入参";
             Annotation annotation = Arrays.stream(parameterAnnotation).filter(each -> each.annotationType().equals(ApiParam.class)).findFirst().orElse(null);
@@ -54,9 +56,10 @@ public class MethodUtil {
 
             CustomMethod.CustomMethodParam customMethodParam = new CustomMethod.CustomMethodParam();
             customMethodParam.setParamName(name);
-            customMethodParam.setParamType(parameterTypes[i]);
+            customMethodParam.setIsSysClassType(isSysParamType(parameterType));
+            customMethodParam.setParamType(parameterType);
 
-            express.append(getMethodExpression(parameterTypes[i]));
+            express.append(getMethodExpression(parameterType));
             if (i != parameterAnnotations.length - 1) {
                 express.append(Dict.SPLIT);
             }
@@ -91,10 +94,32 @@ public class MethodUtil {
         if (paramType.isAssignableFrom(Boolean.class)) {
             return "Boolean.TRUE.equals(%s)";
         }
+        return "%s";
+    }
 
-        return "toString(%s)";
-
-//        throw new RuntimeException("不支持的类型");
+    /**
+     * 判断是否系统内置参数类型
+     *
+     * @param paramType 参数类型
+     * @return trule/false
+     */
+    public static boolean isSysParamType(Class<?> paramType) {
+        if (paramType.isPrimitive()) {
+            return true;
+        }
+        if (paramType.isAssignableFrom(Date.class)) {
+            return true;
+        }
+        if (paramType.isAssignableFrom(Collection.class)) {
+            return true;
+        }
+        if (paramType.isAssignableFrom(String.class)) {
+            return true;
+        }
+        if (paramType.isAssignableFrom(Boolean.class)) {
+            return true;
+        }
+        return false;
     }
 
     public static List<CommonDict> getMethodConstants(Map<String, Object> context) {

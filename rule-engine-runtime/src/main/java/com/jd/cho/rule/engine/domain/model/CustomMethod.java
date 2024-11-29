@@ -70,5 +70,10 @@ public class CustomMethod {
          * 参数类型
          */
         private Class<?> paramType;
+
+        /**
+         * 是否为系统类型
+         */
+        private Boolean isSysClassType;
     }
 }

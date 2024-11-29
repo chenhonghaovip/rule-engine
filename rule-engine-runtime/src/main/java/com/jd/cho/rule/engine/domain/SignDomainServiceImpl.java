@@ -30,6 +30,14 @@ public class SignDomainServiceImpl implements SignDomainService {
     @ApiMethod(code = "getSignInfo", name = "获取签名", returnType = FactorTypeEnum.TEXT, values = "")
     public String getSignInfo(String name, Date date, RuleFactor ruleFactor) {
         System.out.println("asfafa");
-        return "3423";
+        return "abc";
+    }
+
+    @Override
+    @ApiMethod(code = "getRuleFactor", name = "获取签名", returnType = FactorTypeEnum.TEXT, values = "")
+    public RuleFactor getRuleFactor() {
+        RuleFactor ruleFactor = new RuleFactor();
+        ruleFactor.setFactorCode("sdfafafa");
+        return ruleFactor;
     }
 }

@@ -20,14 +20,14 @@ public @interface ApiMethod {
      *
      * @return string
      */
-    String code();
+    String code() default "";
 
     /**
      * 方法名称
      *
      * @return 方法名称
      */
-    String name();
+    String name() default "";
 
     /**
      * 返回值类型

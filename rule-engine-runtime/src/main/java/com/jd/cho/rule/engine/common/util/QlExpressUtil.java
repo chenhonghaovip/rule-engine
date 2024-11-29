@@ -1,6 +1,5 @@
 package com.jd.cho.rule.engine.common.util;
 
-import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.jd.cho.rule.engine.domain.model.CustomMethod;
 import com.ql.util.express.ExpressRunner;
@@ -48,7 +47,6 @@ public class QlExpressUtil {
             RUNNER.addFunctionOfClassMethod("dateAfter", DateUtil.class, "dateAfter", new Class[]{Date.class, Date.class}, null);
             RUNNER.addFunctionOfClassMethod("dateEqualDay", DateUtil.class, "dateEqualDay", new Class[]{Date.class, Date.class}, null);
             RUNNER.addFunctionOfClassMethod("dateEqual", DateUtil.class, "dateEqual", new Class[]{Date.class, Date.class}, null);
-            RUNNER.addFunctionOfClassMethod("toString", JSON.class, "toJSONString", new Class[]{Object.class}, null);
 
             List<Method> customFunctions = AtomicCustomFunctionUtil.getCustomFunction();
             addFunctionOfClassMethod(customFunctions);

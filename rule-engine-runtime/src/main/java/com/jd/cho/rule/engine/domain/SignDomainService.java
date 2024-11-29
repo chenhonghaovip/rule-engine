@@ -14,4 +14,7 @@ public interface SignDomainService {
 
 
     String getSignInfo(String name, Date date, RuleFactor ruleFactor);
+
+
+    RuleFactor getRuleFactor();
 }

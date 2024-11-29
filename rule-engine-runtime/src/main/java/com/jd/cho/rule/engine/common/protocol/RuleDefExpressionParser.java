@@ -227,6 +227,12 @@ public class RuleDefExpressionParser extends CommonExpressionParser {
             for (int i = 0; i < customMethod.getCustomMethodParams().size(); i++) {
                 customMethodParam = customMethod.getCustomMethodParams().get(i);
                 BasicVar methodParam = basicVar.getParams().get(i);
+
+                // 如果方法参数类型为非内置，则方法入参无法接收前端常量，只能是变量或者方法
+                if (!customMethodParam.getIsSysClassType() && VarTypeEnum.CONSTANT.getCode().equals(methodParam.getRuleType())) {
+                    throw new BusinessException(BizErrorEnum.PARAM_TYPE_NOT_MATCH);
+                }
+
                 Object o = resolveBasicVar(methodParam, fieldMapping);
                 if (VarTypeEnum.CONSTANT.getCode().equals(methodParam.getRuleType()) && customMethodParam.getParamType().isAssignableFrom(String.class)) {
                     String s = "\"" + o + "\"";
@@ -235,7 +241,6 @@ public class RuleDefExpressionParser extends CommonExpressionParser {
                     params.add(o);
                 }
             }
-//            Object[] array = basicVar.getParams().stream().map(each -> resolveBasicVar(each, fieldMapping)).toArray();
             return String.format(customMethod.getMethodExpression(), params.toArray());
         }
         return null;

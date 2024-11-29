@@ -36,7 +36,7 @@ public class RuleEngineController {
     public Map<String, Object> execute(@RequestBody Map<String, Object> context) {
         String rulePackCode = (String) context.get("rulePackCode");
         context.put("b", new Date());
-        context.put("d", null);
+        context.put("d", new Date());
         ruleEngineService.execute(rulePackCode, context);
         if (Objects.nonNull(context.get(Dict.RESULT_ALIAS))) {
             Type type = new TypeToken<Map<String, Object>>() {
