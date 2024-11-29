@@ -1,4 +1,4 @@
-package com.jd.cho.rule.engine.service.dto;
+package com.jd.cho.rule.engine.adapter.dto;
 
 
 import lombok.Data;

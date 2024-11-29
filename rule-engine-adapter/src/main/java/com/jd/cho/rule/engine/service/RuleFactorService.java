@@ -1,8 +1,8 @@
 package com.jd.cho.rule.engine.service;
 
 import com.jd.cho.rule.engine.common.base.CommonDict;
-import com.jd.cho.rule.engine.service.dto.RuleFactorDTO;
-import com.jd.cho.rule.engine.service.dto.RuleFactorQueryDTO;
+import com.jd.cho.rule.engine.adapter.dto.RuleFactorDTO;
+import com.jd.cho.rule.engine.adapter.dto.RuleFactorQueryDTO;
 
 import java.util.List;
 import java.util.Map;

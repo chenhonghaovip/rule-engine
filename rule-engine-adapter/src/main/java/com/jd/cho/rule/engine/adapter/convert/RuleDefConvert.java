@@ -1,4 +1,4 @@
-package com.jd.cho.rule.engine.common.convert;
+package com.jd.cho.rule.engine.adapter.convert;
 
 import com.jd.cho.rule.engine.dal.DO.RuleDefDO;
 import com.jd.cho.rule.engine.domain.model.RuleDef;

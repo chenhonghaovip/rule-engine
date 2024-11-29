@@ -1,4 +1,4 @@
-package com.jd.cho.rule.engine.common.convert;
+package com.jd.cho.rule.engine.adapter.convert;
 
 import com.jd.cho.rule.engine.controller.VO.req.RulePackReq;
 import com.jd.cho.rule.engine.controller.VO.resp.RulePackResp;

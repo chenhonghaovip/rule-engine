@@ -1,7 +1,7 @@
 package com.jd.cho.rule.engine.service.impl;
 
 import com.jd.cho.rule.engine.common.base.CommonDict;
-import com.jd.cho.rule.engine.common.convert.RuleFactorConvert;
+import com.jd.cho.rule.engine.adapter.convert.RuleFactorConvert;
 import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
 import com.jd.cho.rule.engine.common.exceptions.BusinessException;
@@ -9,8 +9,8 @@ import com.jd.cho.rule.engine.common.util.AssertUtil;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.domain.model.RuleFactor;
 import com.jd.cho.rule.engine.service.RuleFactorService;
-import com.jd.cho.rule.engine.service.dto.RuleFactorDTO;
-import com.jd.cho.rule.engine.service.dto.RuleFactorQueryDTO;
+import com.jd.cho.rule.engine.adapter.dto.RuleFactorDTO;
+import com.jd.cho.rule.engine.adapter.dto.RuleFactorQueryDTO;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

@@ -1,7 +1,7 @@
 package com.jd.cho.rule.engine.service;
 
 import com.jd.cho.rule.engine.controller.VO.resp.RuleSceneResp;
-import com.jd.cho.rule.engine.service.dto.RuleSceneDTO;
+import com.jd.cho.rule.engine.adapter.dto.RuleSceneDTO;
 
 import java.util.List;
 

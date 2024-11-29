@@ -1,4 +1,4 @@
-package com.jd.cho.rule.engine.service.dto;
+package com.jd.cho.rule.engine.adapter.dto;
 
 import com.jd.cho.rule.engine.common.base.CommonDict;
 import com.jd.cho.rule.engine.common.enums.ConstantEnum;

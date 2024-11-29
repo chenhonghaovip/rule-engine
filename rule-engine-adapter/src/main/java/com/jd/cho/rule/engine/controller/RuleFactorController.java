@@ -1,11 +1,11 @@
 package com.jd.cho.rule.engine.controller;
 
 import com.jd.cho.rule.engine.common.base.CommonDict;
-import com.jd.cho.rule.engine.common.convert.RuleFactorConvert;
+import com.jd.cho.rule.engine.adapter.convert.RuleFactorConvert;
 import com.jd.cho.rule.engine.controller.VO.req.RuleFactorReq;
 import com.jd.cho.rule.engine.service.RuleFactorService;
-import com.jd.cho.rule.engine.service.dto.RuleFactorDTO;
-import com.jd.cho.rule.engine.service.dto.RuleFactorQueryDTO;
+import com.jd.cho.rule.engine.adapter.dto.RuleFactorDTO;
+import com.jd.cho.rule.engine.adapter.dto.RuleFactorQueryDTO;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
