@@ -1,10 +1,10 @@
 package com.jd.cho.rule.engine.domain.model;
 
 import com.jd.cho.rule.engine.common.base.CommonDict;
-import com.jd.cho.rule.engine.core.convert.RuleFactorConvert;
 import com.jd.cho.rule.engine.common.enums.ConstantEnum;
 import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
 import com.jd.cho.rule.engine.common.enums.FactorTypeEnum;
+import com.jd.cho.rule.engine.core.convert.CoreRuleFactorConvert;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -108,7 +108,7 @@ public class RuleFactor {
     private String extInfo;
 
     public static RuleFactor copyEntity(RuleFactor ruleFactor) {
-        return RuleFactorConvert.INSTANCE.doToEntity(ruleFactor);
+        return CoreRuleFactorConvert.INSTANCE.doToEntity(ruleFactor);
     }
 
 }

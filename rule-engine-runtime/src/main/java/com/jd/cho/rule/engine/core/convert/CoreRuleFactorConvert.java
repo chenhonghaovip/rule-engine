@@ -9,8 +9,8 @@ import org.mapstruct.factory.Mappers;
  * @date 2024/11/28
  */
 @Mapper(componentModel = "spring")
-public interface RuleFactorConvert {
-    RuleFactorConvert INSTANCE = Mappers.getMapper(RuleFactorConvert.class);
+public interface CoreRuleFactorConvert {
+    CoreRuleFactorConvert INSTANCE = Mappers.getMapper(CoreRuleFactorConvert.class);
 
     RuleFactor doToEntity(RuleFactor ruleFactor);
 }
