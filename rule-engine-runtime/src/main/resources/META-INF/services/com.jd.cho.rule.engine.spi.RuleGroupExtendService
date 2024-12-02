@@ -1,2 +1,2 @@
-com.jd.cho.rule.engine.group.PriorityOrderMatchRuleGroup
-com.jd.cho.rule.engine.group.PriorityOrderSeqRuleGroup
+com.jd.cho.rule.engine.core.extend.PriorityOrderMatchRuleGroup
+com.jd.cho.rule.engine.core.extend.PriorityOrderSeqRuleGroup

@@ -34,7 +34,7 @@ public class CoreDecisionSetRuleExecutor_MethodTest {
     @BeforeEach
     void setUp() {
         ruleConfigGateway = Mockito.mock(RuleConfigGateway.class);
-        executor = new CoreDecisionSetRuleExecutor(ruleConfigGateway);
+        executor = new CoreDecisionSetRuleExecutor(ruleConfigGateway, null);
         factorValueService = new FactorValueServiceImpl(ruleConfigGateway);
         staticApplicationUtils = Mockito.mockStatic(ApplicationUtils.class);
         staticApplicationUtils.when(() -> ApplicationUtils.getBeans(FactorValueService.class)).thenReturn(factorValueService);

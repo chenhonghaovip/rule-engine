@@ -31,7 +31,7 @@ public class CoreDecisionSetRuleExecutor_FactorTest {
     @BeforeEach
     void setUp() {
         ruleConfigGateway = Mockito.mock(RuleConfigGateway.class);
-        executor = new CoreDecisionSetRuleExecutor(ruleConfigGateway);
+        executor = new CoreDecisionSetRuleExecutor(ruleConfigGateway, null);
         factorValueService = new FactorValueServiceImpl(ruleConfigGateway);
         staticApplicationUtils = Mockito.mockStatic(ApplicationUtils.class);
         staticApplicationUtils.when(() -> ApplicationUtils.getBeans(FactorValueService.class)).thenReturn(factorValueService);
@@ -40,6 +40,38 @@ public class CoreDecisionSetRuleExecutor_FactorTest {
     @AfterEach
     void tearDown() {
         staticApplicationUtils.close();
+    }
+
+    @DisplayName("condition(single expr): factorOne = 1xx")
+    @Test
+    void test_factor_eq_const_xxx() {
+        final String factorOne = "factorOne";
+        final String factorOneCode = factorOne + "Code";
+        final Integer constOne = 1;
+        final RuleDef ruleDef = new RuleDef() {{
+            this.setPriority(1);
+            this.setRuleCondition(new RuleCondition() {{
+                this.setCompareOperation(ExpressOperationEnum.NUM_EQUAL.getOperator());
+                this.setLeftVar(new BasicVar() {{
+                    this.setRuleType(VarTypeEnum.FACTOR.getCode());
+                    this.setCode(factorOneCode);
+                    this.setOriginalFactorCode(factorOne);
+                }});
+                this.setRightVar(new BasicVar() {{
+                    this.setRuleType(VarTypeEnum.CONSTANT.getCode());
+                    this.setValues(constOne);
+                }});
+            }});
+        }};
+
+        Mockito.when(ruleConfigGateway.queryFactorCodes()).thenReturn(new ArrayList<RuleFactor>() {{
+            this.add(RuleFactor.builder().factorCode(factorOne).factorScript("return 1;").build());
+        }});
+
+        final Map<String, Object> context = new HashMap<>();
+        context.put(factorOneCode, 100);
+        boolean matched = executor.execute(ruleDef, context);
+        Assertions.assertThat(matched).isFalse();
     }
 
     @DisplayName("condition(single expr): factorOne = 1")

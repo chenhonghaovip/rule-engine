@@ -11,11 +11,11 @@ import com.jd.cho.rule.engine.common.protocol.ProtocolStrategy;
 import com.jd.cho.rule.engine.common.protocol.RuleDefExpressionParser;
 import com.jd.cho.rule.engine.common.util.QlExpressUtil;
 import com.jd.cho.rule.engine.core.DecisionSetRuleExecutor;
+import com.jd.cho.rule.engine.core.RuleGroupExtendServiceFactory;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.domain.model.RuleAction;
 import com.jd.cho.rule.engine.domain.model.RuleDef;
 import com.jd.cho.rule.engine.domain.model.RulePack;
-import com.jd.cho.rule.engine.group.RuleGroupRunStrategy;
 import com.jd.cho.rule.engine.spi.RuleGroupExtendService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +33,7 @@ import java.util.Objects;
 public class CoreDecisionSetRuleExecutor implements DecisionSetRuleExecutor {
 
     private RuleConfigGateway ruleConfigGateway;
+    private RuleGroupExtendServiceFactory ruleGroupExtendServiceFactory;
 
     @Override
     public boolean execute(RuleDef ruleDef, Map<String, Object> context) {
@@ -49,7 +50,7 @@ public class CoreDecisionSetRuleExecutor implements DecisionSetRuleExecutor {
     public boolean execute(RulePack rulePack, Map<String, Object> context) {
         if (Arrays.asList(RulePackTypeEnum.DECISION_SET, RulePackTypeEnum.NORMAL).contains(rulePack.getRulePackType())) {
             List<RuleDef> rules = JSON.parseArray(rulePack.getRuleContent(), RuleDef.class);
-            RuleGroupExtendService ruleGroup = RuleGroupRunStrategy.getRuleGroup(rulePack.getRuleArrangeStrategy());
+            RuleGroupExtendService ruleGroup = ruleGroupExtendServiceFactory.get(rulePack.getRuleArrangeStrategy());
             return ruleGroup.execute(rules, context);
         }
         //todo 支持其余模式下的决策类型，目前不使用，没有开发

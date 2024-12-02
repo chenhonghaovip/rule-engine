@@ -1,9 +1,10 @@
-package com.jd.cho.rule.engine.group;
+package com.jd.cho.rule.engine.core.extend;
 
 import com.jd.cho.rule.engine.common.util.ApplicationUtils;
 import com.jd.cho.rule.engine.domain.gateway.RuleEngineGateway;
 import com.jd.cho.rule.engine.domain.model.RuleDef;
 import com.jd.cho.rule.engine.spi.RuleGroupExtendService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ import java.util.Map;
  * @author chenhonghao12
  * @version 1.0
  */
+@Service
 public class PriorityOrderSeqRuleGroup implements RuleGroupExtendService {
 
     @Override
@@ -34,6 +36,4 @@ public class PriorityOrderSeqRuleGroup implements RuleGroupExtendService {
         }
         return true;
     }
-
-
 }
