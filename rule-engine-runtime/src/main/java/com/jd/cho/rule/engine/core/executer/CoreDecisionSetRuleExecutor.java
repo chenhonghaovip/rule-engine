@@ -7,7 +7,7 @@ import com.google.gson.reflect.TypeToken;
 import com.jd.cho.rule.engine.common.cache.ContextHolder;
 import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.enums.RulePackTypeEnum;
-import com.jd.cho.rule.engine.common.protocol.RuleDefExpressionParser;
+import com.jd.cho.rule.engine.common.protocol.RuleDefConditionExpressionBuilder;
 import com.jd.cho.rule.engine.common.util.QlExpressUtil;
 import com.jd.cho.rule.engine.core.DecisionSetRuleExecutor;
 import com.jd.cho.rule.engine.core.RuleGroupExtendServiceFactory;
@@ -30,11 +30,12 @@ import java.util.Objects;
 @AllArgsConstructor
 public class CoreDecisionSetRuleExecutor implements DecisionSetRuleExecutor {
     private RuleGroupExtendServiceFactory ruleGroupExtendServiceFactory;
+    private RuleDefConditionExpressionBuilder ruleDefConditionExpressionBuilder;
 
     @Override
     public boolean execute(RuleDef ruleDef, Map<String, Object> context) {
         Map<String, String> fieldMapping = Maps.newHashMap();
-        String statement = RuleDefExpressionParser.buildWhenExpression(ruleDef.getRuleCondition(), fieldMapping);
+        String statement = ruleDefConditionExpressionBuilder.buildWhenExpression(ruleDef.getRuleCondition(), fieldMapping);
         if (this.executeCondition(statement, context, fieldMapping)) {
             this.executeAction(ruleDef.getRuleActions(), context);
             return true;

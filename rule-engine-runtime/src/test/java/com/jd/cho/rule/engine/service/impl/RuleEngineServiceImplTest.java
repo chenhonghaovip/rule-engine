@@ -3,6 +3,7 @@ package com.jd.cho.rule.engine.service.impl;
 import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
 import com.jd.cho.rule.engine.common.enums.RulePackTypeEnum;
 import com.jd.cho.rule.engine.common.enums.VarTypeEnum;
+import com.jd.cho.rule.engine.common.protocol.RuleDefConditionExpressionBuilder;
 import com.jd.cho.rule.engine.common.util.ApplicationUtils;
 import com.jd.cho.rule.engine.core.AcceptableRulePackExecutor;
 import com.jd.cho.rule.engine.core.DispatchRulePackExecutor;
@@ -50,7 +51,7 @@ class RuleEngineServiceImplTest {
     protected void setUp() {
         ruleGroupExtendServiceFactory = Mockito.mock(RuleGroupExtendServiceFactory.class);
         acceptableRulePackExecutors = new ArrayList<AcceptableRulePackExecutor>() {{
-            this.add(new CoreDecisionSetRuleExecutor(ruleGroupExtendServiceFactory));
+            this.add(new CoreDecisionSetRuleExecutor(ruleGroupExtendServiceFactory, new RuleDefConditionExpressionBuilder()));
         }};
 
         ruleConfigGateway = Mockito.mock(RuleConfigGateway.class);

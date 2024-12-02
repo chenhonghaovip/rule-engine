@@ -1,5 +1,6 @@
 package com.jd.cho.rule.engine.core.executer;
 
+import com.jd.cho.rule.engine.common.protocol.RuleDefConditionExpressionBuilder;
 import com.jd.cho.rule.engine.common.util.ApplicationUtils;
 import com.jd.cho.rule.engine.core.RuleGroupExtendServiceFactory;
 import com.jd.cho.rule.engine.domain.atomic.FactorValueService;
@@ -20,7 +21,7 @@ abstract class AbstractCoreDecisionSetRuleExecutorTest {
     @BeforeEach
     protected void setUp() {
         ruleGroupExtendServiceFactory = Mockito.mock(RuleGroupExtendServiceFactory.class);
-        executor = new CoreDecisionSetRuleExecutor(ruleGroupExtendServiceFactory);
+        executor = new CoreDecisionSetRuleExecutor(ruleGroupExtendServiceFactory, new RuleDefConditionExpressionBuilder());
 
         ruleConfigGateway = Mockito.mock(RuleConfigGateway.class);
         factorValueService = new FactorValueServiceImpl(ruleConfigGateway);
