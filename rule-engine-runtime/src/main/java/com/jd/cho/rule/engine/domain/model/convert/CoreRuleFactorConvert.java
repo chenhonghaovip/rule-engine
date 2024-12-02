@@ -1,4 +1,4 @@
-package com.jd.cho.rule.engine.core.convert;
+package com.jd.cho.rule.engine.domain.model.convert;
 
 import com.jd.cho.rule.engine.domain.model.RuleFactor;
 import org.mapstruct.Mapper;

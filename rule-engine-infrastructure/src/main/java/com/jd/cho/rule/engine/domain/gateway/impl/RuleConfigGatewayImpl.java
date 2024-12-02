@@ -11,17 +11,18 @@ import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
 import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
 import com.jd.cho.rule.engine.common.exceptions.BusinessException;
-import com.jd.cho.rule.engine.common.protocol.ProtocolStrategy;
+import com.jd.cho.rule.engine.common.protocol.RulePackDTO;
+import com.jd.cho.rule.engine.common.protocol.checker.RulePackDTOChecker;
 import com.jd.cho.rule.engine.common.util.AssertUtil;
 import com.jd.cho.rule.engine.common.util.AtomicLoginUserUtil;
 import com.jd.cho.rule.engine.common.util.AtomicRuleFactorUtil;
 import com.jd.cho.rule.engine.common.util.MethodUtil;
+import com.jd.cho.rule.engine.core.factor.RulePackDTOFactorParser;
 import com.jd.cho.rule.engine.dal.DO.*;
 import com.jd.cho.rule.engine.dal.mapper.*;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.domain.model.*;
 import com.jd.cho.rule.engine.infra.convert.*;
-import com.jd.cho.rule.engine.service.dto.RulePackDTO;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -60,6 +61,11 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
 
     @Resource
     private RuleFactorGroupMapper ruleFactorGroupMapper;
+
+    @Resource
+    private RulePackDTOChecker rulePackDTOChecker;
+    @Resource
+    private RulePackDTOFactorParser rulePackDTOFactorParser;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -425,7 +431,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
      * @return key:因子-value:因子入参
      */
     private Map<String, RuleFactor> getFactorScriptParam(RulePackDTO rulePackDTO) {
-        Set<String> factorCodes = ProtocolStrategy.getFactorScriptParam(rulePackDTO);
+        Set<String> factorCodes = rulePackDTOFactorParser.getFactorScriptParam(rulePackDTO);
 
         List<RuleFactorDO> ruleFactors = ruleFactorMapper.select(s -> s.where(RuleFactorDynamicSqlSupport.yn, isEqualTo(true)).and(RuleFactorDynamicSqlSupport.factorCode, isIn(factorCodes)));
         if (ruleFactors.size() != factorCodes.size()) {
@@ -446,7 +452,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     private String insertRuleGroup(RulePackDTO rulePackDTO, int version) {
         final Map<String, RuleFactor> factorMaps = getFactorScriptParam(rulePackDTO);
 
-        ProtocolStrategy.checkRuleCondition(rulePackDTO, factorMaps);
+        rulePackDTOChecker.check(rulePackDTO, factorMaps);
 
         Map<String, List<String>> factorScriptParam = factorMaps.values().stream().filter(each -> StringUtils.isNotBlank(each.getFactorScriptParam())).collect(Collectors.toMap(RuleFactor::getFactorCode, each -> Arrays.stream(each.getFactorScriptParam().split(Dict.SPLIT)).collect(Collectors.toList())));
 

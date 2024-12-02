@@ -2,12 +2,12 @@ package com.jd.cho.rule.engine.service.impl;
 
 import com.jd.cho.rule.engine.adapter.convert.RulePackConvert;
 import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
+import com.jd.cho.rule.engine.common.protocol.RulePackDTO;
 import com.jd.cho.rule.engine.common.util.AssertUtil;
 import com.jd.cho.rule.engine.core.extend.PriorityOrderMatchRuleGroup;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.domain.model.RulePack;
 import com.jd.cho.rule.engine.service.RulePackService;
-import com.jd.cho.rule.engine.service.dto.RulePackDTO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;

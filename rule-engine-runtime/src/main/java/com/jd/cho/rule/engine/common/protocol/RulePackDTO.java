@@ -1,4 +1,4 @@
-package com.jd.cho.rule.engine.service.dto;
+package com.jd.cho.rule.engine.common.protocol;
 
 import com.jd.cho.rule.engine.common.enums.RulePackTypeEnum;
 import lombok.Data;

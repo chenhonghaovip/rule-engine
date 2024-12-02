@@ -1,6 +1,6 @@
 package com.jd.cho.rule.engine.service;
 
-import com.jd.cho.rule.engine.service.dto.RulePackDTO;
+import com.jd.cho.rule.engine.common.protocol.RulePackDTO;
 
 import java.util.List;
 

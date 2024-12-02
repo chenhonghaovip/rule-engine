@@ -1,8 +1,8 @@
 package com.jd.cho.rule.engine.domain.gateway;
 
 import com.jd.cho.rule.engine.common.base.CommonDict;
+import com.jd.cho.rule.engine.common.protocol.RulePackDTO;
 import com.jd.cho.rule.engine.domain.model.*;
-import com.jd.cho.rule.engine.service.dto.RulePackDTO;
 
 import java.util.List;
 import java.util.Map;

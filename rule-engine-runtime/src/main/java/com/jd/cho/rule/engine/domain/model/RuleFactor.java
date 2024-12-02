@@ -4,7 +4,7 @@ import com.jd.cho.rule.engine.common.base.CommonDict;
 import com.jd.cho.rule.engine.common.enums.ConstantEnum;
 import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
 import com.jd.cho.rule.engine.common.enums.FactorTypeEnum;
-import com.jd.cho.rule.engine.core.convert.CoreRuleFactorConvert;
+import com.jd.cho.rule.engine.domain.model.convert.CoreRuleFactorConvert;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

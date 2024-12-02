@@ -1,10 +1,10 @@
 package com.jd.cho.rule.engine.controller;
 
 import com.jd.cho.rule.engine.adapter.convert.RulePackConvert;
+import com.jd.cho.rule.engine.common.protocol.RulePackDTO;
 import com.jd.cho.rule.engine.controller.VO.req.RulePackReq;
 import com.jd.cho.rule.engine.controller.VO.resp.RulePackResp;
 import com.jd.cho.rule.engine.service.RulePackService;
-import com.jd.cho.rule.engine.service.dto.RulePackDTO;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
