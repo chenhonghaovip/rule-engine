@@ -312,6 +312,7 @@
                         <exclude>**/dict/*</exclude>
                         <exclude>**/model/*</exclude>
                         <exclude>**/convert/*</exclude>
+                        <exclude>**/exceptions/*</exclude>
                         <exclude>**/ContextHolder.class</exclude>
                     </excludes>
                 </configuration>
