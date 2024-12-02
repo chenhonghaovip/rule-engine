@@ -5,7 +5,7 @@ import com.google.common.collect.Maps;
 import com.jd.cho.rule.engine.common.base.CommonDict;
 import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
 import com.jd.cho.rule.engine.common.exceptions.BusinessException;
-import com.jd.cho.rule.engine.spi.RuleGroupExtendService;
+import com.jd.cho.rule.engine.spi.RuleDefsExecutor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -19,11 +19,11 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 public class RuleGroupRunStrategy {
-    private static final Map<String, RuleGroupExtendService> SERVICE_HASH_MAP = Maps.newHashMap();
+    private static final Map<String, RuleDefsExecutor> SERVICE_HASH_MAP = Maps.newHashMap();
 
     static {
-        ServiceLoader<RuleGroupExtendService> load = ServiceLoader.load(RuleGroupExtendService.class);
-        for (RuleGroupExtendService abstractRuleGroup : load) {
+        ServiceLoader<RuleDefsExecutor> load = ServiceLoader.load(RuleDefsExecutor.class);
+        for (RuleDefsExecutor abstractRuleGroup : load) {
             String code = abstractRuleGroup.getCode();
             if (SERVICE_HASH_MAP.containsKey(code)) {
                 log.error("规则组code{}已经存在，请修改避免重复", code);
@@ -48,7 +48,7 @@ public class RuleGroupRunStrategy {
      * @param code 调度code
      * @return RuleGroupExtendService
      */
-    public static RuleGroupExtendService getRuleGroup(String code) {
+    public static RuleDefsExecutor getRuleGroup(String code) {
         return SERVICE_HASH_MAP.get(code);
     }
 }
