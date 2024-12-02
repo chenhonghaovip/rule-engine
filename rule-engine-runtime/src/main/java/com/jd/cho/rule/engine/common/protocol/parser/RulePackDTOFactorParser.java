@@ -1,4 +1,4 @@
-package com.jd.cho.rule.engine.core.factor;
+package com.jd.cho.rule.engine.common.protocol.parser;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Sets;
