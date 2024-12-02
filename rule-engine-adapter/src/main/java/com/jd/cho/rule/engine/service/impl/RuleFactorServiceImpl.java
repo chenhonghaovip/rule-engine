@@ -1,16 +1,19 @@
 package com.jd.cho.rule.engine.service.impl;
 
-import com.jd.cho.rule.engine.common.base.CommonDict;
+import com.google.common.collect.Lists;
 import com.jd.cho.rule.engine.adapter.convert.RuleFactorConvert;
+import com.jd.cho.rule.engine.adapter.dto.RuleFactorDTO;
+import com.jd.cho.rule.engine.adapter.dto.RuleFactorQueryDTO;
+import com.jd.cho.rule.engine.common.base.CommonDict;
 import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
 import com.jd.cho.rule.engine.common.exceptions.BusinessException;
 import com.jd.cho.rule.engine.common.util.AssertUtil;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.domain.model.RuleFactor;
+import com.jd.cho.rule.engine.domain.model.RuleFactorGroup;
 import com.jd.cho.rule.engine.service.RuleFactorService;
-import com.jd.cho.rule.engine.adapter.dto.RuleFactorDTO;
-import com.jd.cho.rule.engine.adapter.dto.RuleFactorQueryDTO;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -52,15 +55,27 @@ public class RuleFactorServiceImpl implements RuleFactorService {
             throw new BusinessException("场景编码不能为空");
         }
         String sceneCode = (String) context.get(Dict.SCENE_CODE);
-        List<RuleFactor> ruleFactors = ruleConfigGateway.queryBySceneCode(sceneCode, context);
-        Map<String, List<RuleFactor>> groupCodeMaps = ruleFactors.stream().collect(Collectors.groupingBy(RuleFactor::getGroupCode));
 
-        return groupCodeMaps.entrySet().stream()
-                .map(each -> RuleFactorQueryDTO.builder()
-                        .groupCode(each.getKey())
-                        .groupName(each.getValue().stream().findFirst().orElse(new RuleFactor()).getGroupName())
-                        .ruleFactorBeans(each.getValue().stream().map(RuleFactorConvert.INSTANCE::doToDTO).collect(Collectors.toList())).build()).collect(Collectors.toList());
+        List<String> groupCodes = ruleConfigGateway.queryRuleScene(sceneCode);
+        List<RuleFactorGroup> ruleFactorGroups = ruleConfigGateway.queryRuleFactorGroupWithTree(groupCodes);
 
+        List<RuleFactor> ruleFactors = ruleConfigGateway.queryFactorBySceneCode(groupCodes, context);
+        Map<String, List<RuleFactor>> groupFactorCodeMaps = ruleFactors.stream().collect(Collectors.groupingBy(RuleFactor::getGroupCode));
+
+        return buildTree(ruleFactorGroups, groupFactorCodeMaps);
+    }
+
+
+    private List<RuleFactorQueryDTO> buildTree(List<RuleFactorGroup> currentList, Map<String, List<RuleFactor>> groupFactorCodeMaps) {
+        if (CollectionUtils.isNotEmpty(currentList)) {
+            return currentList.stream().map(each -> RuleFactorQueryDTO.builder()
+                    .groupCode(each.getGroupCode())
+                    .groupName(each.getGroupName())
+                    .ruleFactorGroups(buildTree(each.getRuleFactorGroups(), groupFactorCodeMaps))
+                    .ruleFactorBeans(groupFactorCodeMaps.getOrDefault(each.getGroupCode(), Lists.newArrayList()).stream().map(RuleFactorConvert.INSTANCE::doToDTO).collect(Collectors.toList()))
+                    .build()).collect(Collectors.toList());
+        }
+        return Lists.newArrayList();
     }
 
     @Override

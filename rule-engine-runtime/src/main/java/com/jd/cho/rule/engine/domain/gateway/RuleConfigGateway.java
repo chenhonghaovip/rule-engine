@@ -23,6 +23,13 @@ public interface RuleConfigGateway {
     List<RuleScene> queryRuleScene();
 
     /**
+     * 查询规则场景
+     *
+     * @return List<RuleScene>
+     */
+    List<String> queryRuleScene(String sceneCode);
+
+    /**
      * 创建规则场景
      *
      * @return List<RuleScene>
@@ -73,6 +80,20 @@ public interface RuleConfigGateway {
     List<RuleFactorGroup> queryRuleFactorGroup(List<String> groupCodes);
 
     /**
+     * 查询规则因子分组（转换为树形结构）
+     *
+     * @return List<RuleScene>
+     */
+    List<RuleFactorGroup> queryRuleFactorGroupWithChildren(List<String> groupCodes);
+
+    /**
+     * 查询规则因子分组（转换为树形结构）
+     *
+     * @return List<RuleScene>
+     */
+    List<RuleFactorGroup> queryRuleFactorGroupWithTree(List<String> groupCodes);
+
+    /**
      * 创建规则因子分组
      *
      * @return List<RuleScene>
@@ -97,10 +118,10 @@ public interface RuleConfigGateway {
     /**
      * 通过场景code获取规则因子
      *
-     * @param sceneCode 场景code
+     * @param groupCodes 分组code
      * @return 规则因子
      */
-    List<RuleFactor> queryBySceneCode(String sceneCode, Map<String, Object> context);
+    List<RuleFactor> queryFactorBySceneCode(List<String> groupCodes, Map<String, Object> context);
 
     /**
      * 查询当前租户下全部的规则因子

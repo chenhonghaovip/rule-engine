@@ -40,7 +40,7 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = NullPointerException.class)
     public BaseResponse<Void> exceptionHandler(NullPointerException e, HttpServletRequest httpServletRequest) {
-        log.error("发生空指针异常！原因是:{}", e.getMessage());
+        log.error("发生空指针异常！原因是:{}", e.getMessage(), e);
         return BaseResponse.error(e.getMessage());
     }
 

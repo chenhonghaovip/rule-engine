@@ -20,10 +20,7 @@ import com.jd.cho.rule.engine.dal.DO.*;
 import com.jd.cho.rule.engine.dal.mapper.*;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.domain.model.*;
-import com.jd.cho.rule.engine.infra.convert.RuleFactorDOConvert;
-import com.jd.cho.rule.engine.infra.convert.RulePackDOConvert;
-import com.jd.cho.rule.engine.infra.convert.RuleSceneActionDOConvert;
-import com.jd.cho.rule.engine.infra.convert.RuleSceneDOConvert;
+import com.jd.cho.rule.engine.infra.convert.*;
 import com.jd.cho.rule.engine.service.dto.RulePackDTO;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -103,8 +100,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public List<RuleScene> queryRuleScene() {
-        String tenant = AtomicLoginUserUtil.getLoginUserInfo().getTenant();
-        List<RuleSceneDO> ruleSceneList = ruleSceneMapper.select(s -> s.where(RuleSceneDynamicSqlSupport.yn, isEqualTo(true)).and(RuleSceneDynamicSqlSupport.tenant, isEqualTo(tenant)));
+        List<RuleSceneDO> ruleSceneList = ruleSceneMapper.select(s -> s.where(RuleSceneDynamicSqlSupport.yn, isEqualTo(true)));
 
         List<String> groupCodes = Lists.newArrayList();
         List<String> sceneCodes = Lists.newArrayList();
@@ -126,6 +122,20 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
             ruleScene.setRuleFactorGroups(groups);
             return ruleScene;
         }).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> queryRuleScene(String sceneCode) {
+        Optional<RuleSceneDO> optionalRuleScene = ruleSceneMapper.selectOne(s -> s.where(RuleSceneDynamicSqlSupport.sceneCode, isEqualTo(sceneCode)).and(RuleSceneDynamicSqlSupport.yn, isEqualTo(true)));
+        if (!optionalRuleScene.isPresent()) {
+            return Lists.newArrayList();
+        }
+        RuleSceneDO ruleSceneDO = optionalRuleScene.get();
+        List<String> groupCodes = Arrays.stream(ruleSceneDO.getGroupCode().split(Dict.SPLIT)).collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(groupCodes)) {
+            return Lists.newArrayList();
+        }
+        return groupCodes;
     }
 
     @Override
@@ -180,14 +190,55 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     public List<RuleFactorGroup> queryRuleFactorGroup() {
         UserInfo loginUserInfo = AtomicLoginUserUtil.getLoginUserInfo();
         List<RuleFactorGroupDO> list = ruleFactorGroupMapper.select(s -> s.where(RuleFactorGroupDynamicSqlSupport.yn, isEqualTo(true)).and(RuleFactorGroupDynamicSqlSupport.tenant, isEqualTo(loginUserInfo.getTenant())));
-        return list.stream().map(each -> RuleFactorGroup.builder().groupCode(each.getGroupCode()).groupName(each.getGroupName()).id(each.getId()).build()).collect(Collectors.toList());
+        return list.stream().map(RuleFactorGroupDOConvert.INSTANCE::doToEntity).collect(Collectors.toList());
     }
 
     @Override
     public List<RuleFactorGroup> queryRuleFactorGroup(List<String> groupCodes) {
-        UserInfo loginUserInfo = AtomicLoginUserUtil.getLoginUserInfo();
-        List<RuleFactorGroupDO> list = ruleFactorGroupMapper.select(s -> s.where(RuleFactorGroupDynamicSqlSupport.yn, isEqualTo(true)).and(RuleFactorGroupDynamicSqlSupport.tenant, isEqualTo(loginUserInfo.getTenant())).and(RuleFactorGroupDynamicSqlSupport.groupCode, isIn(groupCodes)));
-        return list.stream().map(each -> RuleFactorGroup.builder().groupCode(each.getGroupCode()).groupName(each.getGroupName()).id(each.getId()).build()).collect(Collectors.toList());
+        List<RuleFactorGroupDO> allGroups = ruleFactorGroupMapper.select(s -> s.where(RuleFactorGroupDynamicSqlSupport.yn, isEqualTo(true)).and(RuleFactorGroupDynamicSqlSupport.groupCode, isIn(groupCodes)));
+        return allGroups.stream().map(RuleFactorGroupDOConvert.INSTANCE::doToEntity).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<RuleFactorGroup> queryRuleFactorGroupWithChildren(List<String> groupCodes) {
+        List<RuleFactorGroupDO> allGroups = ruleFactorGroupMapper.select(s -> s.where(RuleFactorGroupDynamicSqlSupport.yn, isEqualTo(true)));
+        List<RuleFactorGroup> allGroupEntities = allGroups.stream().map(RuleFactorGroupDOConvert.INSTANCE::doToEntity).collect(Collectors.toList());
+
+        List<RuleFactorGroup> rootGroups = allGroupEntities.stream().filter(each -> groupCodes.contains(each.getGroupCode())).collect(Collectors.toList());
+
+        List<RuleFactorGroup> result = Lists.newArrayList(rootGroups);
+        rootGroups.forEach(each -> findChildren(each, allGroupEntities, result));
+        return result;
+    }
+
+    @Override
+    public List<RuleFactorGroup> queryRuleFactorGroupWithTree(List<String> groupCodes) {
+        List<RuleFactorGroup> allGroupEntities = queryRuleFactorGroupWithChildren(groupCodes);
+        List<RuleFactorGroup> rootGroups = allGroupEntities.stream().filter(each -> groupCodes.contains(each.getGroupCode())).collect(Collectors.toList());
+        rootGroups.forEach(each -> buildGroupTree(each, allGroupEntities));
+        return rootGroups;
+    }
+
+    private void findChildren(RuleFactorGroup root, List<RuleFactorGroup> allChildren, List<RuleFactorGroup> result) {
+        if (CollectionUtils.isNotEmpty(allChildren)) {
+            List<RuleFactorGroup> groups = allChildren.stream().filter(each -> root.getGroupCode().equals(each.getParentGroupCode())).collect(Collectors.toList());
+            result.addAll(groups);
+            groups.forEach(each -> findChildren(each, allChildren, result));
+        }
+    }
+
+    /**
+     * 构建树形结构
+     *
+     * @param root      根节点
+     * @param allChilds 所有叶子节点
+     */
+    private void buildGroupTree(RuleFactorGroup root, List<RuleFactorGroup> allChilds) {
+        if (CollectionUtils.isNotEmpty(allChilds)) {
+            List<RuleFactorGroup> groups = allChilds.stream().filter(each -> root.getGroupCode().equals(each.getParentGroupCode())).collect(Collectors.toList());
+            root.setRuleFactorGroups(groups);
+            groups.forEach(each -> buildGroupTree(each, allChilds));
+        }
     }
 
     @Override
@@ -233,24 +284,17 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     }
 
     @Override
-    public List<RuleFactor> queryBySceneCode(String sceneCode, Map<String, Object> context) {
-        Optional<RuleSceneDO> optionalRuleScene = ruleSceneMapper.selectOne(s -> s.where(RuleSceneDynamicSqlSupport.sceneCode, isEqualTo(sceneCode)).and(RuleSceneDynamicSqlSupport.yn, isEqualTo(true)));
-        if (!optionalRuleScene.isPresent()) {
-            return Lists.newArrayList();
-        }
-        RuleSceneDO ruleSceneDO = optionalRuleScene.get();
-        List<String> groupCodes = Arrays.stream(ruleSceneDO.getGroupCode().split(Dict.SPLIT)).collect(Collectors.toList());
-        if (CollectionUtils.isEmpty(groupCodes)) {
-            return Lists.newArrayList();
-        }
+    public List<RuleFactor> queryFactorBySceneCode(List<String> groupCodes, Map<String, Object> context) {
+        List<RuleFactorGroup> ruleFactorGroups = this.queryRuleFactorGroupWithChildren(groupCodes);
+        List<String> allGroupCodes = ruleFactorGroups.stream().map(RuleFactorGroup::getGroupCode).collect(Collectors.toList());
 
-        List<RuleFactorGroupDO> groupList = ruleFactorGroupMapper.select(s -> s.where(RuleFactorGroupDynamicSqlSupport.groupCode, isIn(groupCodes)));
-        Map<String, String> groupMaps = groupList.stream().collect(Collectors.toMap(RuleFactorGroupDO::getGroupCode, RuleFactorGroupDO::getGroupName));
-        List<RuleFactorDO> ruleFactors = ruleFactorMapper.select(s -> s.where(RuleFactorDynamicSqlSupport.groupCode, isIn(groupCodes)).and(RuleFactorDynamicSqlSupport.yn, isEqualTo(true)));
+        Map<String, RuleFactorGroup> groupMaps = ruleFactorGroups.stream().collect(Collectors.toMap(RuleFactorGroup::getGroupCode, Function.identity()));
+        List<RuleFactorDO> ruleFactors = ruleFactorMapper.select(s -> s.where(RuleFactorDynamicSqlSupport.groupCode, isIn(allGroupCodes)).and(RuleFactorDynamicSqlSupport.yn, isEqualTo(true)));
 
         List<RuleFactor> ruleFactorList = ruleFactors.stream().map(each -> {
             RuleFactor ruleFactor = RuleFactorDOConvert.INSTANCE.doToEntity(each);
-            ruleFactor.setGroupName(groupMaps.get(each.getGroupCode()));
+            ruleFactor.setGroupName(groupMaps.get(each.getGroupCode()).getGroupName());
+            ruleFactor.setParentGroupCode(groupMaps.get(each.getGroupCode()).getParentGroupCode());
             ruleFactor.setConstantValues(MethodUtil.getDict(each.getConstantType(), each.getConstantValue(), context));
             ruleFactor.setExpressOperationList(ExpressOperationEnum.MAP.get(each.getFactorType()));
             return ruleFactor;
@@ -404,9 +448,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
 
         ProtocolStrategy.checkRuleCondition(rulePackDTO, factorMaps);
 
-        Map<String, List<String>> factorScriptParam = factorMaps.values().stream()
-                .filter(each -> StringUtils.isNotBlank(each.getFactorScriptParam()))
-                .collect(Collectors.toMap(RuleFactor::getFactorCode, each -> Arrays.stream(each.getFactorScriptParam().split(Dict.SPLIT)).collect(Collectors.toList())));
+        Map<String, List<String>> factorScriptParam = factorMaps.values().stream().filter(each -> StringUtils.isNotBlank(each.getFactorScriptParam())).collect(Collectors.toMap(RuleFactor::getFactorCode, each -> Arrays.stream(each.getFactorScriptParam().split(Dict.SPLIT)).collect(Collectors.toList())));
 
         RulePackDO rulePackDO = RulePackDOConvert.INSTANCE.doToDO(rulePackDTO);
         rulePackDO.setVersion(version);

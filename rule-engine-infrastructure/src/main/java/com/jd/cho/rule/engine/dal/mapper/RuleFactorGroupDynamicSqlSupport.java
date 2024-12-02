@@ -74,6 +74,13 @@ public final class RuleFactorGroupDynamicSqlSupport {
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor_group.tenant")
     public static final SqlColumn<String> tenant = ruleFactorGroup.tenant;
 
+    /**
+     * Database Column Remarks:
+     * 父分组code
+     */
+    @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_factor_group.parent_group_code")
+    public static final SqlColumn<String> parentGroupCode = ruleFactorGroup.parentGroupCode;
+
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_factor_group")
     public static final class RuleFactorGroup extends SqlTable {
         public final SqlColumn<Long> id = column("id", JDBCType.BIGINT);
@@ -93,6 +100,8 @@ public final class RuleFactorGroupDynamicSqlSupport {
         public final SqlColumn<String> modifier = column("modifier", JDBCType.VARCHAR);
 
         public final SqlColumn<String> tenant = column("tenant", JDBCType.VARCHAR);
+
+        public final SqlColumn<String> parentGroupCode = column("parent_group_code", JDBCType.VARCHAR);
 
         public RuleFactorGroup() {
             super("rule_factor_group");

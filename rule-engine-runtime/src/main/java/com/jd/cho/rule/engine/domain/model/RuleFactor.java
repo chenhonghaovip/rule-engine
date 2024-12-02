@@ -31,6 +31,11 @@ public class RuleFactor {
     private String groupCode;
 
     /**
+     * 父分组编码
+     */
+    private String parentGroupCode;
+
+    /**
      * 分组名称
      */
     private String groupName;

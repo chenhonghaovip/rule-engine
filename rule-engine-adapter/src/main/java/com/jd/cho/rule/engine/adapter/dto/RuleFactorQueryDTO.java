@@ -26,6 +26,11 @@ public class RuleFactorQueryDTO {
     private String groupName;
 
     /**
+     * 分组下分组集合
+     */
+    private List<RuleFactorQueryDTO> ruleFactorGroups;
+
+    /**
      * 分组下规则因子集合
      */
     private List<RuleFactorDTO> ruleFactorBeans;

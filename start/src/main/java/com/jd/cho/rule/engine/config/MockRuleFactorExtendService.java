@@ -26,7 +26,6 @@ public class MockRuleFactorExtendService implements RuleFactorExtendService {
                 List<RuleFactor> ruleFactorList = ruleFactors1.stream().map(each -> {
                     RuleFactor ruleFactor = RuleFactor.copyEntity(each);
                     ruleFactor.setFactorCode(index + "_" + each.getFactorCode());
-                    ruleFactor.setGroupCode(index + "_" + each.getGroupCode());
                     return ruleFactor;
                 }).collect(Collectors.toList());
                 result.addAll(ruleFactorList);

@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+
 /**
  * @author chenhonghao12
  * @version 1.0
@@ -24,5 +26,15 @@ public class RuleFactorGroup {
      * 分组名称
      */
     private String groupName;
+
+    /**
+     * 父分组编码
+     */
+    private String parentGroupCode;
+
+    /**
+     * 子分组列表
+     */
+    private List<RuleFactorGroup> ruleFactorGroups;
 
 }

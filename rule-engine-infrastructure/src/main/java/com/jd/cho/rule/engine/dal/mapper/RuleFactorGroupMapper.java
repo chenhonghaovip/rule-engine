@@ -23,12 +23,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import static com.jd.cho.rule.engine.dal.mapper.RuleFactorGroupDynamicSqlSupport.*;
 import static org.mybatis.dynamic.sql.SqlBuilder.isEqualTo;
 
 @Mapper
 public interface RuleFactorGroupMapper {
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_factor_group")
-    BasicColumn[] selectList = BasicColumn.columnList(RuleFactorGroupDynamicSqlSupport.id, RuleFactorGroupDynamicSqlSupport.groupCode, RuleFactorGroupDynamicSqlSupport.groupName, RuleFactorGroupDynamicSqlSupport.yn, RuleFactorGroupDynamicSqlSupport.createTime, RuleFactorGroupDynamicSqlSupport.modifyTime, RuleFactorGroupDynamicSqlSupport.creator, RuleFactorGroupDynamicSqlSupport.modifier, RuleFactorGroupDynamicSqlSupport.tenant);
+    BasicColumn[] selectList = BasicColumn.columnList(id, groupCode, groupName, yn, createTime, modifyTime, creator, modifier, tenant, parentGroupCode);
 
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_factor_group")
     @SelectProvider(type = SqlProviderAdapter.class, method = "select")
@@ -62,7 +63,8 @@ public interface RuleFactorGroupMapper {
             @Result(column = "modify_time", property = "modifyTime", jdbcType = JdbcType.TIMESTAMP),
             @Result(column = "creator", property = "creator", jdbcType = JdbcType.VARCHAR),
             @Result(column = "modifier", property = "modifier", jdbcType = JdbcType.VARCHAR),
-            @Result(column = "tenant", property = "tenant", jdbcType = JdbcType.VARCHAR)
+            @Result(column = "tenant", property = "tenant", jdbcType = JdbcType.VARCHAR),
+            @Result(column = "parent_group_code", property = "parentGroupCode", jdbcType = JdbcType.VARCHAR)
     })
     List<RuleFactorGroupDO> selectMany(SelectStatementProvider selectStatement);
 
@@ -72,146 +74,153 @@ public interface RuleFactorGroupMapper {
 
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_factor_group")
     default long count(CountDSLCompleter completer) {
-        return MyBatis3Utils.countFrom(this::count, RuleFactorGroupDynamicSqlSupport.ruleFactorGroup, completer);
+        return MyBatis3Utils.countFrom(this::count, ruleFactorGroup, completer);
     }
 
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_factor_group")
     default int delete(DeleteDSLCompleter completer) {
-        return MyBatis3Utils.deleteFrom(this::delete, RuleFactorGroupDynamicSqlSupport.ruleFactorGroup, completer);
+        return MyBatis3Utils.deleteFrom(this::delete, ruleFactorGroup, completer);
     }
 
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_factor_group")
     default int deleteByPrimaryKey(Long id_) {
         return delete(c ->
-                c.where(RuleFactorGroupDynamicSqlSupport.id, isEqualTo(id_))
+                c.where(id, isEqualTo(id_))
         );
     }
 
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_factor_group")
     default int insert(RuleFactorGroupDO record) {
-        return MyBatis3Utils.insert(this::insert, record, RuleFactorGroupDynamicSqlSupport.ruleFactorGroup, c ->
-                c.map(RuleFactorGroupDynamicSqlSupport.id).toProperty("id")
-                        .map(RuleFactorGroupDynamicSqlSupport.groupCode).toProperty("groupCode")
-                        .map(RuleFactorGroupDynamicSqlSupport.groupName).toProperty("groupName")
-                        .map(RuleFactorGroupDynamicSqlSupport.yn).toProperty("yn")
-                        .map(RuleFactorGroupDynamicSqlSupport.createTime).toProperty("createTime")
-                        .map(RuleFactorGroupDynamicSqlSupport.modifyTime).toProperty("modifyTime")
-                        .map(RuleFactorGroupDynamicSqlSupport.creator).toProperty("creator")
-                        .map(RuleFactorGroupDynamicSqlSupport.modifier).toProperty("modifier")
-                        .map(RuleFactorGroupDynamicSqlSupport.tenant).toProperty("tenant")
+        return MyBatis3Utils.insert(this::insert, record, ruleFactorGroup, c ->
+                c.map(id).toProperty("id")
+                        .map(groupCode).toProperty("groupCode")
+                        .map(groupName).toProperty("groupName")
+                        .map(yn).toProperty("yn")
+                        .map(createTime).toProperty("createTime")
+                        .map(modifyTime).toProperty("modifyTime")
+                        .map(creator).toProperty("creator")
+                        .map(modifier).toProperty("modifier")
+                        .map(tenant).toProperty("tenant")
+                        .map(parentGroupCode).toProperty("parentGroupCode")
         );
     }
 
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_factor_group")
     default int insertMultiple(Collection<RuleFactorGroupDO> records) {
-        return MyBatis3Utils.insertMultiple(this::insertMultiple, records, RuleFactorGroupDynamicSqlSupport.ruleFactorGroup, c ->
-                c.map(RuleFactorGroupDynamicSqlSupport.id).toProperty("id")
-                        .map(RuleFactorGroupDynamicSqlSupport.groupCode).toProperty("groupCode")
-                        .map(RuleFactorGroupDynamicSqlSupport.groupName).toProperty("groupName")
-                        .map(RuleFactorGroupDynamicSqlSupport.yn).toProperty("yn")
-                        .map(RuleFactorGroupDynamicSqlSupport.createTime).toProperty("createTime")
-                        .map(RuleFactorGroupDynamicSqlSupport.modifyTime).toProperty("modifyTime")
-                        .map(RuleFactorGroupDynamicSqlSupport.creator).toProperty("creator")
-                        .map(RuleFactorGroupDynamicSqlSupport.modifier).toProperty("modifier")
-                        .map(RuleFactorGroupDynamicSqlSupport.tenant).toProperty("tenant")
+        return MyBatis3Utils.insertMultiple(this::insertMultiple, records, ruleFactorGroup, c ->
+                c.map(id).toProperty("id")
+                        .map(groupCode).toProperty("groupCode")
+                        .map(groupName).toProperty("groupName")
+                        .map(yn).toProperty("yn")
+                        .map(createTime).toProperty("createTime")
+                        .map(modifyTime).toProperty("modifyTime")
+                        .map(creator).toProperty("creator")
+                        .map(modifier).toProperty("modifier")
+                        .map(tenant).toProperty("tenant")
+                        .map(parentGroupCode).toProperty("parentGroupCode")
         );
     }
 
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_factor_group")
     default int insertSelective(RuleFactorGroupDO record) {
-        return MyBatis3Utils.insert(this::insert, record, RuleFactorGroupDynamicSqlSupport.ruleFactorGroup, c ->
-                c.map(RuleFactorGroupDynamicSqlSupport.id).toPropertyWhenPresent("id", record::getId)
-                        .map(RuleFactorGroupDynamicSqlSupport.groupCode).toPropertyWhenPresent("groupCode", record::getGroupCode)
-                        .map(RuleFactorGroupDynamicSqlSupport.groupName).toPropertyWhenPresent("groupName", record::getGroupName)
-                        .map(RuleFactorGroupDynamicSqlSupport.yn).toPropertyWhenPresent("yn", record::getYn)
-                        .map(RuleFactorGroupDynamicSqlSupport.createTime).toPropertyWhenPresent("createTime", record::getCreateTime)
-                        .map(RuleFactorGroupDynamicSqlSupport.modifyTime).toPropertyWhenPresent("modifyTime", record::getModifyTime)
-                        .map(RuleFactorGroupDynamicSqlSupport.creator).toPropertyWhenPresent("creator", record::getCreator)
-                        .map(RuleFactorGroupDynamicSqlSupport.modifier).toPropertyWhenPresent("modifier", record::getModifier)
-                        .map(RuleFactorGroupDynamicSqlSupport.tenant).toPropertyWhenPresent("tenant", record::getTenant)
+        return MyBatis3Utils.insert(this::insert, record, ruleFactorGroup, c ->
+                c.map(id).toPropertyWhenPresent("id", record::getId)
+                        .map(groupCode).toPropertyWhenPresent("groupCode", record::getGroupCode)
+                        .map(groupName).toPropertyWhenPresent("groupName", record::getGroupName)
+                        .map(yn).toPropertyWhenPresent("yn", record::getYn)
+                        .map(createTime).toPropertyWhenPresent("createTime", record::getCreateTime)
+                        .map(modifyTime).toPropertyWhenPresent("modifyTime", record::getModifyTime)
+                        .map(creator).toPropertyWhenPresent("creator", record::getCreator)
+                        .map(modifier).toPropertyWhenPresent("modifier", record::getModifier)
+                        .map(tenant).toPropertyWhenPresent("tenant", record::getTenant)
+                        .map(parentGroupCode).toPropertyWhenPresent("parentGroupCode", record::getParentGroupCode)
         );
     }
 
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_factor_group")
     default Optional<RuleFactorGroupDO> selectOne(SelectDSLCompleter completer) {
-        return MyBatis3Utils.selectOne(this::selectOne, selectList, RuleFactorGroupDynamicSqlSupport.ruleFactorGroup, completer);
+        return MyBatis3Utils.selectOne(this::selectOne, selectList, ruleFactorGroup, completer);
     }
 
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_factor_group")
     default List<RuleFactorGroupDO> select(SelectDSLCompleter completer) {
-        return MyBatis3Utils.selectList(this::selectMany, selectList, RuleFactorGroupDynamicSqlSupport.ruleFactorGroup, completer);
+        return MyBatis3Utils.selectList(this::selectMany, selectList, ruleFactorGroup, completer);
     }
 
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_factor_group")
     default List<RuleFactorGroupDO> selectDistinct(SelectDSLCompleter completer) {
-        return MyBatis3Utils.selectDistinct(this::selectMany, selectList, RuleFactorGroupDynamicSqlSupport.ruleFactorGroup, completer);
+        return MyBatis3Utils.selectDistinct(this::selectMany, selectList, ruleFactorGroup, completer);
     }
 
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_factor_group")
     default Optional<RuleFactorGroupDO> selectByPrimaryKey(Long id_) {
         return selectOne(c ->
-                c.where(RuleFactorGroupDynamicSqlSupport.id, isEqualTo(id_))
+                c.where(id, isEqualTo(id_))
         );
     }
 
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_factor_group")
     default int update(UpdateDSLCompleter completer) {
-        return MyBatis3Utils.update(this::update, RuleFactorGroupDynamicSqlSupport.ruleFactorGroup, completer);
+        return MyBatis3Utils.update(this::update, ruleFactorGroup, completer);
     }
 
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_factor_group")
     static UpdateDSL<UpdateModel> updateAllColumns(RuleFactorGroupDO record, UpdateDSL<UpdateModel> dsl) {
-        return dsl.set(RuleFactorGroupDynamicSqlSupport.id).equalTo(record::getId)
-                .set(RuleFactorGroupDynamicSqlSupport.groupCode).equalTo(record::getGroupCode)
-                .set(RuleFactorGroupDynamicSqlSupport.groupName).equalTo(record::getGroupName)
-                .set(RuleFactorGroupDynamicSqlSupport.yn).equalTo(record::getYn)
-                .set(RuleFactorGroupDynamicSqlSupport.createTime).equalTo(record::getCreateTime)
-                .set(RuleFactorGroupDynamicSqlSupport.modifyTime).equalTo(record::getModifyTime)
-                .set(RuleFactorGroupDynamicSqlSupport.creator).equalTo(record::getCreator)
-                .set(RuleFactorGroupDynamicSqlSupport.modifier).equalTo(record::getModifier)
-                .set(RuleFactorGroupDynamicSqlSupport.tenant).equalTo(record::getTenant);
+        return dsl.set(id).equalTo(record::getId)
+                .set(groupCode).equalTo(record::getGroupCode)
+                .set(groupName).equalTo(record::getGroupName)
+                .set(yn).equalTo(record::getYn)
+                .set(createTime).equalTo(record::getCreateTime)
+                .set(modifyTime).equalTo(record::getModifyTime)
+                .set(creator).equalTo(record::getCreator)
+                .set(modifier).equalTo(record::getModifier)
+                .set(tenant).equalTo(record::getTenant)
+                .set(parentGroupCode).equalTo(record::getParentGroupCode);
     }
 
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_factor_group")
     static UpdateDSL<UpdateModel> updateSelectiveColumns(RuleFactorGroupDO record, UpdateDSL<UpdateModel> dsl) {
-        return dsl.set(RuleFactorGroupDynamicSqlSupport.id).equalToWhenPresent(record::getId)
-                .set(RuleFactorGroupDynamicSqlSupport.groupCode).equalToWhenPresent(record::getGroupCode)
-                .set(RuleFactorGroupDynamicSqlSupport.groupName).equalToWhenPresent(record::getGroupName)
-                .set(RuleFactorGroupDynamicSqlSupport.yn).equalToWhenPresent(record::getYn)
-                .set(RuleFactorGroupDynamicSqlSupport.createTime).equalToWhenPresent(record::getCreateTime)
-                .set(RuleFactorGroupDynamicSqlSupport.modifyTime).equalToWhenPresent(record::getModifyTime)
-                .set(RuleFactorGroupDynamicSqlSupport.creator).equalToWhenPresent(record::getCreator)
-                .set(RuleFactorGroupDynamicSqlSupport.modifier).equalToWhenPresent(record::getModifier)
-                .set(RuleFactorGroupDynamicSqlSupport.tenant).equalToWhenPresent(record::getTenant);
+        return dsl.set(id).equalToWhenPresent(record::getId)
+                .set(groupCode).equalToWhenPresent(record::getGroupCode)
+                .set(groupName).equalToWhenPresent(record::getGroupName)
+                .set(yn).equalToWhenPresent(record::getYn)
+                .set(createTime).equalToWhenPresent(record::getCreateTime)
+                .set(modifyTime).equalToWhenPresent(record::getModifyTime)
+                .set(creator).equalToWhenPresent(record::getCreator)
+                .set(modifier).equalToWhenPresent(record::getModifier)
+                .set(tenant).equalToWhenPresent(record::getTenant)
+                .set(parentGroupCode).equalToWhenPresent(record::getParentGroupCode);
     }
 
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_factor_group")
     default int updateByPrimaryKey(RuleFactorGroupDO record) {
         return update(c ->
-                c.set(RuleFactorGroupDynamicSqlSupport.groupCode).equalTo(record::getGroupCode)
-                        .set(RuleFactorGroupDynamicSqlSupport.groupName).equalTo(record::getGroupName)
-                        .set(RuleFactorGroupDynamicSqlSupport.yn).equalTo(record::getYn)
-                        .set(RuleFactorGroupDynamicSqlSupport.createTime).equalTo(record::getCreateTime)
-                        .set(RuleFactorGroupDynamicSqlSupport.modifyTime).equalTo(record::getModifyTime)
-                        .set(RuleFactorGroupDynamicSqlSupport.creator).equalTo(record::getCreator)
-                        .set(RuleFactorGroupDynamicSqlSupport.modifier).equalTo(record::getModifier)
-                        .set(RuleFactorGroupDynamicSqlSupport.tenant).equalTo(record::getTenant)
-                        .where(RuleFactorGroupDynamicSqlSupport.id, isEqualTo(record::getId))
+                c.set(groupCode).equalTo(record::getGroupCode)
+                        .set(groupName).equalTo(record::getGroupName)
+                        .set(yn).equalTo(record::getYn)
+                        .set(createTime).equalTo(record::getCreateTime)
+                        .set(modifyTime).equalTo(record::getModifyTime)
+                        .set(creator).equalTo(record::getCreator)
+                        .set(modifier).equalTo(record::getModifier)
+                        .set(tenant).equalTo(record::getTenant)
+                        .set(parentGroupCode).equalTo(record::getParentGroupCode)
+                        .where(id, isEqualTo(record::getId))
         );
     }
 
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source Table: rule_factor_group")
     default int updateByPrimaryKeySelective(RuleFactorGroupDO record) {
         return update(c ->
-                c.set(RuleFactorGroupDynamicSqlSupport.groupCode).equalToWhenPresent(record::getGroupCode)
-                        .set(RuleFactorGroupDynamicSqlSupport.groupName).equalToWhenPresent(record::getGroupName)
-                        .set(RuleFactorGroupDynamicSqlSupport.yn).equalToWhenPresent(record::getYn)
-                        .set(RuleFactorGroupDynamicSqlSupport.createTime).equalToWhenPresent(record::getCreateTime)
-                        .set(RuleFactorGroupDynamicSqlSupport.modifyTime).equalToWhenPresent(record::getModifyTime)
-                        .set(RuleFactorGroupDynamicSqlSupport.creator).equalToWhenPresent(record::getCreator)
-                        .set(RuleFactorGroupDynamicSqlSupport.modifier).equalToWhenPresent(record::getModifier)
-                        .set(RuleFactorGroupDynamicSqlSupport.tenant).equalToWhenPresent(record::getTenant)
-                        .where(RuleFactorGroupDynamicSqlSupport.id, isEqualTo(record::getId))
+                c.set(groupCode).equalToWhenPresent(record::getGroupCode)
+                        .set(groupName).equalToWhenPresent(record::getGroupName)
+                        .set(yn).equalToWhenPresent(record::getYn)
+                        .set(createTime).equalToWhenPresent(record::getCreateTime)
+                        .set(modifyTime).equalToWhenPresent(record::getModifyTime)
+                        .set(creator).equalToWhenPresent(record::getCreator)
+                        .set(modifier).equalToWhenPresent(record::getModifier)
+                        .set(tenant).equalToWhenPresent(record::getTenant)
+                        .set(parentGroupCode).equalToWhenPresent(record::getParentGroupCode)
+                        .where(id, isEqualTo(record::getId))
         );
     }
 }

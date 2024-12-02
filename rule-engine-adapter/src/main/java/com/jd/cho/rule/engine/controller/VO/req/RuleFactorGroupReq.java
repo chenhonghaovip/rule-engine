@@ -21,4 +21,9 @@ public class RuleFactorGroupReq implements Serializable {
      */
     private String groupName;
 
+    /**
+     * 父分组code
+     */
+    private String parentGroupCode;
+
 }
