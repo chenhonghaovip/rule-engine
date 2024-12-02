@@ -32,15 +32,16 @@ create table rule_scene_action
 
 create table rule_factor_group
 (
-    id          bigint      not null primary key auto_increment comment '主键',
-    group_code  varchar(50) not null comment '分组编码',
-    group_name  varchar(50) not null comment '分组名称',
-    yn          tinyint(1)  not null default 1 comment '是否删除 1-否，0-是',
-    create_time datetime    not null default current_timestamp comment '创建时间',
-    modify_time datetime comment '更新时间',
-    creator     varchar(50) not null comment '创建人',
-    modifier    varchar(50) comment '修改人',
-    tenant      varchar(50) not null comment '租户'
+    id                bigint      not null primary key auto_increment comment '主键',
+    group_code        varchar(50) not null comment '分组编码',
+    group_name        varchar(50) not null comment '分组名称',
+    parent_group_code varchar(50) null comment '父分组编码',
+    yn                tinyint(1)  not null default 1 comment '是否删除 1-否，0-是',
+    create_time       datetime    not null default current_timestamp comment '创建时间',
+    modify_time       datetime comment '更新时间',
+    creator           varchar(50) not null comment '创建人',
+    modifier          varchar(50) comment '修改人',
+    tenant            varchar(50) not null comment '租户'
 ) engine = innodb
   default charset = utf8mb4 comment '规则因子分组表';
 
