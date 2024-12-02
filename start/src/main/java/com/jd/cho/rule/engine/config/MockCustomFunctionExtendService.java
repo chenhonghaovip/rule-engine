@@ -1,6 +1,5 @@
 package com.jd.cho.rule.engine.config;
 
-import com.jd.cho.rule.engine.common.util.TestUtil;
 import com.jd.cho.rule.engine.spi.CustomFunctionExtendService;
 
 import java.lang.reflect.Method;

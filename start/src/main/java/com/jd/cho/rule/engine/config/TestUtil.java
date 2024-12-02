@@ -1,4 +1,4 @@
-package com.jd.cho.rule.engine.common.util;
+package com.jd.cho.rule.engine.config;
 
 
 import com.jd.cho.rule.engine.common.anno.ApiMethod;
