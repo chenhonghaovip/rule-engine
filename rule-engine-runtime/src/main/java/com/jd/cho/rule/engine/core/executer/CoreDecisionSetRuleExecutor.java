@@ -7,22 +7,20 @@ import com.google.gson.reflect.TypeToken;
 import com.jd.cho.rule.engine.common.cache.ContextHolder;
 import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.enums.RulePackTypeEnum;
-import com.jd.cho.rule.engine.common.protocol.ProtocolStrategy;
 import com.jd.cho.rule.engine.common.protocol.RuleDefExpressionParser;
 import com.jd.cho.rule.engine.common.util.QlExpressUtil;
 import com.jd.cho.rule.engine.core.DecisionSetRuleExecutor;
 import com.jd.cho.rule.engine.core.RuleGroupExtendServiceFactory;
-import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.domain.model.RuleAction;
 import com.jd.cho.rule.engine.domain.model.RuleDef;
 import com.jd.cho.rule.engine.domain.model.RulePack;
-import com.jd.cho.rule.engine.spi.RuleGroupExtendService;
+import com.jd.cho.rule.engine.spi.RuleDefsExecutor;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.lang.reflect.Type;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -31,8 +29,6 @@ import java.util.Objects;
 @Service
 @AllArgsConstructor
 public class CoreDecisionSetRuleExecutor implements DecisionSetRuleExecutor {
-
-    private RuleConfigGateway ruleConfigGateway;
     private RuleGroupExtendServiceFactory ruleGroupExtendServiceFactory;
 
     @Override
@@ -47,24 +43,30 @@ public class CoreDecisionSetRuleExecutor implements DecisionSetRuleExecutor {
     }
 
     @Override
-    public boolean execute(RulePack rulePack, Map<String, Object> context) {
-        if (Arrays.asList(RulePackTypeEnum.DECISION_SET, RulePackTypeEnum.NORMAL).contains(rulePack.getRulePackType())) {
-            List<RuleDef> rules = JSON.parseArray(rulePack.getRuleContent(), RuleDef.class);
-            RuleGroupExtendService ruleGroup = ruleGroupExtendServiceFactory.get(rulePack.getRuleArrangeStrategy());
-            return ruleGroup.execute(rules, context);
+    public boolean accept(RulePack rulePack) {
+        if (rulePack == null) {
+            return false;
         }
-        //todo 支持其余模式下的决策类型，目前不使用，没有开发
-        String qlExpress = ProtocolStrategy.getQlExpress(rulePack);
-        return true;
+
+        if (rulePack.getRulePackType() == RulePackTypeEnum.DECISION_SET) {
+            return true;
+        }
+
+        return rulePack.getRulePackType() == RulePackTypeEnum.NORMAL;
     }
 
     @Override
-    public boolean execute(String rulePackCode, Map<String, Object> context) {
-        RulePack rulePack = ruleConfigGateway.rulePackInfo(rulePackCode);
-        if (Objects.isNull(rulePack)) {
-            return false;
-        }
-        return this.execute(rulePack, context);
+    public boolean execute(RulePack rulePack, Map<String, Object> context) {
+        Assert.isTrue(accept(rulePack), () -> {
+            if (rulePack == null) {
+                return "rule pack is null";
+            }
+            return "rule pack type is not support:" + rulePack.getRulePackType();
+        });
+
+        List<RuleDef> rules = rulePack.getRules();
+        RuleDefsExecutor ruleGroup = ruleGroupExtendServiceFactory.get(rulePack.getRuleArrangeStrategy());
+        return ruleGroup.execute(this, rules, context);
     }
 
     /**
@@ -101,7 +103,6 @@ public class CoreDecisionSetRuleExecutor implements DecisionSetRuleExecutor {
             contextResult = new Gson().fromJson(JSON.toJSONString(result), type);
         } else {
             contextResult = Maps.newHashMap();
-
         }
         contextResult.putAll(resultMap);
         context.put(Dict.RESULT_ALIAS, contextResult);

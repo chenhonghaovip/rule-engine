@@ -1,10 +1,9 @@
 package com.jd.cho.rule.engine.core.extend;
 
 
-import com.jd.cho.rule.engine.common.util.ApplicationUtils;
-import com.jd.cho.rule.engine.domain.gateway.RuleEngineGateway;
+import com.jd.cho.rule.engine.core.RuleDefExecutor;
 import com.jd.cho.rule.engine.domain.model.RuleDef;
-import com.jd.cho.rule.engine.spi.RuleGroupExtendService;
+import com.jd.cho.rule.engine.spi.RuleDefsExecutor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +16,7 @@ import java.util.Map;
  * @version 1.0
  */
 @Service
-public class PriorityOrderMatchRuleGroup implements RuleGroupExtendService {
+public class PriorityOrderMatchRuleGroup implements RuleDefsExecutor {
     public static final String CODE = "OrderMatch";
 
     @Override
@@ -31,11 +30,9 @@ public class PriorityOrderMatchRuleGroup implements RuleGroupExtendService {
     }
 
     @Override
-    public boolean execute(List<RuleDef> list, Map<String, Object> context) {
-        RuleEngineGateway ruleEngineGateway = ApplicationUtils.getBeans(RuleEngineGateway.class);
-
+    public boolean execute(RuleDefExecutor ruleDefExecutor, List<RuleDef> list, Map<String, Object> context) {
         for (RuleDef ruleDef : list) {
-            if (ruleEngineGateway.execute(ruleDef, context)) {
+            if (ruleDefExecutor.execute(ruleDef, context)) {
                 return true;
             }
         }

@@ -1,7 +1,7 @@
 package com.jd.cho.rule.engine.core.extend;
 
 import com.jd.cho.rule.engine.core.RuleGroupExtendServiceFactory;
-import com.jd.cho.rule.engine.spi.RuleGroupExtendService;
+import com.jd.cho.rule.engine.spi.RuleDefsExecutor;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -13,15 +13,15 @@ import java.util.List;
 @AllArgsConstructor
 @Slf4j
 public class RuleGroupExtendServiceFactoryImpl implements RuleGroupExtendServiceFactory {
-    private List<RuleGroupExtendService> services;
+    private List<RuleDefsExecutor> services;
 
     @Override
-    public RuleGroupExtendService get(String ruleArrangeStrategy) {
+    public RuleDefsExecutor get(String ruleArrangeStrategy) {
         if (!StringUtils.hasLength(ruleArrangeStrategy)) {
             return null;
         }
 
-        for (RuleGroupExtendService service : services) {
+        for (RuleDefsExecutor service : services) {
             if (ruleArrangeStrategy.equals(service.getCode())) {
                 return service;
             }

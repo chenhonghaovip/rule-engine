@@ -4,46 +4,20 @@ import com.jd.cho.rule.engine.common.anno.ApiMethod;
 import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
 import com.jd.cho.rule.engine.common.enums.FactorTypeEnum;
 import com.jd.cho.rule.engine.common.enums.VarTypeEnum;
-import com.jd.cho.rule.engine.common.util.ApplicationUtils;
 import com.jd.cho.rule.engine.common.util.QlExpressUtil;
-import com.jd.cho.rule.engine.domain.atomic.FactorValueService;
-import com.jd.cho.rule.engine.domain.atomic.impl.FactorValueServiceImpl;
-import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.domain.model.BasicVar;
 import com.jd.cho.rule.engine.domain.model.RuleCondition;
 import com.jd.cho.rule.engine.domain.model.RuleDef;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
-import org.mockito.Mockito;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CoreDecisionSetRuleExecutor_MethodTest {
-    private RuleConfigGateway ruleConfigGateway;
-    private CoreDecisionSetRuleExecutor executor;
-    private FactorValueService factorValueService;
-    private MockedStatic<ApplicationUtils> staticApplicationUtils;
-
-    @BeforeEach
-    void setUp() {
-        ruleConfigGateway = Mockito.mock(RuleConfigGateway.class);
-        executor = new CoreDecisionSetRuleExecutor(ruleConfigGateway, null);
-        factorValueService = new FactorValueServiceImpl(ruleConfigGateway);
-        staticApplicationUtils = Mockito.mockStatic(ApplicationUtils.class);
-        staticApplicationUtils.when(() -> ApplicationUtils.getBeans(FactorValueService.class)).thenReturn(factorValueService);
-    }
-
-    @AfterEach
-    void tearDown() {
-        staticApplicationUtils.close();
-    }
+class CoreDecisionSetRuleExecutor_MethodTest extends AbstractCoreDecisionSetRuleExecutorTest {
 
     @DisplayName("condition(single expr): methodOne = 1")
     @Test

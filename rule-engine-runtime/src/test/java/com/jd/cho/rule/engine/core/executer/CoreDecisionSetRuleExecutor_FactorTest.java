@@ -2,45 +2,20 @@ package com.jd.cho.rule.engine.core.executer;
 
 import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
 import com.jd.cho.rule.engine.common.enums.VarTypeEnum;
-import com.jd.cho.rule.engine.common.util.ApplicationUtils;
-import com.jd.cho.rule.engine.domain.atomic.FactorValueService;
-import com.jd.cho.rule.engine.domain.atomic.impl.FactorValueServiceImpl;
-import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.domain.model.BasicVar;
 import com.jd.cho.rule.engine.domain.model.RuleCondition;
 import com.jd.cho.rule.engine.domain.model.RuleDef;
 import com.jd.cho.rule.engine.domain.model.RuleFactor;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CoreDecisionSetRuleExecutor_FactorTest {
-    private RuleConfigGateway ruleConfigGateway;
-    private CoreDecisionSetRuleExecutor executor;
-    private FactorValueService factorValueService;
-    private MockedStatic<ApplicationUtils> staticApplicationUtils;
-
-    @BeforeEach
-    void setUp() {
-        ruleConfigGateway = Mockito.mock(RuleConfigGateway.class);
-        executor = new CoreDecisionSetRuleExecutor(ruleConfigGateway, null);
-        factorValueService = new FactorValueServiceImpl(ruleConfigGateway);
-        staticApplicationUtils = Mockito.mockStatic(ApplicationUtils.class);
-        staticApplicationUtils.when(() -> ApplicationUtils.getBeans(FactorValueService.class)).thenReturn(factorValueService);
-    }
-
-    @AfterEach
-    void tearDown() {
-        staticApplicationUtils.close();
-    }
+class CoreDecisionSetRuleExecutor_FactorTest extends AbstractCoreDecisionSetRuleExecutorTest {
 
     @DisplayName("condition(single expr): factorOne = 1xx")
     @Test
