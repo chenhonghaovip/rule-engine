@@ -6,8 +6,9 @@ import com.jd.cho.rule.engine.common.enums.*;
 import com.jd.cho.rule.engine.common.util.AssertUtil;
 import com.jd.cho.rule.engine.common.util.MethodUtil;
 import com.jd.cho.rule.engine.common.util.QlExpressUtil;
+import com.jd.cho.rule.engine.core.RuleGroupExtendServiceFactory;
 import com.jd.cho.rule.engine.domain.model.CustomMethod;
-import com.jd.cho.rule.engine.group.RuleGroupRunStrategy;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +20,10 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/rule/common")
+@AllArgsConstructor
 public class RuleCommonController {
+
+    private RuleGroupExtendServiceFactory ruleGroupExtendServiceFactory;
 
     /**
      * 获取因子类型列表
@@ -59,7 +63,7 @@ public class RuleCommonController {
      */
     @GetMapping("/rule/strategy")
     public List<CommonDict> ruleArrangeStrategyEnums() {
-        return RuleGroupRunStrategy.allRuleGroup();
+        return ruleGroupExtendServiceFactory.allRuleGroup();
     }
 
 
