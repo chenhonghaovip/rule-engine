@@ -22,6 +22,12 @@ import static com.jd.cho.rule.engine.common.util.QlExpressUtil.CUSTOM_METHODS;
  */
 public class MethodUtil {
 
+    /**
+     * 解析方法信息
+     *
+     * @param method 方法
+     * @return 解析后的方法信息
+     */
     public static CustomMethod resolve(Method method) {
         CustomMethod customMethod = new CustomMethod();
         ApiMethod apiMethod = method.getAnnotation(ApiMethod.class);
@@ -29,7 +35,7 @@ public class MethodUtil {
             customMethod.setMethodName(StringUtils.isNotBlank(apiMethod.name()) ? apiMethod.name() : method.getName());
             customMethod.setMethodCode(StringUtils.isNotBlank(apiMethod.code()) ? apiMethod.code() : method.getName());
             customMethod.setConstantType(apiMethod.valueMode());
-            customMethod.setReturnType(apiMethod.returnType());
+//            customMethod.setReturnType(apiMethod.returnType());
             customMethod.setConstantValues(apiMethod.values());
         } else {
             customMethod.setMethodName(method.getName());

@@ -36,6 +36,9 @@ public enum BizErrorEnum implements CommonException {
     PARAM_COUNT_NOT_MATCH(-21, "方法参数数量不匹配"),
     PARAM_TYPE_NOT_MATCH(-22, "方法参数类型不匹配"),
 
+    FACTOR_TYPE_IS_REPEAT(-23, "规则因子类型不能重复"),
+    FACTOR_TYPE_IS_ERROR(-24, "加载规则因子异常"),
+
     ;
 
     /**

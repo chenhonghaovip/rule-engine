@@ -2,17 +2,26 @@ package com.jd.cho.rule.engine.controller;
 
 import com.jd.cho.rule.engine.common.base.CommonDict;
 import com.jd.cho.rule.engine.common.dict.Dict;
-import com.jd.cho.rule.engine.common.enums.*;
+import com.jd.cho.rule.engine.common.enums.ConstantEnum;
+import com.jd.cho.rule.engine.common.enums.RulePackTypeEnum;
+import com.jd.cho.rule.engine.common.enums.VarTypeEnum;
+import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
+import com.jd.cho.rule.engine.common.exceptions.BusinessException;
 import com.jd.cho.rule.engine.common.util.AssertUtil;
 import com.jd.cho.rule.engine.common.util.MethodUtil;
 import com.jd.cho.rule.engine.common.util.QlExpressUtil;
 import com.jd.cho.rule.engine.core.RuleGroupExtendServiceFactory;
 import com.jd.cho.rule.engine.domain.model.CustomMethod;
+import com.jd.cho.rule.engine.factor.ComparativeOperator;
+import com.jd.cho.rule.engine.factor.RuleFactorTypeLoader;
+import com.jd.cho.rule.engine.factor.dto.FactorTypeDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author chenhonghao12
@@ -31,8 +40,8 @@ public class RuleCommonController {
      * @return 因子支持类型
      */
     @GetMapping("/factor/type")
-    public List<FactorTypeEnum> factorTypeEnums() {
-        return FactorTypeEnum.FACTOR_TYPE_ENUMS;
+    public List<FactorTypeDTO> factorTypeEnums() {
+        return new ArrayList<>(RuleFactorTypeLoader.FACTOR_TYPE_DTO_MAP.values());
     }
 
 
@@ -42,8 +51,13 @@ public class RuleCommonController {
      * @return 因子支持操作符号
      */
     @GetMapping("/factor/express")
-    public List<ExpressOperationEnum> expressOperationEnums(@RequestParam("type") String type) {
-        return ExpressOperationEnum.getOperationByGroup(type);
+    public List<ComparativeOperator> expressOperationEnums(@RequestParam("type") String type) {
+        FactorTypeDTO factorTypeDTO = RuleFactorTypeLoader.FACTOR_TYPE_DTO_MAP.get(type);
+        if (Objects.isNull(factorTypeDTO)) {
+            throw new BusinessException(BizErrorEnum.FACTOR_TYPE_IS_ERROR);
+        }
+        return factorTypeDTO.getComparativeOperatorList();
+//        return ExpressOperationEnum.getOperationByGroup(type);
     }
 
     /**
