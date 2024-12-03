@@ -2,19 +2,19 @@ package com.jd.cho.rule.engine.common.util;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.jd.cho.rule.engine.common.anno.ApiMethod;
 import com.jd.cho.rule.engine.common.anno.ApiParam;
 import com.jd.cho.rule.engine.common.base.CommonDict;
 import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.enums.ConstantEnum;
 import com.jd.cho.rule.engine.domain.model.CustomMethod;
+import com.jd.cho.rule.engine.factor.RuleFactorTypeLoader;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.*;
-
-import static com.jd.cho.rule.engine.common.util.QlExpressUtil.CUSTOM_METHODS;
 
 /**
  * @author chenhonghao12
@@ -34,14 +34,23 @@ public class MethodUtil {
         if (Objects.nonNull(apiMethod)) {
             customMethod.setMethodName(StringUtils.isNotBlank(apiMethod.name()) ? apiMethod.name() : method.getName());
             customMethod.setMethodCode(StringUtils.isNotBlank(apiMethod.code()) ? apiMethod.code() : method.getName());
-            customMethod.setConstantType(apiMethod.valueMode());
-//            customMethod.setReturnType(apiMethod.returnType());
-            customMethod.setConstantValues(apiMethod.values());
+            String returnType = apiMethod.returnType();
+            if (RuleFactorTypeLoader.FACTOR_TYPE_DTO_MAP.containsKey(returnType)) {
+                customMethod.setReturnType(RuleFactorTypeLoader.getFactorType(returnType));
+            }
+
+            String valueScript = apiMethod.valueScript();
+            if (StringUtils.isNotBlank(valueScript)) {
+                customMethod.setConstantType(ConstantEnum.SCRIPT);
+                Object execute = QlExpressUtil.execute(valueScript, Maps.newHashMap());
+                Optional.ofNullable(execute).ifPresent(each -> customMethod.setConstantValues(JSON.parseArray(JSON.toJSONString(execute), CommonDict.class)));
+            } else {
+                customMethod.setConstantType(ConstantEnum.INPUT);
+            }
         } else {
             customMethod.setMethodName(method.getName());
             customMethod.setMethodCode(method.getName());
         }
-
 
         StringBuilder express = new StringBuilder();
         Class<?>[] parameterTypes = method.getParameterTypes();
@@ -126,19 +135,6 @@ public class MethodUtil {
             return true;
         }
         return paramType.isAssignableFrom(Integer.class);
-    }
-
-    public static List<CommonDict> getMethodConstants(Map<String, Object> context) {
-        String methodCode = (String) context.get(Dict.METHOD_CODE);
-        CustomMethod customMethod = CUSTOM_METHODS.stream().filter(each -> Objects.equals(each.getMethodCode(), methodCode)).findFirst().orElse(null);
-        Optional.ofNullable(customMethod).ifPresent(each -> {
-
-        });
-
-        if (Objects.nonNull(customMethod)) {
-            return getDict(customMethod.getConstantType().getCode(), customMethod.getConstantValues(), context);
-        }
-        return Lists.newArrayList();
     }
 
 

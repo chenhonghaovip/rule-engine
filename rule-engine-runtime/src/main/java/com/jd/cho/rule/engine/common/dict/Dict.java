@@ -14,7 +14,7 @@ public class Dict {
     /**
      * 内置变量
      */
-    public static final String INNER_CONTEXT = "applicationContext";
+    public static final String INNER_CONTEXT = "Spring";
 
     /**
      * 场景code

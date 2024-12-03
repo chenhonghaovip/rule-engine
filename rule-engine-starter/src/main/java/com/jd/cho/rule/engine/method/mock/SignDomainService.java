@@ -1,8 +1,10 @@
 package com.jd.cho.rule.engine.method.mock;
 
+import com.jd.cho.rule.engine.common.base.CommonDict;
 import com.jd.cho.rule.engine.domain.model.RuleFactor;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author chenhonghao12
@@ -17,4 +19,6 @@ public interface SignDomainService {
 
 
     RuleFactor getRuleFactor();
+
+    List<CommonDict> getDict();
 }

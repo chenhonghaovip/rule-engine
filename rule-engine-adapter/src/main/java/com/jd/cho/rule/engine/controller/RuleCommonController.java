@@ -1,14 +1,11 @@
 package com.jd.cho.rule.engine.controller;
 
 import com.jd.cho.rule.engine.common.base.CommonDict;
-import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.enums.ConstantEnum;
 import com.jd.cho.rule.engine.common.enums.RulePackTypeEnum;
 import com.jd.cho.rule.engine.common.enums.VarTypeEnum;
 import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
 import com.jd.cho.rule.engine.common.exceptions.BusinessException;
-import com.jd.cho.rule.engine.common.util.AssertUtil;
-import com.jd.cho.rule.engine.common.util.MethodUtil;
 import com.jd.cho.rule.engine.common.util.QlExpressUtil;
 import com.jd.cho.rule.engine.core.RuleGroupExtendServiceFactory;
 import com.jd.cho.rule.engine.domain.model.CustomMethod;
@@ -16,11 +13,13 @@ import com.jd.cho.rule.engine.factor.RuleFactorTypeLoader;
 import com.jd.cho.rule.engine.factor.dto.FactorTypeDTO;
 import com.jd.cho.rule.engine.factor.model.ComparativeOperator;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -57,7 +56,6 @@ public class RuleCommonController {
             throw new BusinessException(BizErrorEnum.FACTOR_TYPE_IS_ERROR);
         }
         return factorTypeDTO.getComparativeOperatorList();
-//        return ExpressOperationEnum.getOperationByGroup(type);
     }
 
     /**
@@ -110,17 +108,6 @@ public class RuleCommonController {
     @GetMapping("/methods")
     public List<CustomMethod> getMethod() {
         return QlExpressUtil.CUSTOM_METHODS;
-    }
-
-    /**
-     * 获取全局自定义函数方法的详细信息（出入参数、返回值类型、枚举选项等）
-     *
-     * @return 函数方法
-     */
-    @PostMapping("/methodInfo")
-    public List<CommonDict> getMethodInfo(@RequestBody Map<String, Object> context) {
-        AssertUtil.isNotNull(context.get(Dict.METHOD_CODE));
-        return MethodUtil.getMethodConstants(context);
     }
 
 

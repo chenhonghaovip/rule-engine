@@ -1,6 +1,8 @@
 package com.jd.cho.rule.engine.domain.model;
 
+import com.jd.cho.rule.engine.common.base.CommonDict;
 import com.jd.cho.rule.engine.common.enums.ConstantEnum;
+import com.jd.cho.rule.engine.factor.model.RuleFactorType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,10 +34,10 @@ public class CustomMethod {
      */
     private Integer paramCount;
 
-//    /**
-//     * 方法返回值类型（日期、数值、集合、布尔、文本）
-//     */
-//    private FactorTypeEnum returnType;
+    /**
+     * 方法返回值类型（日期、数值、集合、布尔、文本）
+     */
+    private RuleFactorType returnType;
 
     /**
      * 常量类型（Input:输入，Enum:枚举，Script:脚本）
@@ -45,7 +47,7 @@ public class CustomMethod {
     /**
      * 常量值
      */
-    private String constantValues;
+    private List<CommonDict> constantValues;
 
     /**
      * 方法表达式(QLExpress)

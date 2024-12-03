@@ -1,6 +1,7 @@
 package com.jd.cho.rule.engine.common.util;
 
 import com.google.common.collect.Lists;
+import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.domain.model.CustomMethod;
 import com.ql.util.express.ExpressRunner;
 import lombok.extern.slf4j.Slf4j;
@@ -89,6 +90,7 @@ public class QlExpressUtil {
     @SuppressWarnings("unchecked")
     public static Object execute(String statement, Map<String, Object> context, Map<String, String> fieldMapping) {
         try {
+            context.putIfAbsent(Dict.INNER_CONTEXT, ApplicationUtils.getApplicationContext());
             return RUNNER.execute(statement, new QLExpressContext(context, fieldMapping), null, false, false);
         } catch (Exception e) {
             log.error("QlExpressUtil::execute error,context:{}", statement, e);
@@ -104,7 +106,7 @@ public class QlExpressUtil {
     @SuppressWarnings("unchecked")
     public static Object execute(String statement, Map<String, Object> context) {
         try {
-            return RUNNER.execute(statement, new QLExpressContext(context, null), null, false, false);
+            return execute(statement, context, null);
         } catch (Exception e) {
             log.error("QlExpressUtil::execute error,statement={}", statement);
             throw new RuntimeException(e);
