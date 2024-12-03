@@ -87,21 +87,4 @@ public enum ExpressOperationEnum {
     public static List<ExpressOperationEnum> getOperationByGroup(String group) {
         return MAP.getOrDefault(group, Lists.newArrayList());
     }
-
-
-    public String getOperator() {
-        return operator;
-    }
-
-    public String getExpression() {
-        return expression;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public String getGroup() {
-        return group;
-    }
 }
