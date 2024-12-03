@@ -35,8 +35,6 @@ public enum ExpressOperationEnum {
     NUM_LESS_THAN_EQUAL(FactorTypeEnum.NUM.getCode(), "NUM_LESS_THAN_EQUAL", "%s <= %s", "小于等于"),
     NUM_EQUAL(FactorTypeEnum.NUM.getCode(), "NUM_EQUAL", "%s == %s", "等于"),
     NUM_UNEQUAL(FactorTypeEnum.NUM.getCode(), "NUM_UNEQUAL", "%s != %s", "不等于"),
-//    NUM_IS_NULL(FactorTypeEnum.NUM.getCode(), "NUM_IS_NULL", "%s == null", "为空"),
-//    NUM_NOT_NULL(FactorTypeEnum.NUM.getCode(), "NUM_NOT_NULL", "%s != null", "不为空"),
 
     /**
      * 日期类型
