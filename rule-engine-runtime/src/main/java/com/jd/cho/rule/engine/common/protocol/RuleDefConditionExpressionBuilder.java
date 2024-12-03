@@ -2,7 +2,6 @@ package com.jd.cho.rule.engine.common.protocol;
 
 import com.google.common.collect.Lists;
 import com.jd.cho.rule.engine.common.dict.Dict;
-import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
 import com.jd.cho.rule.engine.common.enums.RelationTypeEnum;
 import com.jd.cho.rule.engine.common.enums.VarTypeEnum;
 import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
@@ -12,6 +11,8 @@ import com.jd.cho.rule.engine.common.util.QlExpressUtil;
 import com.jd.cho.rule.engine.domain.model.BasicVar;
 import com.jd.cho.rule.engine.domain.model.CustomMethod;
 import com.jd.cho.rule.engine.domain.model.RuleCondition;
+import com.jd.cho.rule.engine.factor.RuleFactorTypeLoader;
+import com.jd.cho.rule.engine.factor.model.ComparativeOperator;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -84,7 +85,9 @@ public class RuleDefConditionExpressionBuilder {
      * @return 构建好的表达式
      */
     public String buildOperatorExpress(String operator, BasicVar leftVar, BasicVar rightVar, Map<String, String> fieldMapping) {
-        ExpressOperationEnum operation = ExpressOperationEnum.getByCode(operator);
+//        ExpressOperationEnum operation = ExpressOperationEnum.getByCode(operator);
+
+        ComparativeOperator operation = RuleFactorTypeLoader.EXPRESS_TYPES_MAPS.get(operator);
         AssertUtil.isNotNull(operation);
         String expression = operation.getExpression();
         return String.format(expression, resolveBasicVar(leftVar, fieldMapping), resolveBasicVar(rightVar, fieldMapping));
