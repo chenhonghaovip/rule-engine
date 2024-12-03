@@ -30,6 +30,16 @@ public class RuleFactorGroupController {
         return ruleFactorGroupService.queryRuleFactorGroup();
     }
 
+    /**
+     * 分组因子分组查询
+     *
+     * @return list
+     */
+    @GetMapping(value = "/tree")
+    public List<RuleFactorGroup> list(String sceneCode) {
+        return ruleFactorGroupService.queryGroupBySceneCode(sceneCode);
+    }
+
 
     /**
      * 规则因子分组创建

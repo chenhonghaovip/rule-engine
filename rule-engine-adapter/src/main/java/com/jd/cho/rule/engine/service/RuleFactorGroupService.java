@@ -19,6 +19,14 @@ public interface RuleFactorGroupService {
 
 
     /**
+     * 通过场景code获取对应的因子信息
+     *
+     * @param sceneCode 场景code
+     * @return 规则因子集合
+     */
+    List<RuleFactorGroup> queryGroupBySceneCode(String sceneCode);
+
+    /**
      * 创建规则因子分组
      *
      * @param ruleFactorGroupReq ruleFactorGroupReq

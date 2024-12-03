@@ -27,9 +27,14 @@ public class RuleFactorGroupServiceImpl implements RuleFactorGroupService {
     }
 
     @Override
+    public List<RuleFactorGroup> queryGroupBySceneCode(String sceneCode) {
+        List<String> groupCodes = ruleConfigGateway.queryRuleScene(sceneCode);
+        return ruleConfigGateway.queryRuleFactorGroupWithTree(groupCodes);
+    }
+
+    @Override
     public String createRuleFactorGroup(RuleFactorGroupReq ruleFactorGroupReq) {
-        RuleFactorGroup ruleFactorGroup = RuleFactorGroup.builder().groupCode(ruleFactorGroupReq.getGroupCode())
-                .groupName(ruleFactorGroupReq.getGroupName()).build();
+        RuleFactorGroup ruleFactorGroup = RuleFactorGroup.builder().groupCode(ruleFactorGroupReq.getGroupCode()).groupName(ruleFactorGroupReq.getGroupName()).build();
         Assert.notNull(ruleFactorGroup, "数据不能为空");
         return ruleConfigGateway.createRuleFactorGroup(ruleFactorGroup);
     }
