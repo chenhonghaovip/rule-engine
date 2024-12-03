@@ -8,7 +8,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jd.cho.rule.engine.common.base.CommonDict;
 import com.jd.cho.rule.engine.common.dict.Dict;
-import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
 import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
 import com.jd.cho.rule.engine.common.exceptions.BusinessException;
 import com.jd.cho.rule.engine.common.protocol.RulePackDTO;
@@ -22,6 +21,8 @@ import com.jd.cho.rule.engine.dal.DO.*;
 import com.jd.cho.rule.engine.dal.mapper.*;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.domain.model.*;
+import com.jd.cho.rule.engine.factor.RuleFactorTypeLoader;
+import com.jd.cho.rule.engine.factor.dto.FactorTypeDTO;
 import com.jd.cho.rule.engine.infra.convert.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -302,7 +303,11 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
             ruleFactor.setGroupName(groupMaps.get(each.getGroupCode()).getGroupName());
             ruleFactor.setParentGroupCode(groupMaps.get(each.getGroupCode()).getParentGroupCode());
             ruleFactor.setConstantValues(MethodUtil.getDict(each.getConstantType(), each.getConstantValue(), context));
-            ruleFactor.setExpressOperationList(ExpressOperationEnum.MAP.get(each.getFactorType()));
+            FactorTypeDTO factorTypeDTO = RuleFactorTypeLoader.FACTOR_TYPE_DTO_MAP.get(each.getFactorType());
+            if (Objects.isNull(factorTypeDTO)) {
+                throw new BusinessException(BizErrorEnum.FACTOR_TYPE_IS_ERROR);
+            }
+            ruleFactor.setExpressOperationList(factorTypeDTO.getComparativeOperatorList());
             return ruleFactor;
         }).collect(Collectors.toList());
 

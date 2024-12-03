@@ -1,19 +1,24 @@
-package com.jd.cho.rule.engine.factor;
+package com.jd.cho.rule.engine.factor.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 /**
  * @author chenhonghao12
  * @version 1.0
  */
 @Data
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 public class ComparativeOperator {
+
+    /**
+     * 归属规则因子类型
+     */
+    private String code;
 
     /**
      * 操作符唯一标识

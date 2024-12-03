@@ -1,16 +1,16 @@
-package com.jd.cho.rule.engine.domain.model;
+package com.jd.cho.rule.engine.factor.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 /**
  * @author chenhonghao12
  * @version 1.0
  */
 @Data
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 public class RuleFactorType {
@@ -24,19 +24,5 @@ public class RuleFactorType {
      */
     private String desc;
 
-    /**
-     * 操作符唯一标识
-     */
-    private String operator;
-
-    /**
-     * 操作符名称
-     */
-    private String remark;
-
-    /**
-     * 表达式
-     */
-    private String expression;
 
 }

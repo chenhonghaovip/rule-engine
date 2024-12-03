@@ -1,8 +1,6 @@
 package com.jd.cho.rule.engine.common.protocol.checker;
 
 import com.alibaba.fastjson.JSON;
-import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
-import com.jd.cho.rule.engine.common.enums.FactorTypeEnum;
 import com.jd.cho.rule.engine.common.enums.RelationTypeEnum;
 import com.jd.cho.rule.engine.common.enums.VarTypeEnum;
 import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
@@ -11,6 +9,9 @@ import com.jd.cho.rule.engine.common.util.AssertUtil;
 import com.jd.cho.rule.engine.domain.model.BasicVar;
 import com.jd.cho.rule.engine.domain.model.RuleCondition;
 import com.jd.cho.rule.engine.domain.model.RuleFactor;
+import com.jd.cho.rule.engine.factor.RuleFactorTypeLoader;
+import com.jd.cho.rule.engine.factor.model.ComparativeOperator;
+import com.jd.cho.rule.engine.factor.model.RuleFactorType;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -19,6 +20,9 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * @author chenhonghao12
+ */
 @Service
 @Slf4j
 public class RuleConditionChecker {
@@ -58,11 +62,13 @@ public class RuleConditionChecker {
 
                 // 如果是规则因子，判断因子类型和操作符是否相匹配
                 if (Objects.nonNull(leftFactor)) {
-                    FactorTypeEnum factorType = leftFactor.getFactorType();
+                    RuleFactorType factorType = leftFactor.getFactorType();
                     AssertUtil.isNotNull(factorType, BizErrorEnum.FACTOR_TYPE_IS_NOT_EXIST);
 
-                    ExpressOperationEnum byCode = ExpressOperationEnum.getByCode(ruleCondition.getCompareOperation());
-                    AssertUtil.isTrue(byCode.getGroup().equals(factorType.getCode()), BizErrorEnum.FACTOR_TYPE_AND_OPERATE_NOT_MATCH);
+                    ComparativeOperator comparativeOperator = RuleFactorTypeLoader.EXPRESS_TYPES_MAPS.get(ruleCondition.getCompareOperation());
+                    AssertUtil.isNotNull(comparativeOperator, BizErrorEnum.EXPRESS_OPERATION_DOES_NOT_EXIST);
+
+                    AssertUtil.isTrue(Objects.equals(comparativeOperator.getCode(), factorType.getCode()), BizErrorEnum.FACTOR_TYPE_AND_OPERATE_NOT_MATCH);
                 }
             }
         }

@@ -12,9 +12,9 @@ import com.jd.cho.rule.engine.common.util.MethodUtil;
 import com.jd.cho.rule.engine.common.util.QlExpressUtil;
 import com.jd.cho.rule.engine.core.RuleGroupExtendServiceFactory;
 import com.jd.cho.rule.engine.domain.model.CustomMethod;
-import com.jd.cho.rule.engine.factor.ComparativeOperator;
 import com.jd.cho.rule.engine.factor.RuleFactorTypeLoader;
 import com.jd.cho.rule.engine.factor.dto.FactorTypeDTO;
+import com.jd.cho.rule.engine.factor.model.ComparativeOperator;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

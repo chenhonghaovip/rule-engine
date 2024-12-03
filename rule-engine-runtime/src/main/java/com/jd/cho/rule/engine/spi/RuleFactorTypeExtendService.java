@@ -4,8 +4,8 @@ import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
 import com.jd.cho.rule.engine.common.enums.FactorTypeEnum;
 import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
 import com.jd.cho.rule.engine.common.util.AssertUtil;
-import com.jd.cho.rule.engine.factor.ComparativeOperator;
 import com.jd.cho.rule.engine.factor.dto.FactorTypeDTO;
+import com.jd.cho.rule.engine.factor.model.ComparativeOperator;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -38,6 +38,7 @@ public enum BizErrorEnum implements CommonException {
 
     FACTOR_TYPE_IS_REPEAT(-23, "规则因子类型不能重复"),
     FACTOR_TYPE_IS_ERROR(-24, "加载规则因子异常"),
+    EXPRESSION_CODE_IS_REPEAT(-25, "表达式code重复"),
 
     ;
 

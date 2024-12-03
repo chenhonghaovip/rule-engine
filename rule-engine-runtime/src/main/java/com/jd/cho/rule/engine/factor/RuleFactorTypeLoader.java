@@ -3,8 +3,9 @@ package com.jd.cho.rule.engine.factor;
 import com.google.common.collect.Maps;
 import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
 import com.jd.cho.rule.engine.common.exceptions.BusinessException;
-import com.jd.cho.rule.engine.domain.model.RuleFactorType;
 import com.jd.cho.rule.engine.factor.dto.FactorTypeDTO;
+import com.jd.cho.rule.engine.factor.model.ComparativeOperator;
+import com.jd.cho.rule.engine.factor.model.RuleFactorType;
 import com.jd.cho.rule.engine.spi.RuleFactorTypeExtendService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
@@ -16,7 +17,6 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * @author chenhonghao12
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 public class RuleFactorTypeLoader implements InitializingBean {
-    public static final Map<String, RuleFactorType> FACTOR_EXPRESS_TYPES_MAPS = Maps.newHashMap();
+    public static final Map<String, ComparativeOperator> EXPRESS_TYPES_MAPS = Maps.newHashMap();
     public static final Map<String, FactorTypeDTO> FACTOR_TYPE_DTO_MAP = Maps.newHashMap();
 
     @Resource
@@ -39,15 +39,12 @@ public class RuleFactorTypeLoader implements InitializingBean {
             checkInfo(factorType);
 
             List<ComparativeOperator> comparativeOperatorList = factorType.getComparativeOperatorList();
-            List<RuleFactorType> ruleFactorTypes = comparativeOperatorList.stream().map(o ->
-                    RuleFactorType.builder().code(factorType.getCode()).desc(factorType.getDesc())
-                            .expression(o.getExpression()).remark(o.getRemark())
-                            .operator(o.getOperator()).build()).collect(Collectors.toList());
-            ruleFactorTypes.forEach(o -> {
-                if (FACTOR_EXPRESS_TYPES_MAPS.containsKey(o.getOperator())) {
-                    throw new BusinessException(BizErrorEnum.FACTOR_TYPE_IS_REPEAT);
+            comparativeOperatorList.forEach(each -> {
+                if (EXPRESS_TYPES_MAPS.containsKey(each.getOperator())) {
+                    throw new BusinessException(BizErrorEnum.EXPRESSION_CODE_IS_REPEAT);
                 }
-                FACTOR_EXPRESS_TYPES_MAPS.put(o.getOperator(), o);
+                each.setCode(factorType.getCode());
+                EXPRESS_TYPES_MAPS.put(each.getOperator(), each);
             });
             FACTOR_TYPE_DTO_MAP.put(factorType.getCode(), factorType);
         }
@@ -66,5 +63,11 @@ public class RuleFactorTypeLoader implements InitializingBean {
         if (FACTOR_TYPE_DTO_MAP.containsKey(factorType.getCode())) {
             throw new BusinessException(BizErrorEnum.FACTOR_TYPE_IS_REPEAT);
         }
+    }
+
+
+    public static RuleFactorType getFactorType(String factorType) {
+        FactorTypeDTO factorTypeDTO = FACTOR_TYPE_DTO_MAP.get(factorType);
+        return RuleFactorType.builder().code(factorTypeDTO.getCode()).desc(factorTypeDTO.getDesc()).build();
     }
 }

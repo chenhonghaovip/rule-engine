@@ -2,8 +2,8 @@ package com.jd.cho.rule.engine.adapter.dto;
 
 import com.jd.cho.rule.engine.common.base.CommonDict;
 import com.jd.cho.rule.engine.common.enums.ConstantEnum;
-import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
-import com.jd.cho.rule.engine.common.enums.FactorTypeEnum;
+import com.jd.cho.rule.engine.factor.model.ComparativeOperator;
+import com.jd.cho.rule.engine.factor.model.RuleFactorType;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -41,7 +41,7 @@ public class RuleFactorDTO implements Serializable {
     /**
      * 因子类型（日期、数值、集合、布尔、文本）
      */
-    private FactorTypeEnum factorType;
+    private RuleFactorType factorType;
 
     /**
      * 因子分组code
@@ -51,7 +51,7 @@ public class RuleFactorDTO implements Serializable {
     /**
      * 支持的操作符
      */
-    private List<ExpressOperationEnum> expressOperationList;
+    private List<ComparativeOperator> expressOperationList;
 
     /**
      * 常量类型（Input:输入，Enum:枚举，Script:脚本）

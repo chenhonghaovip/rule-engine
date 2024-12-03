@@ -1,6 +1,6 @@
 package com.jd.cho.rule.engine.factor.dto;
 
-import com.jd.cho.rule.engine.factor.ComparativeOperator;
+import com.jd.cho.rule.engine.factor.model.ComparativeOperator;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

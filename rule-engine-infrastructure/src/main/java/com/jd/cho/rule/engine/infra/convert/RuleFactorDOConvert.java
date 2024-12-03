@@ -14,7 +14,7 @@ public interface RuleFactorDOConvert {
     RuleFactorDOConvert INSTANCE = Mappers.getMapper(RuleFactorDOConvert.class);
 
     @Mapping(source = "factorCode", target = "originalFactorCode")
-    @Mapping(target = "factorType", expression = "java(com.jd.cho.rule.engine.common.enums.FactorTypeEnum.getByCode(ruleFactorDO.getFactorType()))")
+    @Mapping(target = "factorType", expression = "java(com.jd.cho.rule.engine.factor.RuleFactorTypeLoader.getFactorType(ruleFactorDO.getFactorType()))")
     @Mapping(target = "constantType", expression = "java(com.jd.cho.rule.engine.common.enums.ConstantEnum.getByCode(ruleFactorDO.getConstantType()))")
     RuleFactor doToEntity(RuleFactorDO ruleFactorDO);
 

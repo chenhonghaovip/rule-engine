@@ -2,9 +2,9 @@ package com.jd.cho.rule.engine.domain.model;
 
 import com.jd.cho.rule.engine.common.base.CommonDict;
 import com.jd.cho.rule.engine.common.enums.ConstantEnum;
-import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
-import com.jd.cho.rule.engine.common.enums.FactorTypeEnum;
 import com.jd.cho.rule.engine.domain.model.convert.CoreRuleFactorConvert;
+import com.jd.cho.rule.engine.factor.model.ComparativeOperator;
+import com.jd.cho.rule.engine.factor.model.RuleFactorType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -63,12 +63,12 @@ public class RuleFactor {
     /**
      * 因子类型（日期、数值、集合、布尔、文本）
      */
-    private FactorTypeEnum factorType;
+    private RuleFactorType factorType;
 
     /**
      * 支持的操作符
      */
-    private List<ExpressOperationEnum> expressOperationList;
+    private List<ComparativeOperator> expressOperationList;
 
     /**
      * 常量类型（Input:输入，Enum:枚举，Script:脚本）
