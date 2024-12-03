@@ -2,7 +2,6 @@ package com.jd.cho.rule.engine.core.executer;
 
 import com.jd.cho.rule.engine.common.anno.ApiMethod;
 import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
-import com.jd.cho.rule.engine.common.enums.FactorTypeEnum;
 import com.jd.cho.rule.engine.common.enums.VarTypeEnum;
 import com.jd.cho.rule.engine.common.util.QlExpressUtil;
 import com.jd.cho.rule.engine.domain.model.BasicVar;
@@ -55,7 +54,7 @@ class CoreDecisionSetRuleExecutor_MethodTest extends AbstractCoreDecisionSetRule
     }
 
     public static class MethodOne {
-        @ApiMethod(code = "methodOne", name = "方法一", returnType = FactorTypeEnum.NUM, values = "i")
+        @ApiMethod(code = "methodOne", name = "方法一", valueScript = "Spring.getBean(\"signDomainServiceImpl\").getDict();")
         public Integer methodOne(Integer i) {
             return i;
         }
