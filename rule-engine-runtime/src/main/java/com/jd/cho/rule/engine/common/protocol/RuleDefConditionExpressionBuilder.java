@@ -13,6 +13,7 @@ import com.jd.cho.rule.engine.domain.model.CustomMethod;
 import com.jd.cho.rule.engine.domain.model.RuleCondition;
 import com.jd.cho.rule.engine.factor.RuleFactorTypeLoader;
 import com.jd.cho.rule.engine.factor.model.ComparativeOperator;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -24,7 +25,10 @@ import java.util.Objects;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class RuleDefConditionExpressionBuilder {
+
+    private RuleFactorTypeLoader ruleFactorTypeLoader;
 
     /**
      * 构建当表达式
@@ -85,9 +89,7 @@ public class RuleDefConditionExpressionBuilder {
      * @return 构建好的表达式
      */
     public String buildOperatorExpress(String operator, BasicVar leftVar, BasicVar rightVar, Map<String, String> fieldMapping) {
-//        ExpressOperationEnum operation = ExpressOperationEnum.getByCode(operator);
-
-        ComparativeOperator operation = RuleFactorTypeLoader.EXPRESS_TYPES_MAPS.get(operator);
+        ComparativeOperator operation = ruleFactorTypeLoader.getComparativeOperator(operator);
         AssertUtil.isNotNull(operation);
         String expression = operation.getExpression();
         return String.format(expression, resolveBasicVar(leftVar, fieldMapping), resolveBasicVar(rightVar, fieldMapping));

@@ -67,6 +67,10 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     private RulePackDTOChecker rulePackDTOChecker;
     @Resource
     private RulePackDTOFactorParser rulePackDTOFactorParser;
+    @Resource
+    private RuleFactorTypeLoader ruleFactorTypeLoader;
+    @Resource
+    private InfraConverters infraConverters;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -299,11 +303,11 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
         List<RuleFactorDO> ruleFactors = ruleFactorMapper.select(s -> s.where(RuleFactorDynamicSqlSupport.groupCode, isIn(allGroupCodes)).and(RuleFactorDynamicSqlSupport.yn, isEqualTo(true)));
 
         List<RuleFactor> ruleFactorList = ruleFactors.stream().map(each -> {
-            RuleFactor ruleFactor = RuleFactorDOConvert.INSTANCE.doToEntity(each);
+            RuleFactor ruleFactor = infraConverters.doToEntity(each);
             ruleFactor.setGroupName(groupMaps.get(each.getGroupCode()).getGroupName());
             ruleFactor.setParentGroupCode(groupMaps.get(each.getGroupCode()).getParentGroupCode());
             ruleFactor.setConstantValues(MethodUtil.getDict(each.getConstantType(), each.getConstantValue(), context));
-            FactorTypeDTO factorTypeDTO = RuleFactorTypeLoader.FACTOR_TYPE_DTO_MAP.get(each.getFactorType());
+            FactorTypeDTO factorTypeDTO = ruleFactorTypeLoader.getFactorTypeDTO(each.getFactorType());
             if (Objects.isNull(factorTypeDTO)) {
                 throw new BusinessException(BizErrorEnum.FACTOR_TYPE_IS_ERROR);
             }
@@ -318,7 +322,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
     public List<RuleFactor> queryFactorCodes() {
         if (RULE_CODE_MAP.isEmpty()) {
             List<RuleFactorDO> ruleFactors = ruleFactorMapper.select(s -> s.where(RuleFactorDynamicSqlSupport.tenant, isEqualTo(AtomicLoginUserUtil.getLoginUserInfo().getTenant())).and(RuleFactorDynamicSqlSupport.yn, isEqualTo(true)));
-            List<RuleFactor> ruleFactorList = ruleFactors.stream().map(RuleFactorDOConvert.INSTANCE::doToEntity).collect(Collectors.toList());
+            List<RuleFactor> ruleFactorList = ruleFactors.stream().map(infraConverters::doToEntity).collect(Collectors.toList());
             RULE_CODE_MAP.putAll(ruleFactorList.stream().collect(Collectors.toMap(RuleFactor::getFactorCode, Function.identity())));
             return ruleFactorList;
         }
@@ -443,7 +447,7 @@ public class RuleConfigGatewayImpl implements RuleConfigGateway {
             throw new BusinessException(BizErrorEnum.FACTOR_CODE_IS_NOT_EXIST);
         }
 
-        return ruleFactors.stream().map(RuleFactorDOConvert.INSTANCE::doToEntity).collect(Collectors.toMap(RuleFactor::getFactorCode, Function.identity()));
+        return ruleFactors.stream().map(infraConverters::doToEntity).collect(Collectors.toMap(RuleFactor::getFactorCode, Function.identity()));
     }
 
 

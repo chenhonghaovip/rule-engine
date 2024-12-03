@@ -35,8 +35,8 @@ public class MethodUtil {
             customMethod.setMethodName(StringUtils.isNotBlank(apiMethod.name()) ? apiMethod.name() : method.getName());
             customMethod.setMethodCode(StringUtils.isNotBlank(apiMethod.code()) ? apiMethod.code() : method.getName());
             String returnType = apiMethod.returnType();
-            if (RuleFactorTypeLoader.FACTOR_TYPE_DTO_MAP.containsKey(returnType)) {
-                customMethod.setReturnType(RuleFactorTypeLoader.getFactorType(returnType));
+            if (ApplicationUtils.getBeans(RuleFactorTypeLoader.class).getFactorType(returnType) != null) {
+                customMethod.setReturnType(ApplicationUtils.getBeans(RuleFactorTypeLoader.class).getFactorType(returnType));
             }
 
             String valueScript = apiMethod.valueScript();

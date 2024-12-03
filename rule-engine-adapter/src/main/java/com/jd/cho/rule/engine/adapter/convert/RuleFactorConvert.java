@@ -17,12 +17,17 @@ public interface RuleFactorConvert {
 
     RuleFactorDTO doToDTO(RuleFactor ruleFactor);
 
-
+    /**
+     * !不要直接使用该方法
+     *
+     * @param ruleFactorReq
+     * @return
+     * @see AdapterConverters#doToDTO(RuleFactorReq)
+     */
     @Mapping(source = "factorCode", target = "originalFactorCode")
-    @Mapping(target = "factorType", expression = "java(com.jd.cho.rule.engine.factor.RuleFactorTypeLoader.getFactorType(ruleFactorReq.getFactorType()))")
+    @Mapping(target = "factorType", ignore = true)
     @Mapping(target = "constantType", expression = "java(com.jd.cho.rule.engine.common.enums.ConstantEnum.getByCode(ruleFactorReq.getConstantType()))")
     RuleFactorDTO doToDTO(RuleFactorReq ruleFactorReq);
-
 
     RuleFactor doToEntity(RuleFactorDTO ruleFactorDTO);
 }

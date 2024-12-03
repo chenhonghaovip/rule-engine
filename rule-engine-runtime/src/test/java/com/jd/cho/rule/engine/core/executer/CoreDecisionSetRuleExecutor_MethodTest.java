@@ -22,7 +22,7 @@ class CoreDecisionSetRuleExecutor_MethodTest extends AbstractCoreDecisionSetRule
     @Test
     void test_method_eq_const() throws Exception {
         QlExpressUtil.addFunctionOfClassMethod(new ArrayList<Method>() {{
-            Method methodOne = MethodOne.class.getMethod("methodOne", Integer.class);
+            Method methodOne = Methods.class.getMethod("methodOne", Integer.class);
             this.add(methodOne);
         }});
         final String methodOne = "methodOne";
@@ -53,8 +53,8 @@ class CoreDecisionSetRuleExecutor_MethodTest extends AbstractCoreDecisionSetRule
         Assertions.assertThat(matched).isTrue();
     }
 
-    public static class MethodOne {
-        @ApiMethod(code = "methodOne", name = "方法一", valueScript = "Spring.getBean(\"signDomainServiceImpl\").getDict();")
+    public static class Methods {
+        @ApiMethod(code = "methodOne", name = "方法一")
         public Integer methodOne(Integer i) {
             return i;
         }

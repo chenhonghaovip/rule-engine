@@ -12,6 +12,7 @@ import com.jd.cho.rule.engine.domain.model.RuleFactor;
 import com.jd.cho.rule.engine.factor.RuleFactorTypeLoader;
 import com.jd.cho.rule.engine.factor.model.ComparativeOperator;
 import com.jd.cho.rule.engine.factor.model.RuleFactorType;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -25,7 +26,9 @@ import java.util.Objects;
  */
 @Service
 @Slf4j
+@AllArgsConstructor
 public class RuleConditionChecker {
+    private RuleFactorTypeLoader ruleFactorTypeLoader;
 
     public void check(RuleCondition ruleCondition, Map<String, RuleFactor> ruleFactorMap) {
         try {
@@ -46,7 +49,7 @@ public class RuleConditionChecker {
      * @param ruleCondition 规则协议
      * @param ruleFactorMap 规则因子信息
      */
-    private static void checkRuleConditionInner(RuleCondition ruleCondition, Map<String, RuleFactor> ruleFactorMap) {
+    private void checkRuleConditionInner(RuleCondition ruleCondition, Map<String, RuleFactor> ruleFactorMap) {
         if (Objects.nonNull(ruleCondition)) {
             if (StringUtils.isNotBlank(ruleCondition.getLogicOperation())) {
                 AssertUtil.isNotNull(RelationTypeEnum.getByCode(ruleCondition.getLogicOperation()), BizErrorEnum.EXPRESS_OPERATION_DOES_NOT_EXIST);
@@ -65,7 +68,7 @@ public class RuleConditionChecker {
                     RuleFactorType factorType = leftFactor.getFactorType();
                     AssertUtil.isNotNull(factorType, BizErrorEnum.FACTOR_TYPE_IS_NOT_EXIST);
 
-                    ComparativeOperator comparativeOperator = RuleFactorTypeLoader.EXPRESS_TYPES_MAPS.get(ruleCondition.getCompareOperation());
+                    ComparativeOperator comparativeOperator = ruleFactorTypeLoader.getComparativeOperator(ruleCondition.getCompareOperation());
                     AssertUtil.isNotNull(comparativeOperator, BizErrorEnum.EXPRESS_OPERATION_DOES_NOT_EXIST);
 
                     AssertUtil.isTrue(Objects.equals(comparativeOperator.getCode(), factorType.getCode()), BizErrorEnum.FACTOR_TYPE_AND_OPERATE_NOT_MATCH);

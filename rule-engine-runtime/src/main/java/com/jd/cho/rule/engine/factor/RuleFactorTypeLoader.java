@@ -14,6 +14,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -25,8 +26,8 @@ import java.util.Objects;
 @Slf4j
 @Component
 public class RuleFactorTypeLoader implements InitializingBean {
-    public static final Map<String, ComparativeOperator> EXPRESS_TYPES_MAPS = Maps.newHashMap();
-    public static final Map<String, FactorTypeDTO> FACTOR_TYPE_DTO_MAP = Maps.newHashMap();
+    private final Map<String, ComparativeOperator> EXPRESS_TYPES_MAPS = Maps.newHashMap();
+    private final Map<String, FactorTypeDTO> FACTOR_TYPE_DTO_MAP = Maps.newHashMap();
 
     @Resource
     private List<RuleFactorTypeExtendService> ruleFactorTypeExtendServices;
@@ -50,6 +51,25 @@ public class RuleFactorTypeLoader implements InitializingBean {
         }
     }
 
+    public ComparativeOperator getComparativeOperator(String operator) {
+        return EXPRESS_TYPES_MAPS.get(operator);
+    }
+
+    public FactorTypeDTO getFactorTypeDTO(String factorType) {
+        return FACTOR_TYPE_DTO_MAP.get(factorType);
+    }
+
+    public RuleFactorType getFactorType(String factorType) {
+        FactorTypeDTO factorTypeDTO = FACTOR_TYPE_DTO_MAP.get(factorType);
+        if (factorTypeDTO == null) {
+            return null;
+        }
+        return RuleFactorType.builder().code(factorTypeDTO.getCode()).desc(factorTypeDTO.getDesc()).build();
+    }
+
+    public Map<String, FactorTypeDTO> getFactorTypeDTOMap() {
+        return new HashMap<>(FACTOR_TYPE_DTO_MAP);
+    }
 
     /**
      * 基础校验
@@ -63,11 +83,5 @@ public class RuleFactorTypeLoader implements InitializingBean {
         if (FACTOR_TYPE_DTO_MAP.containsKey(factorType.getCode())) {
             throw new BusinessException(BizErrorEnum.FACTOR_TYPE_IS_REPEAT);
         }
-    }
-
-
-    public static RuleFactorType getFactorType(String factorType) {
-        FactorTypeDTO factorTypeDTO = FACTOR_TYPE_DTO_MAP.get(factorType);
-        return RuleFactorType.builder().code(factorTypeDTO.getCode()).desc(factorTypeDTO.getDesc()).build();
     }
 }

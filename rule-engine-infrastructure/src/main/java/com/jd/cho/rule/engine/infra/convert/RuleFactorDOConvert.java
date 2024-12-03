@@ -13,13 +13,19 @@ import org.mapstruct.factory.Mappers;
 public interface RuleFactorDOConvert {
     RuleFactorDOConvert INSTANCE = Mappers.getMapper(RuleFactorDOConvert.class);
 
+    /**
+     * !不要直接使用该方法
+     *
+     * @param ruleFactorDO
+     * @return
+     * @see InfraConverters#doToEntity(RuleFactorDO)
+     */
     @Mapping(source = "factorCode", target = "originalFactorCode")
-    @Mapping(target = "factorType", expression = "java(com.jd.cho.rule.engine.factor.RuleFactorTypeLoader.getFactorType(ruleFactorDO.getFactorType()))")
+    @Mapping(target = "factorType", ignore = true)
     @Mapping(target = "constantType", expression = "java(com.jd.cho.rule.engine.common.enums.ConstantEnum.getByCode(ruleFactorDO.getConstantType()))")
     RuleFactor doToEntity(RuleFactorDO ruleFactorDO);
 
     @Mapping(target = "factorType", expression = "java(ruleFactor.getFactorType().getCode())")
     @Mapping(target = "constantType", expression = "java(ruleFactor.getConstantType().getCode())")
     RuleFactorDO doToDO(RuleFactor ruleFactor);
-
 }

@@ -32,6 +32,7 @@ import java.util.Objects;
 public class RuleCommonController {
 
     private RuleGroupExtendServiceFactory ruleGroupExtendServiceFactory;
+    private RuleFactorTypeLoader ruleFactorTypeLoader;
 
     /**
      * 获取因子类型列表
@@ -40,7 +41,7 @@ public class RuleCommonController {
      */
     @GetMapping("/factor/type")
     public List<FactorTypeDTO> factorTypeEnums() {
-        return new ArrayList<>(RuleFactorTypeLoader.FACTOR_TYPE_DTO_MAP.values());
+        return new ArrayList<>(ruleFactorTypeLoader.getFactorTypeDTOMap().values());
     }
 
 
@@ -51,7 +52,7 @@ public class RuleCommonController {
      */
     @GetMapping("/factor/express")
     public List<ComparativeOperator> expressOperationEnums(@RequestParam("type") String type) {
-        FactorTypeDTO factorTypeDTO = RuleFactorTypeLoader.FACTOR_TYPE_DTO_MAP.get(type);
+        FactorTypeDTO factorTypeDTO = ruleFactorTypeLoader.getFactorTypeDTO(type);
         if (Objects.isNull(factorTypeDTO)) {
             throw new BusinessException(BizErrorEnum.FACTOR_TYPE_IS_ERROR);
         }
