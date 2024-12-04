@@ -54,7 +54,7 @@ class CoreDecisionSetRuleExecutor_MethodTest extends AbstractCoreDecisionSetRule
     }
 
     public static class Methods {
-        @ApiMethod(code = "methodOne", name = "方法一")
+        @ApiMethod(code = "methodOne", name = "方法一", returnType = "num")
         public Integer methodOne(Integer i) {
             return i;
         }

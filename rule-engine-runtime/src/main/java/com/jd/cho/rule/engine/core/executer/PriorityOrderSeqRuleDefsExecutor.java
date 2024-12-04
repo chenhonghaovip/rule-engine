@@ -1,5 +1,4 @@
-package com.jd.cho.rule.engine.core.extend;
-
+package com.jd.cho.rule.engine.core.executer;
 
 import com.jd.cho.rule.engine.core.RuleDefExecutor;
 import com.jd.cho.rule.engine.domain.model.RuleDef;
@@ -10,32 +9,29 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 按照优先级执行，执行到第一个规则匹配成功，执行后就返回，不再继续执行
+ * 按照优先级顺序执行，优先级高的先执行，直到执行完全部规则
  *
  * @author chenhonghao12
  * @version 1.0
  */
 @Service
-public class PriorityOrderMatchRuleGroup implements RuleDefsExecutor {
-    public static final String CODE = "OrderMatch";
+public class PriorityOrderSeqRuleDefsExecutor implements RuleDefsExecutor {
 
     @Override
     public String getCode() {
-        return CODE;
+        return "OrderSeq";
     }
 
     @Override
     public String getName() {
-        return "当有规则被命中时终止";
+        return "顺序执行所有规则";
     }
 
     @Override
     public boolean execute(RuleDefExecutor ruleDefExecutor, List<RuleDef> list, Map<String, Object> context) {
         for (RuleDef ruleDef : list) {
-            if (ruleDefExecutor.execute(ruleDef, context)) {
-                return true;
-            }
+            ruleDefExecutor.execute(ruleDef, context);
         }
-        return false;
+        return true;
     }
 }

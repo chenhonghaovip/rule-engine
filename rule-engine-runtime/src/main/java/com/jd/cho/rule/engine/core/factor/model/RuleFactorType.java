@@ -1,23 +1,19 @@
-package com.jd.cho.rule.engine.factor.dto;
+package com.jd.cho.rule.engine.core.factor.model;
 
-import com.jd.cho.rule.engine.factor.model.ComparativeOperator;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
+import lombok.experimental.SuperBuilder;
 
 /**
  * @author chenhonghao12
  * @version 1.0
  */
 @Data
-@Builder
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FactorTypeDTO {
-
+public class RuleFactorType {
     /**
      * 类型编码
      */
@@ -28,8 +24,5 @@ public class FactorTypeDTO {
      */
     private String desc;
 
-    /**
-     * 支持的操作符列表
-     */
-    private List<ComparativeOperator> comparativeOperatorList;
+
 }

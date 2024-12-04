@@ -1,8 +1,8 @@
 package com.jd.cho.rule.engine.config;
 
 import com.google.common.collect.Lists;
-import com.jd.cho.rule.engine.factor.dto.FactorTypeDTO;
-import com.jd.cho.rule.engine.factor.model.ComparativeOperator;
+import com.jd.cho.rule.engine.core.factor.dto.FactorTypeDTO;
+import com.jd.cho.rule.engine.core.factor.model.ComparativeOperator;
 import com.jd.cho.rule.engine.spi.RuleFactorTypeExtendService;
 import org.springframework.stereotype.Service;
 

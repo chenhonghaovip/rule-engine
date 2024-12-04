@@ -4,7 +4,7 @@ import com.jd.cho.rule.engine.adapter.convert.RulePackConvert;
 import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
 import com.jd.cho.rule.engine.common.protocol.RulePackDTO;
 import com.jd.cho.rule.engine.common.util.AssertUtil;
-import com.jd.cho.rule.engine.core.extend.PriorityOrderMatchRuleGroup;
+import com.jd.cho.rule.engine.core.executer.PriorityOrderMatchRuleDefsExecutor;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.domain.model.RulePack;
 import com.jd.cho.rule.engine.service.RulePackService;
@@ -36,7 +36,7 @@ public class RulePackServiceImpl implements RulePackService {
             rulePackDTO.setRulePackCode(UUID.randomUUID().toString());
         }
         Assert.notNull(rulePackDTO.getRulePackType(), "规则类型不能为空");
-        String ruleArrangeStrategy = StringUtils.isBlank(rulePackDTO.getRuleArrangeStrategy()) ? PriorityOrderMatchRuleGroup.CODE : rulePackDTO.getRuleArrangeStrategy();
+        String ruleArrangeStrategy = StringUtils.isBlank(rulePackDTO.getRuleArrangeStrategy()) ? PriorityOrderMatchRuleDefsExecutor.CODE : rulePackDTO.getRuleArrangeStrategy();
         rulePackDTO.setRuleArrangeStrategy(ruleArrangeStrategy);
         AssertUtil.isNotBlank(rulePackDTO.getRuleContent());
 
@@ -48,7 +48,7 @@ public class RulePackServiceImpl implements RulePackService {
         Assert.notNull(rulePackDTO, "规则数据不能为空");
         Assert.notNull(rulePackDTO.getId(), "规则包id不能为空");
         AssertUtil.isNotBlank(rulePackDTO.getRuleContent());
-        String ruleArrangeStrategy = StringUtils.isBlank(rulePackDTO.getRuleArrangeStrategy()) ? PriorityOrderMatchRuleGroup.CODE : rulePackDTO.getRuleArrangeStrategy();
+        String ruleArrangeStrategy = StringUtils.isBlank(rulePackDTO.getRuleArrangeStrategy()) ? PriorityOrderMatchRuleDefsExecutor.CODE : rulePackDTO.getRuleArrangeStrategy();
         rulePackDTO.setRuleArrangeStrategy(ruleArrangeStrategy);
         ruleConfigGateway.updateRulePack(rulePackDTO);
     }

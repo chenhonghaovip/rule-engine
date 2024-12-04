@@ -5,7 +5,7 @@ import com.jd.cho.rule.engine.spi.RuleDefsExecutor;
 
 import java.util.List;
 
-public interface RuleGroupExtendServiceFactory {
+public interface RuleDefsExecutorFactory {
     RuleDefsExecutor get(String ruleArrangeStrategy);
 
     /**

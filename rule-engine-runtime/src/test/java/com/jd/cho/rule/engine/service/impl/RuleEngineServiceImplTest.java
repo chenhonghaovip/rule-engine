@@ -1,5 +1,6 @@
 package com.jd.cho.rule.engine.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
 import com.jd.cho.rule.engine.common.enums.RulePackTypeEnum;
 import com.jd.cho.rule.engine.common.enums.VarTypeEnum;
@@ -9,7 +10,7 @@ import com.jd.cho.rule.engine.core.DispatchRulePackExecutor;
 import com.jd.cho.rule.engine.core.executer.AbstractCoreDecisionSetRuleExecutorTest;
 import com.jd.cho.rule.engine.core.executer.CoreDecisionSetRuleExecutor;
 import com.jd.cho.rule.engine.core.executer.CoreDispatchRulePackExecutorImpl;
-import com.jd.cho.rule.engine.core.extend.PriorityOrderMatchRuleGroup;
+import com.jd.cho.rule.engine.core.executer.PriorityOrderMatchRuleDefsExecutor;
 import com.jd.cho.rule.engine.domain.model.BasicVar;
 import com.jd.cho.rule.engine.domain.model.RuleCondition;
 import com.jd.cho.rule.engine.domain.model.RuleDef;
@@ -32,20 +33,21 @@ class RuleEngineServiceImplTest extends AbstractCoreDecisionSetRuleExecutorTest 
     protected List<AcceptableRulePackExecutor> acceptableRulePackExecutors;
     protected DispatchRulePackExecutor dispatchRulePackExecutor;
     protected ApplicationContext applicationContext;
-    protected RuleEngineService ruleEngine;
+
+    protected RuleEngineService tester;
 
     @BeforeEach
     protected void setUp() {
         super.setUp();
 
         acceptableRulePackExecutors = new ArrayList<AcceptableRulePackExecutor>() {{
-            this.add(new CoreDecisionSetRuleExecutor(ruleGroupExtendServiceFactory, new RuleDefConditionExpressionBuilder(ruleFactorTypeLoader)));
+            this.add(new CoreDecisionSetRuleExecutor(ruleDefsExecutorFactory, new RuleDefConditionExpressionBuilder(ruleFactorTypeLoader)));
         }};
 
         applicationContext = Mockito.mock(ApplicationContext.class);
         dispatchRulePackExecutor = new CoreDispatchRulePackExecutorImpl(ruleConfigGateway, acceptableRulePackExecutors);
 
-        ruleEngine = new RuleEngineServiceImpl(dispatchRulePackExecutor, applicationContext);
+        tester = new RuleEngineServiceImpl(dispatchRulePackExecutor, applicationContext);
     }
 
     @AfterEach
@@ -55,14 +57,14 @@ class RuleEngineServiceImplTest extends AbstractCoreDecisionSetRuleExecutorTest 
 
     @DisplayName("condition(single expr): 1 = 1")
     @Test
-    void test_const_eq_const() {
+    void test_const_eq_const() throws JsonProcessingException {
         final String rulePackCode = "ss";
         final Map<String, Object> context = new HashMap<>();
         final RulePack rulePack = new RulePack() {{
             this.setRulePackCode(rulePackCode);
             this.setRulePackType(RulePackTypeEnum.DECISION_SET);
-            this.setRuleArrangeStrategy(PriorityOrderMatchRuleGroup.CODE);
-            this.setRules(new ArrayList<RuleDef>() {{
+            this.setRuleArrangeStrategy(PriorityOrderMatchRuleDefsExecutor.CODE);
+            ArrayList<RuleDef> ruleDefs = new ArrayList<RuleDef>() {{
                 final RuleDef ruleDef = new RuleDef() {{
                     final Integer constValue = 1;
                     this.setPriority(1);
@@ -79,13 +81,14 @@ class RuleEngineServiceImplTest extends AbstractCoreDecisionSetRuleExecutorTest 
                     }});
                 }};
                 this.add(ruleDef);
-            }});
+            }};
+            this.setRuleContent(objectMapper.writeValueAsString(ruleDefs));
         }};
 
         Mockito.when(ruleConfigGateway.rulePackInfo(rulePackCode)).thenReturn(rulePack);
-        Mockito.when(ruleGroupExtendServiceFactory.get(PriorityOrderMatchRuleGroup.CODE)).thenReturn(new PriorityOrderMatchRuleGroup());
+        Mockito.when(ruleDefsExecutorFactory.get(PriorityOrderMatchRuleDefsExecutor.CODE)).thenReturn(new PriorityOrderMatchRuleDefsExecutor());
 
-        boolean matched = ruleEngine.execute(rulePackCode, context);
+        boolean matched = tester.execute(rulePackCode, context);
         Assertions.assertThat(matched).isTrue();
     }
 }

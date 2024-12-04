@@ -10,9 +10,9 @@ import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.enums.ConstantEnum;
 import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
 import com.jd.cho.rule.engine.common.exceptions.BusinessException;
+import com.jd.cho.rule.engine.core.factor.RuleFactorTypeLoader;
+import com.jd.cho.rule.engine.core.factor.model.RuleFactorType;
 import com.jd.cho.rule.engine.domain.model.CustomMethod;
-import com.jd.cho.rule.engine.factor.RuleFactorTypeLoader;
-import com.jd.cho.rule.engine.factor.model.RuleFactorType;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 

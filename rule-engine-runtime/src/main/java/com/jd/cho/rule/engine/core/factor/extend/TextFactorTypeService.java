@@ -1,7 +1,7 @@
-package com.jd.cho.rule.engine.factor.extend;
+package com.jd.cho.rule.engine.core.factor.extend;
 
 import com.jd.cho.rule.engine.common.enums.FactorTypeEnum;
-import com.jd.cho.rule.engine.factor.dto.FactorTypeDTO;
+import com.jd.cho.rule.engine.core.factor.dto.FactorTypeDTO;
 import com.jd.cho.rule.engine.spi.RuleFactorTypeExtendService;
 import org.springframework.stereotype.Service;
 
@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
  * @version 1.0
  */
 @Service
-public class DateFactorTypeService implements RuleFactorTypeExtendService {
+public class TextFactorTypeService implements RuleFactorTypeExtendService {
 
     @Override
     public FactorTypeDTO getFactorType() {
-        FactorTypeEnum factorTypeEnum = FactorTypeEnum.DATE;
+        FactorTypeEnum factorTypeEnum = FactorTypeEnum.TEXT;
         return getExpressOperationList(factorTypeEnum);
     }
 }

@@ -2,8 +2,8 @@ package com.jd.cho.rule.engine.adapter.dto;
 
 import com.jd.cho.rule.engine.common.base.CommonDict;
 import com.jd.cho.rule.engine.common.enums.ConstantEnum;
-import com.jd.cho.rule.engine.factor.model.ComparativeOperator;
-import com.jd.cho.rule.engine.factor.model.RuleFactorType;
+import com.jd.cho.rule.engine.core.factor.model.ComparativeOperator;
+import com.jd.cho.rule.engine.core.factor.model.RuleFactorType;
 import lombok.Data;
 
 import java.io.Serializable;

@@ -1,4 +1,4 @@
-package com.jd.cho.rule.engine.domain.atomic;
+package com.jd.cho.rule.engine.core.atomic;
 
 import java.util.Map;
 

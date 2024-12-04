@@ -7,11 +7,11 @@ import com.jd.cho.rule.engine.common.enums.VarTypeEnum;
 import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
 import com.jd.cho.rule.engine.common.exceptions.BusinessException;
 import com.jd.cho.rule.engine.common.util.QlExpressUtil;
-import com.jd.cho.rule.engine.core.RuleGroupExtendServiceFactory;
+import com.jd.cho.rule.engine.core.RuleDefsExecutorFactory;
+import com.jd.cho.rule.engine.core.factor.RuleFactorTypeLoader;
+import com.jd.cho.rule.engine.core.factor.dto.FactorTypeDTO;
+import com.jd.cho.rule.engine.core.factor.model.ComparativeOperator;
 import com.jd.cho.rule.engine.domain.model.CustomMethod;
-import com.jd.cho.rule.engine.factor.RuleFactorTypeLoader;
-import com.jd.cho.rule.engine.factor.dto.FactorTypeDTO;
-import com.jd.cho.rule.engine.factor.model.ComparativeOperator;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +31,7 @@ import java.util.Objects;
 @AllArgsConstructor
 public class RuleCommonController {
 
-    private RuleGroupExtendServiceFactory ruleGroupExtendServiceFactory;
+    private RuleDefsExecutorFactory ruleDefsExecutorFactory;
     private RuleFactorTypeLoader ruleFactorTypeLoader;
 
     /**
@@ -76,7 +76,7 @@ public class RuleCommonController {
      */
     @GetMapping("/rule/strategy")
     public List<CommonDict> ruleArrangeStrategyEnums() {
-        return ruleGroupExtendServiceFactory.allRuleGroup();
+        return ruleDefsExecutorFactory.allRuleGroup();
     }
 
 

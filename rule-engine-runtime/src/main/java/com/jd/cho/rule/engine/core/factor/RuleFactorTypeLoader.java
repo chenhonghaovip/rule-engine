@@ -1,11 +1,11 @@
-package com.jd.cho.rule.engine.factor;
+package com.jd.cho.rule.engine.core.factor;
 
 import com.google.common.collect.Maps;
 import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
 import com.jd.cho.rule.engine.common.exceptions.BusinessException;
-import com.jd.cho.rule.engine.factor.dto.FactorTypeDTO;
-import com.jd.cho.rule.engine.factor.model.ComparativeOperator;
-import com.jd.cho.rule.engine.factor.model.RuleFactorType;
+import com.jd.cho.rule.engine.core.factor.dto.FactorTypeDTO;
+import com.jd.cho.rule.engine.core.factor.model.ComparativeOperator;
+import com.jd.cho.rule.engine.core.factor.model.RuleFactorType;
 import com.jd.cho.rule.engine.spi.RuleFactorTypeExtendService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;

@@ -10,7 +10,7 @@ import com.jd.cho.rule.engine.common.enums.RulePackTypeEnum;
 import com.jd.cho.rule.engine.common.protocol.RuleDefConditionExpressionBuilder;
 import com.jd.cho.rule.engine.common.util.QlExpressUtil;
 import com.jd.cho.rule.engine.core.DecisionSetRuleExecutor;
-import com.jd.cho.rule.engine.core.RuleGroupExtendServiceFactory;
+import com.jd.cho.rule.engine.core.RuleDefsExecutorFactory;
 import com.jd.cho.rule.engine.domain.model.RuleAction;
 import com.jd.cho.rule.engine.domain.model.RuleDef;
 import com.jd.cho.rule.engine.domain.model.RulePack;
@@ -29,7 +29,7 @@ import java.util.Objects;
 @Service
 @AllArgsConstructor
 public class CoreDecisionSetRuleExecutor implements DecisionSetRuleExecutor {
-    private RuleGroupExtendServiceFactory ruleGroupExtendServiceFactory;
+    private RuleDefsExecutorFactory ruleDefsExecutorFactory;
     private RuleDefConditionExpressionBuilder ruleDefConditionExpressionBuilder;
 
     @Override
@@ -61,7 +61,7 @@ public class CoreDecisionSetRuleExecutor implements DecisionSetRuleExecutor {
         Assert.isTrue(accept(rulePack), () -> "rule pack type is not support: " + rulePack);
 
         List<RuleDef> rules = JSON.parseArray(rulePack.getRuleContent(), RuleDef.class);
-        RuleDefsExecutor ruleGroup = ruleGroupExtendServiceFactory.get(rulePack.getRuleArrangeStrategy());
+        RuleDefsExecutor ruleGroup = ruleDefsExecutorFactory.get(rulePack.getRuleArrangeStrategy());
         return ruleGroup.execute(this, rules, context);
     }
 

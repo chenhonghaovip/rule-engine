@@ -2,8 +2,8 @@ package com.jd.cho.rule.engine.adapter.convert;
 
 import com.jd.cho.rule.engine.adapter.dto.RuleFactorDTO;
 import com.jd.cho.rule.engine.controller.VO.req.RuleFactorReq;
-import com.jd.cho.rule.engine.factor.RuleFactorTypeLoader;
-import com.jd.cho.rule.engine.factor.model.RuleFactorType;
+import com.jd.cho.rule.engine.core.factor.RuleFactorTypeLoader;
+import com.jd.cho.rule.engine.core.factor.model.RuleFactorType;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

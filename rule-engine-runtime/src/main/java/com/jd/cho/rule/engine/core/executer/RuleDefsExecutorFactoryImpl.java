@@ -1,7 +1,7 @@
-package com.jd.cho.rule.engine.core.extend;
+package com.jd.cho.rule.engine.core.executer;
 
 import com.jd.cho.rule.engine.common.base.CommonDict;
-import com.jd.cho.rule.engine.core.RuleGroupExtendServiceFactory;
+import com.jd.cho.rule.engine.core.RuleDefsExecutorFactory;
 import com.jd.cho.rule.engine.spi.RuleDefsExecutor;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 @Slf4j
-public class RuleGroupExtendServiceFactoryImpl implements RuleGroupExtendServiceFactory {
+public class RuleDefsExecutorFactoryImpl implements RuleDefsExecutorFactory {
     private List<RuleDefsExecutor> services;
 
     @Override

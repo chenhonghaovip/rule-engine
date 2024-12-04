@@ -1,4 +1,4 @@
-package com.jd.cho.rule.engine.factor.model;
+package com.jd.cho.rule.engine.core.factor.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

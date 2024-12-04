@@ -1,11 +1,11 @@
-package com.jd.cho.rule.engine.domain.atomic.impl;
+package com.jd.cho.rule.engine.core.atomic.impl;
 
 import com.jd.cho.rule.engine.common.cache.ContextHolder;
 import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
 import com.jd.cho.rule.engine.common.exceptions.BusinessException;
 import com.jd.cho.rule.engine.common.util.QlExpressUtil;
-import com.jd.cho.rule.engine.domain.atomic.FactorValueService;
+import com.jd.cho.rule.engine.core.atomic.FactorValueService;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.domain.model.RuleFactor;
 import lombok.AllArgsConstructor;

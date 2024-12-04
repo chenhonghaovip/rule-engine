@@ -1,8 +1,8 @@
 package com.jd.cho.rule.engine.infra.convert;
 
+import com.jd.cho.rule.engine.core.factor.RuleFactorTypeLoader;
 import com.jd.cho.rule.engine.dal.DO.RuleFactorDO;
 import com.jd.cho.rule.engine.domain.model.RuleFactor;
-import com.jd.cho.rule.engine.factor.RuleFactorTypeLoader;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

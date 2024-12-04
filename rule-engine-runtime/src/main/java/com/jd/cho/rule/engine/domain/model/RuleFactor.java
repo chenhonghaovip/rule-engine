@@ -2,9 +2,9 @@ package com.jd.cho.rule.engine.domain.model;
 
 import com.jd.cho.rule.engine.common.base.CommonDict;
 import com.jd.cho.rule.engine.common.enums.ConstantEnum;
+import com.jd.cho.rule.engine.core.factor.model.ComparativeOperator;
+import com.jd.cho.rule.engine.core.factor.model.RuleFactorType;
 import com.jd.cho.rule.engine.domain.model.convert.CoreRuleFactorConvert;
-import com.jd.cho.rule.engine.factor.model.ComparativeOperator;
-import com.jd.cho.rule.engine.factor.model.RuleFactorType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
