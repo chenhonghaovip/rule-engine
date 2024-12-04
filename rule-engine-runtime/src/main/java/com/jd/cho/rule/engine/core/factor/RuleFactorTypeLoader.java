@@ -7,13 +7,13 @@ import com.jd.cho.rule.engine.core.factor.dto.FactorTypeDTO;
 import com.jd.cho.rule.engine.core.factor.model.ComparativeOperator;
 import com.jd.cho.rule.engine.core.factor.model.RuleFactorType;
 import com.jd.cho.rule.engine.spi.RuleFactorTypeExtendService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,11 +25,11 @@ import java.util.Objects;
  */
 @Slf4j
 @Component
+@AllArgsConstructor
 public class RuleFactorTypeLoader implements InitializingBean {
     private final Map<String, ComparativeOperator> EXPRESS_TYPES_MAPS = Maps.newHashMap();
     private final Map<String, FactorTypeDTO> FACTOR_TYPE_DTO_MAP = Maps.newHashMap();
 
-    @Resource
     private List<RuleFactorTypeExtendService> ruleFactorTypeExtendServices;
 
     @Override

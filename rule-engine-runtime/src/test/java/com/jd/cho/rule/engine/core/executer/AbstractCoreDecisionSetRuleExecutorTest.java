@@ -1,21 +1,20 @@
 package com.jd.cho.rule.engine.core.executer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
-import com.jd.cho.rule.engine.common.enums.FactorTypeEnum;
 import com.jd.cho.rule.engine.common.protocol.RuleDefConditionExpressionBuilder;
 import com.jd.cho.rule.engine.common.util.ApplicationUtils;
 import com.jd.cho.rule.engine.core.RuleDefsExecutorFactory;
 import com.jd.cho.rule.engine.core.atomic.FactorValueService;
 import com.jd.cho.rule.engine.core.atomic.impl.FactorValueServiceImpl;
 import com.jd.cho.rule.engine.core.factor.RuleFactorTypeLoader;
-import com.jd.cho.rule.engine.core.factor.model.ComparativeOperator;
-import com.jd.cho.rule.engine.core.factor.model.RuleFactorType;
+import com.jd.cho.rule.engine.core.factor.extend.*;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
+
+import java.util.Arrays;
 
 public abstract class AbstractCoreDecisionSetRuleExecutorTest {
     protected RuleDefsExecutorFactory ruleDefsExecutorFactory;
@@ -31,21 +30,8 @@ public abstract class AbstractCoreDecisionSetRuleExecutorTest {
     @BeforeEach
     protected void setUp() {
         ruleDefsExecutorFactory = Mockito.mock(RuleDefsExecutorFactory.class);
-        ruleFactorTypeLoader = Mockito.mock(RuleFactorTypeLoader.class);
-        for (ExpressOperationEnum expressOperation : ExpressOperationEnum.values()) {
-            Mockito.when(ruleFactorTypeLoader.getComparativeOperator(
-                    expressOperation.getOperator())).thenReturn(
-                    ComparativeOperator.builder()
-                            .operator(expressOperation.getOperator())
-                            .remark(expressOperation.getRemark())
-                            .expression(expressOperation.getExpression()).build()
-            );
-        }
-        for (FactorTypeEnum factorType : FactorTypeEnum.values()) {
-            Mockito.when(ruleFactorTypeLoader.getFactorType(factorType.getCode())).thenReturn(
-                    RuleFactorType.builder().code(factorType.getCode()).desc(factorType.getDesc()).build()
-            );
-        }
+        ruleFactorTypeLoader = new RuleFactorTypeLoader(Arrays.asList(new BooleanFactorTypeService(), new DateFactorTypeService(), new ListFactorTypeService(), new NumFactorTypeService(), new TextFactorTypeService()));
+        ruleFactorTypeLoader.afterPropertiesSet();
 
         executor = new CoreDecisionSetRuleExecutor(ruleDefsExecutorFactory, new RuleDefConditionExpressionBuilder(ruleFactorTypeLoader));
 
