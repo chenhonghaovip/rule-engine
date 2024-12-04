@@ -86,7 +86,6 @@ class RuleEngineServiceImplTest extends AbstractCoreDecisionSetRuleExecutorTest 
         }};
 
         Mockito.when(ruleConfigGateway.rulePackInfo(rulePackCode)).thenReturn(rulePack);
-        Mockito.when(ruleDefsExecutorFactory.get(PriorityOrderMatchRuleDefsExecutor.CODE)).thenReturn(new PriorityOrderMatchRuleDefsExecutor());
 
         boolean matched = tester.execute(rulePackCode, context);
         Assertions.assertThat(matched).isTrue();

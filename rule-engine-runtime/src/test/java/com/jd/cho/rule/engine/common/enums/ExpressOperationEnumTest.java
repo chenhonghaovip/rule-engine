@@ -19,4 +19,17 @@ class ExpressOperationEnumTest {
         List<ExpressOperationEnum> operations = ExpressOperationEnum.getOperationByGroup("not exist group");
         Assertions.assertThat(operations).isEmpty();
     }
+
+    @Test
+    void test_getByCode() {
+        ExpressOperationEnum[] enums = ExpressOperationEnum.values();
+        for (ExpressOperationEnum expressOperation : enums) {
+            String operator = expressOperation.getOperator();
+            ExpressOperationEnum operation = ExpressOperationEnum.getByCode(operator);
+            Assertions.assertThat(operation.getOperator()).isEqualTo(operator);
+        }
+
+        ExpressOperationEnum operation = ExpressOperationEnum.getByCode("not exist group");
+        Assertions.assertThat(operation).isNull();
+    }
 }

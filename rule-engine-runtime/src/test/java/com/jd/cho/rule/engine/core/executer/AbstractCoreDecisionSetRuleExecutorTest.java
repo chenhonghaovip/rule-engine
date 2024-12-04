@@ -29,7 +29,10 @@ public abstract class AbstractCoreDecisionSetRuleExecutorTest {
 
     @BeforeEach
     protected void setUp() {
-        ruleDefsExecutorFactory = Mockito.mock(RuleDefsExecutorFactory.class);
+        ruleDefsExecutorFactory = new RuleDefsExecutorFactoryImpl(Arrays.asList(
+                new PriorityOrderMatchRuleDefsExecutor(),
+                new PriorityOrderSeqRuleDefsExecutor()
+        ));
         ruleFactorTypeLoader = new RuleFactorTypeLoader(Arrays.asList(new BooleanFactorTypeService(), new DateFactorTypeService(), new ListFactorTypeService(), new NumFactorTypeService(), new TextFactorTypeService()));
         ruleFactorTypeLoader.afterPropertiesSet();
 
