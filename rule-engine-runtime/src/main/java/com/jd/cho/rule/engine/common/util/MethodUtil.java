@@ -8,8 +8,12 @@ import com.jd.cho.rule.engine.common.anno.ApiParam;
 import com.jd.cho.rule.engine.common.base.CommonDict;
 import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.enums.ConstantEnum;
+import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
+import com.jd.cho.rule.engine.common.exceptions.BusinessException;
 import com.jd.cho.rule.engine.domain.model.CustomMethod;
 import com.jd.cho.rule.engine.factor.RuleFactorTypeLoader;
+import com.jd.cho.rule.engine.factor.model.RuleFactorType;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.annotation.Annotation;
@@ -20,6 +24,7 @@ import java.util.*;
  * @author chenhonghao12
  * @version 1.0
  */
+@Slf4j
 public class MethodUtil {
 
     /**
@@ -29,29 +34,33 @@ public class MethodUtil {
      * @return 解析后的方法信息
      */
     public static CustomMethod resolve(Method method) {
-        CustomMethod customMethod = new CustomMethod();
         ApiMethod apiMethod = method.getAnnotation(ApiMethod.class);
-        if (Objects.nonNull(apiMethod)) {
-            customMethod.setMethodName(StringUtils.isNotBlank(apiMethod.name()) ? apiMethod.name() : method.getName());
-            customMethod.setMethodCode(StringUtils.isNotBlank(apiMethod.code()) ? apiMethod.code() : method.getName());
-            String returnType = apiMethod.returnType();
-            if (ApplicationUtils.getBeans(RuleFactorTypeLoader.class).getFactorType(returnType) != null) {
-                customMethod.setReturnType(ApplicationUtils.getBeans(RuleFactorTypeLoader.class).getFactorType(returnType));
-            }
-
-            String valueScript = apiMethod.valueScript();
-            if (StringUtils.isNotBlank(valueScript)) {
-                customMethod.setConstantType(ConstantEnum.SCRIPT);
-                Object execute = QlExpressUtil.execute(valueScript, Maps.newHashMap());
-                Optional.ofNullable(execute).ifPresent(each -> customMethod.setConstantValues(JSON.parseArray(JSON.toJSONString(execute), CommonDict.class)));
-            } else {
-                customMethod.setConstantType(ConstantEnum.INPUT);
-            }
-        } else {
-            customMethod.setMethodName(method.getName());
-            customMethod.setMethodCode(method.getName());
+        if (Objects.isNull(apiMethod)) {
+            log.error("current method ignore method annotation:{}", method.getName());
+            throw new BusinessException(BizErrorEnum.CUSTOM_METHOD_NOT_HAVE_ANNOTATION);
         }
 
+        // 构建方法code、方法名称、方法返回值类型
+        CustomMethod customMethod = new CustomMethod();
+        customMethod.setMethodName(StringUtils.isNotBlank(apiMethod.name()) ? apiMethod.name() : method.getName());
+        customMethod.setMethodCode(StringUtils.isNotBlank(apiMethod.code()) ? apiMethod.code() : method.getName());
+        RuleFactorType factorType = ApplicationUtils.getBeans(RuleFactorTypeLoader.class).getFactorType(apiMethod.returnType());
+        if (Objects.isNull(factorType)) {
+            throw new BusinessException(BizErrorEnum.RETURN_TYPE_NOT_EXIST);
+        }
+        customMethod.setReturnType(factorType);
+
+        // 设置当前方法的返回值枚举
+        String valueScript = apiMethod.valueScript();
+        if (StringUtils.isNotBlank(valueScript)) {
+            customMethod.setConstantType(ConstantEnum.SCRIPT);
+            Object execute = QlExpressUtil.execute(valueScript, Maps.newHashMap());
+            Optional.ofNullable(execute).ifPresent(each -> customMethod.setConstantValues(JSON.parseArray(JSON.toJSONString(execute), CommonDict.class)));
+        } else {
+            customMethod.setConstantType(ConstantEnum.INPUT);
+        }
+
+        // 构建方法的QL表达式和入参信息
         StringBuilder express = new StringBuilder();
         Class<?>[] parameterTypes = method.getParameterTypes();
         customMethod.setParamCount(parameterTypes.length);

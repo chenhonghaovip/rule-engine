@@ -110,7 +110,7 @@ public class RuleDefConditionExpressionBuilder {
         } else if (VarTypeEnum.CONSTANT.getCode().equals(basicVar.getRuleType())) {
             return basicVar.getValues();
         } else if (VarTypeEnum.METHOD.getCode().equals(basicVar.getRuleType())) {
-            CustomMethod customMethod = QlExpressUtil.CUSTOM_METHODS.stream().filter(each -> each.getMethodCode().equals(basicVar.getCode())).findFirst().orElse(null);
+            CustomMethod customMethod = QlExpressUtil.getCustomMethod(basicVar.getCode());
             AssertUtil.isNotNull(customMethod);
             CustomMethod.CustomMethodParam customMethodParam;
             if (customMethod.getParamCount() != basicVar.getParams().size()) {

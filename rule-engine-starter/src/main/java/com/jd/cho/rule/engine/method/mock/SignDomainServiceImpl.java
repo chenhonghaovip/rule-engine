@@ -51,4 +51,9 @@ public class SignDomainServiceImpl implements SignDomainService {
 
         return Lists.newArrayList(build1, build2, build3);
     }
+
+    @ApiMethod(code = "toString1", name = "toString1", valueScript = "")
+    public static String toString1() {
+        return "123";
+    }
 }

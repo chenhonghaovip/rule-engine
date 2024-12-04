@@ -108,7 +108,7 @@ public class RuleCommonController {
      */
     @GetMapping("/methods")
     public List<CustomMethod> getMethod() {
-        return QlExpressUtil.CUSTOM_METHODS;
+        return QlExpressUtil.getCustomMethodList();
     }
 
 

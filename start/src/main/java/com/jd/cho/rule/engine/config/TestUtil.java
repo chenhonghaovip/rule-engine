@@ -15,4 +15,11 @@ public class TestUtil {
         System.out.println("fafafdaefafae");
         return "4564";
     }
+
+
+    @ApiMethod(code = "getInfo1", name = "getInfo1", returnType = "test", valueScript = "Spring.getBean(\"signDomainServiceImpl\").getDict();")
+    public String getInfo1(@ApiParam(name = "节点编码") String nodeCode, @ApiParam(name = "因子") String factorCode) {
+        System.out.println("fafafdaefafae");
+        return "dsafa";
+    }
 }
