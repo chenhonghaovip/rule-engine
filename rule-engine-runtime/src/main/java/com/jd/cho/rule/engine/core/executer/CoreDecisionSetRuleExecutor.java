@@ -60,7 +60,7 @@ public class CoreDecisionSetRuleExecutor implements DecisionSetRuleExecutor {
     public boolean execute(RulePack rulePack, Map<String, Object> context) {
         Assert.isTrue(accept(rulePack), () -> "rule pack type is not support: " + rulePack);
 
-        List<RuleDef> rules = rulePack.getRules();
+        List<RuleDef> rules = JSON.parseArray(rulePack.getRuleContent(), RuleDef.class);
         RuleDefsExecutor ruleGroup = ruleGroupExtendServiceFactory.get(rulePack.getRuleArrangeStrategy());
         return ruleGroup.execute(this, rules, context);
     }

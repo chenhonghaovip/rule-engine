@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.util.List;
-
 /**
  * @author chenhonghao12
  * @version 1.0
@@ -56,9 +54,4 @@ public class RulePack {
      * 规则内容
      */
     private String ruleContent;
-
-    /**
-     * 规则包规则
-     */
-    private List<RuleDef> rules;
 }

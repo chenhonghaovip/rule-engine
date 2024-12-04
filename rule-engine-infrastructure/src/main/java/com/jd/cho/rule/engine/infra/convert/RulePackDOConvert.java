@@ -16,7 +16,6 @@ public interface RulePackDOConvert {
 
     RulePackDO doToDO(RulePackDTO rulePackDTO);
 
-    @Mapping(target = "rules", expression = "java(com.alibaba.fastjson.JSON.parseArray(rulePackDO.getRuleContent(), com.jd.cho.rule.engine.domain.model.RuleDef.class))")
     @Mapping(target = "rulePackType", expression = "java(com.jd.cho.rule.engine.common.enums.RulePackTypeEnum.getByCode(rulePackDO.getRulePackType()))")
     RulePack doToEntity(RulePackDO rulePackDO);
 }
