@@ -5,12 +5,11 @@ import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
 import com.jd.cho.rule.engine.common.enums.RulePackTypeEnum;
 import com.jd.cho.rule.engine.common.enums.VarTypeEnum;
 import com.jd.cho.rule.engine.common.protocol.RuleDefConditionExpressionBuilder;
-import com.jd.cho.rule.engine.core.AcceptableRulePackExecutor;
-import com.jd.cho.rule.engine.core.DispatchRulePackExecutor;
+import com.jd.cho.rule.engine.core.dispatch.CoreDispatchRulePackExecutor;
 import com.jd.cho.rule.engine.core.executer.AbstractCoreDecisionSetRuleExecutorTest;
-import com.jd.cho.rule.engine.core.executer.CoreDecisionSetRuleExecutor;
-import com.jd.cho.rule.engine.core.executer.CoreDispatchRulePackExecutorImpl;
-import com.jd.cho.rule.engine.core.executer.PriorityOrderMatchRuleDefsExecutor;
+import com.jd.cho.rule.engine.core.executer.AcceptableRulePackExecutor;
+import com.jd.cho.rule.engine.core.executer.set.CoreDecisionSetRuleExecutor;
+import com.jd.cho.rule.engine.core.executer.set.group.extend.PriorityOrderMatchRuleDefsExecutor;
 import com.jd.cho.rule.engine.domain.model.BasicVar;
 import com.jd.cho.rule.engine.domain.model.RuleCondition;
 import com.jd.cho.rule.engine.domain.model.RuleDef;
@@ -31,7 +30,7 @@ import java.util.Map;
 
 class RuleEngineServiceImplTest extends AbstractCoreDecisionSetRuleExecutorTest {
     protected List<AcceptableRulePackExecutor> acceptableRulePackExecutors;
-    protected DispatchRulePackExecutor dispatchRulePackExecutor;
+    protected CoreDispatchRulePackExecutor dispatchRulePackExecutor;
     protected ApplicationContext applicationContext;
 
     protected RuleEngineService tester;
@@ -45,7 +44,7 @@ class RuleEngineServiceImplTest extends AbstractCoreDecisionSetRuleExecutorTest 
         }};
 
         applicationContext = Mockito.mock(ApplicationContext.class);
-        dispatchRulePackExecutor = new CoreDispatchRulePackExecutorImpl(ruleConfigGateway, acceptableRulePackExecutors);
+        dispatchRulePackExecutor = new CoreDispatchRulePackExecutor(ruleConfigGateway, acceptableRulePackExecutors);
 
         tester = new RuleEngineServiceImpl(dispatchRulePackExecutor, applicationContext);
     }

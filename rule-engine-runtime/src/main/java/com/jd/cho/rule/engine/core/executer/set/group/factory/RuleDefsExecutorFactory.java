@@ -1,4 +1,4 @@
-package com.jd.cho.rule.engine.core;
+package com.jd.cho.rule.engine.core.executer.set.group.factory;
 
 import com.jd.cho.rule.engine.common.base.CommonDict;
 import com.jd.cho.rule.engine.spi.RuleDefsExecutor;

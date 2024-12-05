@@ -1,7 +1,6 @@
 package com.jd.cho.rule.engine.core.executer;
 
-import com.jd.cho.rule.engine.core.AcceptableRulePackExecutor;
-import com.jd.cho.rule.engine.core.DispatchRulePackExecutor;
+import com.jd.cho.rule.engine.core.dispatch.CoreDispatchRulePackExecutor;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.domain.model.RulePack;
 import lombok.extern.slf4j.Slf4j;
@@ -21,14 +20,14 @@ class CoreDispatchRulePackExecutorImpl_SideTest {
     private RuleConfigGateway ruleConfigGateway;
     private List<AcceptableRulePackExecutor> acceptableRulePackExecutors;
 
-    private DispatchRulePackExecutor tester;
+    private CoreDispatchRulePackExecutor tester;
 
     @BeforeEach
     void setUp() {
         ruleConfigGateway = Mockito.mock(RuleConfigGateway.class);
         acceptableRulePackExecutors = new ArrayList<>();
 
-        tester = new CoreDispatchRulePackExecutorImpl(ruleConfigGateway, acceptableRulePackExecutors);
+        tester = new CoreDispatchRulePackExecutor(ruleConfigGateway, acceptableRulePackExecutors);
     }
 
     @Test

@@ -4,7 +4,7 @@ import com.jd.cho.rule.engine.adapter.convert.RulePackConvert;
 import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
 import com.jd.cho.rule.engine.common.protocol.RulePackDTO;
 import com.jd.cho.rule.engine.common.util.AssertUtil;
-import com.jd.cho.rule.engine.core.executer.PriorityOrderMatchRuleDefsExecutor;
+import com.jd.cho.rule.engine.core.executer.set.group.extend.PriorityOrderMatchRuleDefsExecutor;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.domain.model.RulePack;
 import com.jd.cho.rule.engine.service.RulePackService;

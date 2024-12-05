@@ -1,7 +1,6 @@
-package com.jd.cho.rule.engine.core.executer;
+package com.jd.cho.rule.engine.core.executer.set.group.factory;
 
 import com.jd.cho.rule.engine.common.base.CommonDict;
-import com.jd.cho.rule.engine.core.RuleDefsExecutorFactory;
 import com.jd.cho.rule.engine.spi.RuleDefsExecutor;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

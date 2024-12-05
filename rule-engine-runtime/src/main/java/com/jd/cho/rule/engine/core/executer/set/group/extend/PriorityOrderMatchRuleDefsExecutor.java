@@ -1,7 +1,7 @@
-package com.jd.cho.rule.engine.core.executer;
+package com.jd.cho.rule.engine.core.executer.set.group.extend;
 
 
-import com.jd.cho.rule.engine.core.RuleDefExecutor;
+import com.jd.cho.rule.engine.core.executer.set.group.RuleDefExecutor;
 import com.jd.cho.rule.engine.domain.model.RuleDef;
 import com.jd.cho.rule.engine.spi.RuleDefsExecutor;
 import org.springframework.stereotype.Service;
