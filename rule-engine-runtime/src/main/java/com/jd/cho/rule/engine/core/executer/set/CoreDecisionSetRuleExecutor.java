@@ -75,7 +75,6 @@ public class CoreDecisionSetRuleExecutor implements DecisionSetRuleExecutor {
     private boolean executeCondition(String expression, Map<String, Object> context, Map<String, String> fieldMapping) {
         log.info("current express:{}", expression);
         return (Boolean) coreExpressionRunner.execute(expression, context, fieldMapping);
-//        return (Boolean) QlExpressUtil.execute(expression, context, fieldMapping);
     }
 
     /**

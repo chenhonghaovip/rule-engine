@@ -49,6 +49,7 @@ public abstract class AbstractCoreDecisionSetRuleExecutorTest {
         staticApplicationUtils = Mockito.mockStatic(ApplicationUtils.class);
         staticApplicationUtils.when(() -> ApplicationUtils.getBeans(FactorValueService.class)).thenReturn(factorValueService);
         staticApplicationUtils.when(() -> ApplicationUtils.getBeans(RuleFactorTypeLoader.class)).thenReturn(ruleFactorTypeLoader);
+        staticApplicationUtils.when(() -> ApplicationUtils.getBeans(CoreExpressionRunner.class)).thenReturn(coreExpressionRunner);
     }
 
     @AfterEach

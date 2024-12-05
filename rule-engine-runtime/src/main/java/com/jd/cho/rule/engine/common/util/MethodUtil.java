@@ -12,6 +12,7 @@ import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
 import com.jd.cho.rule.engine.common.exceptions.BusinessException;
 import com.jd.cho.rule.engine.core.factor.RuleFactorTypeLoader;
 import com.jd.cho.rule.engine.core.factor.model.RuleFactorType;
+import com.jd.cho.rule.engine.core.runner.CoreExpressionRunner;
 import com.jd.cho.rule.engine.domain.model.CustomMethod;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -54,7 +55,7 @@ public class MethodUtil {
         String valueScript = apiMethod.valueScript();
         if (StringUtils.isNotBlank(valueScript)) {
             customMethod.setConstantType(ConstantEnum.SCRIPT);
-            Object execute = QlExpressUtil.execute(valueScript, Maps.newHashMap());
+            Object execute = ApplicationUtils.getBeans(CoreExpressionRunner.class).execute(valueScript, Maps.newHashMap());
             Optional.ofNullable(execute).ifPresent(each -> customMethod.setConstantValues(JSON.parseArray(JSON.toJSONString(execute), CommonDict.class)));
         } else {
             customMethod.setConstantType(ConstantEnum.INPUT);
@@ -158,7 +159,7 @@ public class MethodUtil {
         if (ConstantEnum.INPUT.getCode().equals(constantType)) {
             return Lists.newArrayList();
         } else if (ConstantEnum.SCRIPT.getCode().equals(constantType)) {
-            constantValue = JSON.toJSONString(QlExpressUtil.execute(constantValue, context));
+            constantValue = JSON.toJSONString(ApplicationUtils.getBeans(CoreExpressionRunner.class).execute(constantValue, context));
         }
         return JSON.parseArray(constantValue, CommonDict.class);
     }
