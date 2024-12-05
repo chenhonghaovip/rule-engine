@@ -18,12 +18,13 @@ import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import javax.annotation.Resource;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
 /**
+ * 该类主要用于解析自定义方法，并注册到规则引擎中
+ *
  * @author chenhonghao12
  * @version 1.0
  */
@@ -32,13 +33,11 @@ import java.util.Map;
 public class CustomMethodProcessor implements SmartInitializingSingleton, BeanFactoryPostProcessor {
 
     private ConfigurableListableBeanFactory beanFactory;
-    @Resource
-    private CoreExpressionRunner coreExpressionRunner;
-    @Resource
-    private List<CustomFunctionExtendService> customFunctionExtendServices;
 
     @Override
     public void afterSingletonsInstantiated() {
+        loadFunctionExtendServices();
+
         String[] beanNamesForType = beanFactory.getBeanNamesForType(Object.class);
         for (String beanName : beanNamesForType) {
             if (!ScopedProxyUtils.isScopedTarget(beanName)) {
@@ -63,7 +62,7 @@ public class CustomMethodProcessor implements SmartInitializingSingleton, BeanFa
                         // 核心功能在于此处
                         processBean(beanName, type);
                     } catch (Throwable ex) {
-                        throw new BeanInitializationException("Failed to process @EventListener " +
+                        throw new BeanInitializationException("Failed to process @ApiMethod " +
                                 "annotation on bean with name '" + beanName + "'", ex);
                     }
                 }
@@ -71,7 +70,13 @@ public class CustomMethodProcessor implements SmartInitializingSingleton, BeanFa
         }
     }
 
-    private void processBean(final String beanName, final Class<?> targetType) throws Exception {
+    /**
+     * 解析IOC容器中被注解@ApiMethod标记的方法，并注册到规则引擎中
+     *
+     * @param beanName   bean实例名称
+     * @param targetType 被注解的类
+     */
+    private void processBean(final String beanName, final Class<?> targetType) {
         Map<Method, ApiMethod> annotatedMethods = null;
         try {
             annotatedMethods = MethodIntrospector.selectMethods(targetType,
@@ -85,6 +90,7 @@ public class CustomMethodProcessor implements SmartInitializingSingleton, BeanFa
                 Object bean = beanFactory.getBean(beanName);
                 Method methodToUse = AopUtils.selectInvocableMethod(method, beanFactory.getType(beanName));
                 try {
+                    CoreExpressionRunner coreExpressionRunner = beanFactory.getBean(CoreExpressionRunner.class);
                     coreExpressionRunner.addFunctionOfServiceMethod(methodToUse, bean);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
@@ -92,14 +98,25 @@ public class CustomMethodProcessor implements SmartInitializingSingleton, BeanFa
             }
         }
 
+    }
 
-        if (!CollectionUtils.isEmpty(customFunctionExtendServices)) {
-            for (CustomFunctionExtendService functionExtendService : customFunctionExtendServices) {
-                List<Method> methods = functionExtendService.extendMethods();
-                if (!CollectionUtils.isEmpty(methods)) {
-                    coreExpressionRunner.addFunctionOfClassMethod(methods);
+    /**
+     * 加载自定义方法
+     */
+    private void loadFunctionExtendServices() {
+        try {
+            Map<String, CustomFunctionExtendService> beansOfType = beanFactory.getBeansOfType(CustomFunctionExtendService.class);
+            if (!CollectionUtils.isEmpty(beansOfType)) {
+                for (CustomFunctionExtendService functionExtendService : beansOfType.values()) {
+                    List<Method> methods = functionExtendService.extendMethods();
+                    if (!CollectionUtils.isEmpty(methods)) {
+                        CoreExpressionRunner coreExpressionRunner = beanFactory.getBean(CoreExpressionRunner.class);
+                        coreExpressionRunner.addFunctionOfClassMethod(methods);
+                    }
                 }
             }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
