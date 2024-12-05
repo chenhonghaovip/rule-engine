@@ -4,6 +4,9 @@ import com.jd.cho.rule.engine.domain.model.RuleDef;
 
 import java.util.Map;
 
+/**
+ * @author chenhonghao12
+ */
 public interface RuleDefExecutor {
     /**
      * 执行规则引擎协议

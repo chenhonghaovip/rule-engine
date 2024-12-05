@@ -4,12 +4,15 @@ import com.jd.cho.rule.engine.domain.model.RulePack;
 
 import java.util.Map;
 
+/**
+ * @author chenhonghao12
+ */
 public interface AcceptableRulePackExecutor {
     /**
      * 是否可以执行该
      *
-     * @param rulePack
-     * @return
+     * @param rulePack 规则包
+     * @return 是否可以执行
      */
     boolean accept(RulePack rulePack);
 
@@ -21,4 +24,6 @@ public interface AcceptableRulePackExecutor {
      * @return 执行结果
      */
     boolean execute(RulePack rulePack, Map<String, Object> context);
+
+
 }
