@@ -3,6 +3,8 @@ package com.jd.cho.rule.engine.core.executer;
 import com.jd.cho.rule.engine.common.enums.RulePackTypeEnum;
 import com.jd.cho.rule.engine.common.protocol.RuleDefConditionExpressionBuilder;
 import com.jd.cho.rule.engine.core.RuleDefsExecutorFactory;
+import com.jd.cho.rule.engine.core.runner.CoreExpressionRunner;
+import com.jd.cho.rule.engine.core.runner.ql.QLExpressionRunner;
 import com.jd.cho.rule.engine.domain.model.RulePack;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 
 class CoreDecisionSetRuleExecutor_SideTest {
+    private final CoreExpressionRunner coreExpressionRunner = new QLExpressionRunner();
     private RuleDefsExecutorFactory ruleDefsExecutorFactory;
     private RuleDefConditionExpressionBuilder ruleDefConditionExpressionBuilder;
 
@@ -18,7 +21,7 @@ class CoreDecisionSetRuleExecutor_SideTest {
 
     @BeforeEach
     void setUp() {
-        tester = new CoreDecisionSetRuleExecutor(ruleDefsExecutorFactory, ruleDefConditionExpressionBuilder);
+        tester = new CoreDecisionSetRuleExecutor(ruleDefsExecutorFactory, ruleDefConditionExpressionBuilder, coreExpressionRunner);
     }
 
     @Test

@@ -11,6 +11,7 @@ import com.jd.cho.rule.engine.common.protocol.RuleDefConditionExpressionBuilder;
 import com.jd.cho.rule.engine.common.util.QlExpressUtil;
 import com.jd.cho.rule.engine.core.DecisionSetRuleExecutor;
 import com.jd.cho.rule.engine.core.RuleDefsExecutorFactory;
+import com.jd.cho.rule.engine.core.runner.CoreExpressionRunner;
 import com.jd.cho.rule.engine.domain.model.RuleAction;
 import com.jd.cho.rule.engine.domain.model.RuleDef;
 import com.jd.cho.rule.engine.domain.model.RulePack;
@@ -31,6 +32,7 @@ import java.util.Objects;
 public class CoreDecisionSetRuleExecutor implements DecisionSetRuleExecutor {
     private RuleDefsExecutorFactory ruleDefsExecutorFactory;
     private RuleDefConditionExpressionBuilder ruleDefConditionExpressionBuilder;
+    private CoreExpressionRunner coreExpressionRunner;
 
     @Override
     public boolean execute(RuleDef ruleDef, Map<String, Object> context) {
@@ -74,6 +76,7 @@ public class CoreDecisionSetRuleExecutor implements DecisionSetRuleExecutor {
      */
     private boolean executeCondition(String expression, Map<String, Object> context, Map<String, String> fieldMapping) {
         log.info("current express:{}", expression);
+//        return (Boolean) coreExpressionRunner.execute(expression, context, fieldMapping);
         return (Boolean) QlExpressUtil.execute(expression, context, fieldMapping);
     }
 
