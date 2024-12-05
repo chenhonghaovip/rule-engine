@@ -1,4 +1,4 @@
-package com.jd.cho.rule.engine.common.util;
+package com.jd.cho.rule.engine.core.method;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
@@ -10,30 +10,29 @@ import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.enums.ConstantEnum;
 import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
 import com.jd.cho.rule.engine.common.exceptions.BusinessException;
+import com.jd.cho.rule.engine.common.util.ApplicationUtils;
 import com.jd.cho.rule.engine.core.factor.RuleFactorTypeLoader;
 import com.jd.cho.rule.engine.core.factor.model.RuleFactorType;
+import com.jd.cho.rule.engine.core.runner.CoreExpressionRunner;
 import com.jd.cho.rule.engine.domain.model.CustomMethod;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.*;
 
-/**
- * @author chenhonghao12
- * @version 1.0
- */
+@Service
 @Slf4j
-public class MethodUtil {
-
+public class CustomMethodResolver {
     /**
      * 解析方法信息
      *
      * @param method 方法
      * @return 解析后的方法信息
      */
-    public static CustomMethod resolve(Method method) {
+    public CustomMethod resolve(Method method) {
         ApiMethod apiMethod = method.getAnnotation(ApiMethod.class);
         if (Objects.isNull(apiMethod)) {
             log.error("current method ignore method annotation:{}", method.getName());
@@ -54,7 +53,7 @@ public class MethodUtil {
         String valueScript = apiMethod.valueScript();
         if (StringUtils.isNotBlank(valueScript)) {
             customMethod.setConstantType(ConstantEnum.SCRIPT);
-            Object execute = QlExpressUtil.execute(valueScript, Maps.newHashMap());
+            Object execute = ApplicationUtils.getBeans(CoreExpressionRunner.class).execute(valueScript, Maps.newHashMap());
             Optional.ofNullable(execute).ifPresent(each -> customMethod.setConstantValues(JSON.parseArray(JSON.toJSONString(execute), CommonDict.class)));
         } else {
             customMethod.setConstantType(ConstantEnum.INPUT);
@@ -127,7 +126,7 @@ public class MethodUtil {
      * @param paramType 参数类型
      * @return trule/false
      */
-    public static boolean isSysParamType(Class<?> paramType) {
+    private static boolean isSysParamType(Class<?> paramType) {
         if (paramType.isPrimitive()) {
             return true;
         }
@@ -146,20 +145,4 @@ public class MethodUtil {
         return paramType.isAssignableFrom(Integer.class);
     }
 
-
-    /**
-     * 获取字典
-     *
-     * @param constantType  常量类型
-     * @param constantValue 常量值
-     * @return 字典
-     */
-    public static List<CommonDict> getDict(String constantType, String constantValue, Map<String, Object> context) {
-        if (ConstantEnum.INPUT.getCode().equals(constantType)) {
-            return Lists.newArrayList();
-        } else if (ConstantEnum.SCRIPT.getCode().equals(constantType)) {
-            constantValue = JSON.toJSONString(QlExpressUtil.execute(constantValue, context));
-        }
-        return JSON.parseArray(constantValue, CommonDict.class);
-    }
 }

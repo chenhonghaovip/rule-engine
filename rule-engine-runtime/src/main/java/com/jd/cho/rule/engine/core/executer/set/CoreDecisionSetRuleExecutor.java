@@ -8,7 +8,6 @@ import com.jd.cho.rule.engine.common.cache.ContextHolder;
 import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.enums.RulePackTypeEnum;
 import com.jd.cho.rule.engine.common.protocol.RuleDefConditionExpressionBuilder;
-import com.jd.cho.rule.engine.common.util.QlExpressUtil;
 import com.jd.cho.rule.engine.core.executer.set.group.factory.RuleDefsExecutorFactory;
 import com.jd.cho.rule.engine.core.runner.CoreExpressionRunner;
 import com.jd.cho.rule.engine.domain.model.RuleAction;
@@ -75,8 +74,7 @@ public class CoreDecisionSetRuleExecutor implements DecisionSetRuleExecutor {
      */
     private boolean executeCondition(String expression, Map<String, Object> context, Map<String, String> fieldMapping) {
         log.info("current express:{}", expression);
-//        return (Boolean) coreExpressionRunner.execute(expression, context, fieldMapping);
-        return (Boolean) QlExpressUtil.execute(expression, context, fieldMapping);
+        return (Boolean) coreExpressionRunner.execute(expression, context, fieldMapping);
     }
 
     /**

@@ -7,9 +7,9 @@ import com.jd.cho.rule.engine.common.enums.VarTypeEnum;
 import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
 import com.jd.cho.rule.engine.common.exceptions.BusinessException;
 import com.jd.cho.rule.engine.common.util.AssertUtil;
-import com.jd.cho.rule.engine.common.util.QlExpressUtil;
 import com.jd.cho.rule.engine.core.factor.RuleFactorTypeLoader;
 import com.jd.cho.rule.engine.core.factor.model.ComparativeOperator;
+import com.jd.cho.rule.engine.core.runner.CoreExpressionRunner;
 import com.jd.cho.rule.engine.domain.model.BasicVar;
 import com.jd.cho.rule.engine.domain.model.CustomMethod;
 import com.jd.cho.rule.engine.domain.model.RuleCondition;
@@ -27,8 +27,8 @@ import java.util.Objects;
 @Slf4j
 @AllArgsConstructor
 public class RuleDefConditionExpressionBuilder {
-
     private RuleFactorTypeLoader ruleFactorTypeLoader;
+    private CoreExpressionRunner coreExpressionRunner;
 
     /**
      * 构建当表达式
@@ -95,7 +95,7 @@ public class RuleDefConditionExpressionBuilder {
         return String.format(expression, resolveBasicVar(leftVar, fieldMapping), resolveBasicVar(rightVar, fieldMapping));
     }
 
-    private static Object resolveBasicVar(BasicVar basicVar, Map<String, String> fieldMapping) {
+    private Object resolveBasicVar(BasicVar basicVar, Map<String, String> fieldMapping) {
         String key;
         if (Objects.isNull(basicVar)) {
             return null;
@@ -110,7 +110,7 @@ public class RuleDefConditionExpressionBuilder {
         } else if (VarTypeEnum.CONSTANT.getCode().equals(basicVar.getRuleType())) {
             return basicVar.getValues();
         } else if (VarTypeEnum.METHOD.getCode().equals(basicVar.getRuleType())) {
-            CustomMethod customMethod = QlExpressUtil.getCustomMethod(basicVar.getCode());
+            CustomMethod customMethod = coreExpressionRunner.getCustomMethod(basicVar.getCode());
             AssertUtil.isNotNull(customMethod);
             CustomMethod.CustomMethodParam customMethodParam;
             if (customMethod.getParamCount() != basicVar.getParams().size()) {

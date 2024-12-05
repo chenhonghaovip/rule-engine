@@ -6,11 +6,11 @@ import com.jd.cho.rule.engine.common.enums.RulePackTypeEnum;
 import com.jd.cho.rule.engine.common.enums.VarTypeEnum;
 import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
 import com.jd.cho.rule.engine.common.exceptions.BusinessException;
-import com.jd.cho.rule.engine.common.util.QlExpressUtil;
 import com.jd.cho.rule.engine.core.executer.set.group.factory.RuleDefsExecutorFactory;
 import com.jd.cho.rule.engine.core.factor.RuleFactorTypeLoader;
 import com.jd.cho.rule.engine.core.factor.dto.FactorTypeDTO;
 import com.jd.cho.rule.engine.core.factor.model.ComparativeOperator;
+import com.jd.cho.rule.engine.core.runner.CoreExpressionRunner;
 import com.jd.cho.rule.engine.domain.model.CustomMethod;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +33,7 @@ public class RuleCommonController {
 
     private RuleDefsExecutorFactory ruleDefsExecutorFactory;
     private RuleFactorTypeLoader ruleFactorTypeLoader;
+    private CoreExpressionRunner coreExpressionRunner;
 
     /**
      * 获取因子类型列表
@@ -108,8 +109,6 @@ public class RuleCommonController {
      */
     @GetMapping("/methods")
     public List<CustomMethod> getMethod() {
-        return QlExpressUtil.getCustomMethodList();
+        return coreExpressionRunner.getCustomMethodList();
     }
-
-
 }

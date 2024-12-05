@@ -1,7 +1,11 @@
 package com.jd.cho.rule.engine.core.runner.ql;
 
 import com.jd.cho.rule.engine.common.dict.Dict;
-import com.jd.cho.rule.engine.common.util.*;
+import com.jd.cho.rule.engine.common.util.ApplicationUtils;
+import com.jd.cho.rule.engine.common.util.CollectionUtil;
+import com.jd.cho.rule.engine.common.util.DateUtil;
+import com.jd.cho.rule.engine.common.util.QLExpressContext;
+import com.jd.cho.rule.engine.core.method.CustomMethodResolver;
 import com.jd.cho.rule.engine.core.runner.CoreExpressionRunner;
 import com.jd.cho.rule.engine.domain.model.CustomMethod;
 import com.ql.util.express.ExpressRunner;
@@ -16,6 +20,7 @@ import java.util.*;
 @Service
 @Slf4j
 public class QLExpressionRunner implements CoreExpressionRunner {
+    private final CustomMethodResolver customMethodResolver;
     /**
      * 运行器
      */
@@ -26,7 +31,8 @@ public class QLExpressionRunner implements CoreExpressionRunner {
      */
     private final List<CustomMethod> CUSTOM_METHODS = new ArrayList<>();
 
-    public QLExpressionRunner() {
+    public QLExpressionRunner(CustomMethodResolver customMethodResolver) {
+        this.customMethodResolver = customMethodResolver;
         try {
             RUNNER.addFunctionOfClassMethod("isNotBlank", StringUtils.class, "isNotBlank", new Class[]{CharSequence.class}, null);
             RUNNER.addFunctionOfClassMethod("isBlank", StringUtils.class, "isBlank", new Class[]{CharSequence.class}, null);
@@ -39,9 +45,6 @@ public class QLExpressionRunner implements CoreExpressionRunner {
             RUNNER.addFunctionOfClassMethod("dateAfter", DateUtil.class, "dateAfter", new Class[]{Date.class, Date.class}, null);
             RUNNER.addFunctionOfClassMethod("dateEqualDay", DateUtil.class, "dateEqualDay", new Class[]{Date.class, Date.class}, null);
             RUNNER.addFunctionOfClassMethod("dateEqual", DateUtil.class, "dateEqual", new Class[]{Date.class, Date.class}, null);
-
-            List<Method> customFunctions = AtomicCustomFunctionUtil.getCustomFunction();
-            addFunctionOfClassMethod(customFunctions);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -60,7 +63,7 @@ public class QLExpressionRunner implements CoreExpressionRunner {
         for (Method method : methods) {
             Class<?> declaringClass = method.getDeclaringClass();
             String methodName = method.getName();
-            CustomMethod resolve = MethodUtil.resolve(method);
+            CustomMethod resolve = customMethodResolver.resolve(method);
             Class<?>[] parameterTypes = method.getParameterTypes();
             RUNNER.addFunctionOfClassMethod(resolve.getMethodCode(), declaringClass, methodName, parameterTypes, null);
             result.add(resolve);
@@ -78,7 +81,7 @@ public class QLExpressionRunner implements CoreExpressionRunner {
     @Override
     public void addFunctionOfServiceMethod(Method method, Object object) throws Exception {
         String methodName = method.getName();
-        CustomMethod resolve = MethodUtil.resolve(method);
+        CustomMethod resolve = customMethodResolver.resolve(method);
         Class<?>[] parameterTypes = method.getParameterTypes();
         RUNNER.addFunctionOfServiceMethod(resolve.getMethodCode(), object, methodName, parameterTypes, null);
         CUSTOM_METHODS.add(resolve);

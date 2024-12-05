@@ -40,7 +40,8 @@ class RuleEngineServiceImplTest extends AbstractCoreDecisionSetRuleExecutorTest 
         super.setUp();
 
         acceptableRulePackExecutors = new ArrayList<AcceptableRulePackExecutor>() {{
-            this.add(new CoreDecisionSetRuleExecutor(ruleDefsExecutorFactory, new RuleDefConditionExpressionBuilder(ruleFactorTypeLoader), coreExpressionRunner));
+            this.add(new CoreDecisionSetRuleExecutor(ruleDefsExecutorFactory,
+                    new RuleDefConditionExpressionBuilder(ruleFactorTypeLoader, coreExpressionRunner), coreExpressionRunner));
         }};
 
         applicationContext = Mockito.mock(ApplicationContext.class);

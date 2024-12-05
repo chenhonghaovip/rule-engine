@@ -12,6 +12,7 @@ import com.jd.cho.rule.engine.core.executer.set.group.factory.RuleDefsExecutorFa
 import com.jd.cho.rule.engine.core.executer.set.group.factory.RuleDefsExecutorFactoryImpl;
 import com.jd.cho.rule.engine.core.factor.RuleFactorTypeLoader;
 import com.jd.cho.rule.engine.core.factor.extend.*;
+import com.jd.cho.rule.engine.core.method.CustomMethodResolver;
 import com.jd.cho.rule.engine.core.runner.CoreExpressionRunner;
 import com.jd.cho.rule.engine.core.runner.ql.QLExpressionRunner;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
@@ -23,7 +24,8 @@ import org.mockito.Mockito;
 import java.util.Arrays;
 
 public abstract class AbstractCoreDecisionSetRuleExecutorTest {
-    protected CoreExpressionRunner coreExpressionRunner = new QLExpressionRunner();
+    protected CustomMethodResolver customMethodResolver = new CustomMethodResolver();
+    protected CoreExpressionRunner coreExpressionRunner = new QLExpressionRunner(customMethodResolver);
     protected RuleDefsExecutorFactory ruleDefsExecutorFactory;
     protected RuleConfigGateway ruleConfigGateway;
     protected CoreDecisionSetRuleExecutor executor;
@@ -40,14 +42,16 @@ public abstract class AbstractCoreDecisionSetRuleExecutorTest {
         ruleFactorTypeLoader = new RuleFactorTypeLoader(Arrays.asList(new BooleanFactorTypeService(), new DateFactorTypeService(), new ListFactorTypeService(), new NumFactorTypeService(), new TextFactorTypeService()));
         ruleFactorTypeLoader.afterPropertiesSet();
 
-        executor = new CoreDecisionSetRuleExecutor(ruleDefsExecutorFactory, new RuleDefConditionExpressionBuilder(ruleFactorTypeLoader), coreExpressionRunner);
+        executor = new CoreDecisionSetRuleExecutor(ruleDefsExecutorFactory,
+                new RuleDefConditionExpressionBuilder(ruleFactorTypeLoader, coreExpressionRunner), coreExpressionRunner);
 
         ruleConfigGateway = Mockito.mock(RuleConfigGateway.class);
-        factorValueService = new FactorValueServiceImpl(ruleConfigGateway);
+        factorValueService = new FactorValueServiceImpl(ruleConfigGateway, coreExpressionRunner);
 
         staticApplicationUtils = Mockito.mockStatic(ApplicationUtils.class);
         staticApplicationUtils.when(() -> ApplicationUtils.getBeans(FactorValueService.class)).thenReturn(factorValueService);
         staticApplicationUtils.when(() -> ApplicationUtils.getBeans(RuleFactorTypeLoader.class)).thenReturn(ruleFactorTypeLoader);
+        staticApplicationUtils.when(() -> ApplicationUtils.getBeans(CoreExpressionRunner.class)).thenReturn(coreExpressionRunner);
     }
 
     @AfterEach
