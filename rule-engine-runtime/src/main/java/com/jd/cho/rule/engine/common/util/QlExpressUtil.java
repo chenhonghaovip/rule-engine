@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -34,7 +33,6 @@ public class QlExpressUtil {
      */
     private static final List<CustomMethod> CUSTOM_METHODS = Lists.newArrayList();
 
-
     static {
         try {
             RUNNER.addFunctionOfClassMethod("isNotBlank", StringUtils.class, "isNotBlank", new Class[]{CharSequence.class}, null);
@@ -48,51 +46,10 @@ public class QlExpressUtil {
             RUNNER.addFunctionOfClassMethod("dateAfter", DateUtil.class, "dateAfter", new Class[]{Date.class, Date.class}, null);
             RUNNER.addFunctionOfClassMethod("dateEqualDay", DateUtil.class, "dateEqualDay", new Class[]{Date.class, Date.class}, null);
             RUNNER.addFunctionOfClassMethod("dateEqual", DateUtil.class, "dateEqual", new Class[]{Date.class, Date.class}, null);
-
-            List<Method> customFunctions = AtomicCustomFunctionUtil.getCustomFunction();
-            addFunctionOfClassMethod(customFunctions);
-
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
-
-
-    /**
-     * 添加自定义函数
-     *
-     * @param methods 自定义方法列表
-     * @throws Exception 异常信息
-     */
-    public static void addFunctionOfClassMethod(List<Method> methods) throws Exception {
-        List<CustomMethod> result = Lists.newArrayList();
-
-        for (Method method : methods) {
-            Class<?> declaringClass = method.getDeclaringClass();
-            String methodName = method.getName();
-            CustomMethod resolve = MethodUtil.resolve(method);
-            Class<?>[] parameterTypes = method.getParameterTypes();
-            RUNNER.addFunctionOfClassMethod(resolve.getMethodCode(), declaringClass, methodName, parameterTypes, null);
-            result.add(resolve);
-        }
-        CUSTOM_METHODS.addAll(result);
-    }
-
-    /**
-     * 添加自定义函数
-     *
-     * @param method 自定义方法
-     * @param object 执行对象实例
-     * @throws Exception 异常信息
-     */
-    public static void addFunctionOfServiceMethod(Method method, Object object) throws Exception {
-        String methodName = method.getName();
-        CustomMethod resolve = MethodUtil.resolve(method);
-        Class<?>[] parameterTypes = method.getParameterTypes();
-        RUNNER.addFunctionOfServiceMethod(resolve.getMethodCode(), object, methodName, parameterTypes, null);
-        CUSTOM_METHODS.add(resolve);
-    }
-
 
     /**
      * 执行QL表达式
@@ -112,7 +69,6 @@ public class QlExpressUtil {
         }
     }
 
-
     /**
      * 执行QL表达式
      *
@@ -127,55 +83,6 @@ public class QlExpressUtil {
             log.error("QlExpressUtil::execute error,statement={}", statement);
             throw new RuntimeException(e);
         }
-    }
-
-    /**
-     * 获取QLExpress表达式中的变量名称
-     *
-     * @param statement 表达式
-     * @return 变量列表
-     */
-    public static String[] getOutVarNames(String statement) {
-        try {
-            return RUNNER.getOutVarNames(statement);
-        } catch (Exception e) {
-            log.error("QlExpressUtil::execute error,statement={}", statement);
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * 获取QLExpress表达式中的函数名称
-     *
-     * @param statement 表达式
-     * @return 函数列表
-     */
-    public static String[] getOutFunctionNames(String statement) {
-        try {
-            return RUNNER.getOutFunctionNames(statement);
-        } catch (Exception e) {
-            log.error("QlExpressUtil::execute error,statement={}", statement);
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * 获取业务方的自定义函数方法
-     *
-     * @return 自定义函数列表
-     */
-    public static List<CustomMethod> getCustomMethodList() {
-        return CUSTOM_METHODS;
-    }
-
-    /**
-     * 通过方法code获取自定义函数信息
-     *
-     * @param methodCode 方法code，唯一标识
-     * @return 自定义函数信息
-     */
-    public static CustomMethod getCustomMethod(String methodCode) {
-        return CUSTOM_METHODS.stream().filter(each -> each.getMethodCode().equals(methodCode)).findFirst().orElse(null);
     }
 
 }

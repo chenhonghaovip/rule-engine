@@ -1,7 +1,7 @@
 package com.jd.cho.rule.engine.method;
 
 import com.jd.cho.rule.engine.common.anno.ApiMethod;
-import com.jd.cho.rule.engine.common.util.QlExpressUtil;
+import com.jd.cho.rule.engine.core.runner.CoreExpressionRunner;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.autoproxy.AutoProxyUtils;
 import org.springframework.aop.scope.ScopedObject;
@@ -17,6 +17,7 @@ import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.lang.reflect.Method;
 import java.util.Map;
 
@@ -29,6 +30,8 @@ import java.util.Map;
 public class CustomMethodProcessor implements SmartInitializingSingleton, BeanFactoryPostProcessor {
 
     private ConfigurableListableBeanFactory beanFactory;
+    @Resource
+    private CoreExpressionRunner coreExpressionRunner;
 
     @Override
     public void afterSingletonsInstantiated() {
@@ -79,7 +82,7 @@ public class CustomMethodProcessor implements SmartInitializingSingleton, BeanFa
                 Object bean = beanFactory.getBean(beanName);
                 Method methodToUse = AopUtils.selectInvocableMethod(method, beanFactory.getType(beanName));
                 try {
-                    QlExpressUtil.addFunctionOfServiceMethod(methodToUse, bean);
+                    coreExpressionRunner.addFunctionOfServiceMethod(methodToUse, bean);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
