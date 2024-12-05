@@ -2,6 +2,7 @@ package com.jd.cho.rule.engine.method;
 
 import com.jd.cho.rule.engine.common.anno.ApiMethod;
 import com.jd.cho.rule.engine.core.runner.CoreExpressionRunner;
+import com.jd.cho.rule.engine.spi.CustomFunctionExtendService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.framework.autoproxy.AutoProxyUtils;
 import org.springframework.aop.scope.ScopedObject;
@@ -19,6 +20,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,6 +34,8 @@ public class CustomMethodProcessor implements SmartInitializingSingleton, BeanFa
     private ConfigurableListableBeanFactory beanFactory;
     @Resource
     private CoreExpressionRunner coreExpressionRunner;
+    @Resource
+    private List<CustomFunctionExtendService> customFunctionExtendServices;
 
     @Override
     public void afterSingletonsInstantiated() {
@@ -67,8 +71,7 @@ public class CustomMethodProcessor implements SmartInitializingSingleton, BeanFa
         }
     }
 
-
-    private void processBean(final String beanName, final Class<?> targetType) {
+    private void processBean(final String beanName, final Class<?> targetType) throws Exception {
         Map<Method, ApiMethod> annotatedMethods = null;
         try {
             annotatedMethods = MethodIntrospector.selectMethods(targetType,
@@ -85,6 +88,16 @@ public class CustomMethodProcessor implements SmartInitializingSingleton, BeanFa
                     coreExpressionRunner.addFunctionOfServiceMethod(methodToUse, bean);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
+                }
+            }
+        }
+
+
+        if (!CollectionUtils.isEmpty(customFunctionExtendServices)) {
+            for (CustomFunctionExtendService functionExtendService : customFunctionExtendServices) {
+                List<Method> methods = functionExtendService.extendMethods();
+                if (!CollectionUtils.isEmpty(methods)) {
+                    coreExpressionRunner.addFunctionOfClassMethod(methods);
                 }
             }
         }

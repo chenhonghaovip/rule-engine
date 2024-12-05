@@ -1,7 +1,10 @@
 package com.jd.cho.rule.engine.core.runner.ql;
 
 import com.jd.cho.rule.engine.common.dict.Dict;
-import com.jd.cho.rule.engine.common.util.*;
+import com.jd.cho.rule.engine.common.util.ApplicationUtils;
+import com.jd.cho.rule.engine.common.util.CollectionUtil;
+import com.jd.cho.rule.engine.common.util.DateUtil;
+import com.jd.cho.rule.engine.common.util.QLExpressContext;
 import com.jd.cho.rule.engine.core.method.CustomMethodResolver;
 import com.jd.cho.rule.engine.core.runner.CoreExpressionRunner;
 import com.jd.cho.rule.engine.domain.model.CustomMethod;
@@ -42,9 +45,6 @@ public class QLExpressionRunner implements CoreExpressionRunner {
             RUNNER.addFunctionOfClassMethod("dateAfter", DateUtil.class, "dateAfter", new Class[]{Date.class, Date.class}, null);
             RUNNER.addFunctionOfClassMethod("dateEqualDay", DateUtil.class, "dateEqualDay", new Class[]{Date.class, Date.class}, null);
             RUNNER.addFunctionOfClassMethod("dateEqual", DateUtil.class, "dateEqual", new Class[]{Date.class, Date.class}, null);
-
-            List<Method> customFunctions = AtomicCustomFunctionUtil.getCustomFunction();
-            addFunctionOfClassMethod(customFunctions);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
