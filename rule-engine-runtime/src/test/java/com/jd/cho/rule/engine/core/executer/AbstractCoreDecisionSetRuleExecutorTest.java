@@ -12,6 +12,7 @@ import com.jd.cho.rule.engine.core.executer.set.group.factory.RuleDefsExecutorFa
 import com.jd.cho.rule.engine.core.executer.set.group.factory.RuleDefsExecutorFactoryImpl;
 import com.jd.cho.rule.engine.core.factor.RuleFactorTypeLoader;
 import com.jd.cho.rule.engine.core.factor.extend.*;
+import com.jd.cho.rule.engine.core.method.CustomMethodResolver;
 import com.jd.cho.rule.engine.core.runner.CoreExpressionRunner;
 import com.jd.cho.rule.engine.core.runner.ql.QLExpressionRunner;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
@@ -23,7 +24,8 @@ import org.mockito.Mockito;
 import java.util.Arrays;
 
 public abstract class AbstractCoreDecisionSetRuleExecutorTest {
-    protected CoreExpressionRunner coreExpressionRunner = new QLExpressionRunner();
+    protected CustomMethodResolver customMethodResolver = new CustomMethodResolver();
+    protected CoreExpressionRunner coreExpressionRunner = new QLExpressionRunner(customMethodResolver);
     protected RuleDefsExecutorFactory ruleDefsExecutorFactory;
     protected RuleConfigGateway ruleConfigGateway;
     protected CoreDecisionSetRuleExecutor executor;

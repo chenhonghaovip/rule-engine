@@ -4,6 +4,7 @@ import com.jd.cho.rule.engine.common.enums.RulePackTypeEnum;
 import com.jd.cho.rule.engine.common.protocol.RuleDefConditionExpressionBuilder;
 import com.jd.cho.rule.engine.core.executer.set.CoreDecisionSetRuleExecutor;
 import com.jd.cho.rule.engine.core.executer.set.group.factory.RuleDefsExecutorFactory;
+import com.jd.cho.rule.engine.core.method.CustomMethodResolver;
 import com.jd.cho.rule.engine.core.runner.CoreExpressionRunner;
 import com.jd.cho.rule.engine.core.runner.ql.QLExpressionRunner;
 import com.jd.cho.rule.engine.domain.model.RulePack;
@@ -14,7 +15,8 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 
 class CoreDecisionSetRuleExecutor_SideTest {
-    private final CoreExpressionRunner coreExpressionRunner = new QLExpressionRunner();
+    protected CustomMethodResolver customMethodResolver = new CustomMethodResolver();
+    private final CoreExpressionRunner coreExpressionRunner = new QLExpressionRunner(customMethodResolver);
     private RuleDefsExecutorFactory ruleDefsExecutorFactory;
     private RuleDefConditionExpressionBuilder ruleDefConditionExpressionBuilder;
 
