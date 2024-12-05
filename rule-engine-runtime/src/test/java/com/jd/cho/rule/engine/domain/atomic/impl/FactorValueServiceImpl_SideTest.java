@@ -26,7 +26,7 @@ class FactorValueServiceImpl_SideTest {
     void setUp() {
         ruleConfigGateway = Mockito.mock(RuleConfigGateway.class);
         coreExpressionRunner = Mockito.mock(CoreExpressionRunner.class);
-        tester = new FactorValueServiceImpl(ruleConfigGateway, coreExpressionRunner);
+        tester = new FactorValueServiceImpl(ruleConfigGateway);
     }
 
     @Test

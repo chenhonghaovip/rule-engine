@@ -14,18 +14,23 @@ import com.jd.cho.rule.engine.core.factor.RuleFactorTypeLoader;
 import com.jd.cho.rule.engine.core.factor.extend.*;
 import com.jd.cho.rule.engine.core.method.CustomMethodResolver;
 import com.jd.cho.rule.engine.core.runner.CoreExpressionRunner;
+import com.jd.cho.rule.engine.core.runner.ExpressionContextFactory;
 import com.jd.cho.rule.engine.core.runner.ql.QLExpressionRunner;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
+import org.springframework.context.ApplicationContext;
 
 import java.util.Arrays;
 
 public abstract class AbstractCoreDecisionSetRuleExecutorTest {
-    protected CustomMethodResolver customMethodResolver = new CustomMethodResolver();
-    protected CoreExpressionRunner coreExpressionRunner = new QLExpressionRunner(customMethodResolver);
+    protected ApplicationContext applicationContext;
+    protected ExpressionContextFactory expressionContextFactory;
+
+    protected CustomMethodResolver customMethodResolver;
+    protected CoreExpressionRunner coreExpressionRunner;
     protected RuleDefsExecutorFactory ruleDefsExecutorFactory;
     protected RuleConfigGateway ruleConfigGateway;
     protected CoreDecisionSetRuleExecutor executor;
@@ -38,15 +43,20 @@ public abstract class AbstractCoreDecisionSetRuleExecutorTest {
 
     @BeforeEach
     protected void setUp() {
+        applicationContext = Mockito.mock(ApplicationContext.class);
+        ruleConfigGateway = Mockito.mock(RuleConfigGateway.class);
+
+        customMethodResolver = new CustomMethodResolver();
         ruleDefsExecutorFactory = new RuleDefsExecutorFactoryImpl(Arrays.asList(new PriorityOrderMatchRuleDefsExecutor(), new PriorityOrderSeqRuleDefsExecutor()));
         ruleFactorTypeLoader = new RuleFactorTypeLoader(Arrays.asList(new BooleanFactorTypeService(), new DateFactorTypeService(), new ListFactorTypeService(), new NumFactorTypeService(), new TextFactorTypeService()));
         ruleFactorTypeLoader.afterPropertiesSet();
 
+        factorValueService = new FactorValueServiceImpl(ruleConfigGateway);
+        expressionContextFactory = new ExpressionContextFactory(applicationContext, factorValueService);
+        coreExpressionRunner = new QLExpressionRunner(customMethodResolver, expressionContextFactory);
+
         executor = new CoreDecisionSetRuleExecutor(ruleDefsExecutorFactory,
                 new RuleDefConditionExpressionBuilder(ruleFactorTypeLoader, coreExpressionRunner), coreExpressionRunner);
-
-        ruleConfigGateway = Mockito.mock(RuleConfigGateway.class);
-        factorValueService = new FactorValueServiceImpl(ruleConfigGateway, coreExpressionRunner);
 
         staticApplicationUtils = Mockito.mockStatic(ApplicationUtils.class);
         staticApplicationUtils.when(() -> ApplicationUtils.getBeans(FactorValueService.class)).thenReturn(factorValueService);

@@ -4,9 +4,9 @@ import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.util.ApplicationUtils;
 import com.jd.cho.rule.engine.common.util.CollectionUtil;
 import com.jd.cho.rule.engine.common.util.DateUtil;
-import com.jd.cho.rule.engine.common.util.QLExpressContext;
 import com.jd.cho.rule.engine.core.method.CustomMethodResolver;
 import com.jd.cho.rule.engine.core.runner.CoreExpressionRunner;
+import com.jd.cho.rule.engine.core.runner.ExpressionContextFactory;
 import com.jd.cho.rule.engine.domain.model.CustomMethod;
 import com.ql.util.express.ExpressRunner;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +24,7 @@ import java.util.*;
 @Slf4j
 public class QLExpressionRunner implements CoreExpressionRunner {
     private final CustomMethodResolver customMethodResolver;
+    private final ExpressionContextFactory expressionContextFactory;
     /**
      * 运行器
      */
@@ -34,8 +35,9 @@ public class QLExpressionRunner implements CoreExpressionRunner {
      */
     private final List<CustomMethod> CUSTOM_METHODS = new ArrayList<>();
 
-    public QLExpressionRunner(CustomMethodResolver customMethodResolver) {
+    public QLExpressionRunner(CustomMethodResolver customMethodResolver, ExpressionContextFactory expressionContextFactory) {
         this.customMethodResolver = customMethodResolver;
+        this.expressionContextFactory = expressionContextFactory;
         try {
             RUNNER.addFunctionOfClassMethod("isNotBlank", StringUtils.class, "isNotBlank", new Class[]{CharSequence.class}, null);
             RUNNER.addFunctionOfClassMethod("isBlank", StringUtils.class, "isBlank", new Class[]{CharSequence.class}, null);
@@ -102,7 +104,7 @@ public class QLExpressionRunner implements CoreExpressionRunner {
     public Object execute(String statement, Map<String, Object> context, Map<String, String> fieldMapping) {
         try {
             context.putIfAbsent(Dict.INNER_CONTEXT, ApplicationUtils.getApplicationContext());
-            return RUNNER.execute(statement, new QLExpressContext(context, fieldMapping), null, false, false);
+            return RUNNER.execute(statement, expressionContextFactory.create(context, fieldMapping), null, false, false);
         } catch (Exception e) {
             log.error("QlExpressUtil::execute error,context:{}", statement, e);
             throw new RuntimeException(e);

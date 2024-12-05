@@ -1,4 +1,4 @@
-package com.jd.cho.rule.engine.common.util;
+package com.jd.cho.rule.engine.core.runner;
 
 import com.jd.cho.rule.engine.core.atomic.FactorValueService;
 import com.ql.util.express.IExpressContext;
@@ -12,7 +12,7 @@ import java.util.Objects;
  * @author chenhonghao12
  * @version 1.0
  */
-public class QLExpressContext extends HashMap<String, Object> implements IExpressContext<String, Object> {
+public class ExpressionContext extends HashMap<String, Object> implements IExpressContext<String, Object> {
 
     private final ApplicationContext context;
 
@@ -20,11 +20,12 @@ public class QLExpressContext extends HashMap<String, Object> implements IExpres
 
     private final FactorValueService factorValueService;
 
-    public QLExpressContext(Map<String, Object> map, Map<String, String> fieldMapping) {
+    public ExpressionContext(Map<String, Object> map, Map<String, String> fieldMapping,
+                             ApplicationContext context, FactorValueService factorValueService) {
         super(map);
         this.fieldMapping = fieldMapping;
-        this.context = ApplicationUtils.getApplicationContext();
-        this.factorValueService = ApplicationUtils.getBeans(FactorValueService.class);
+        this.context = context;
+        this.factorValueService = factorValueService;
     }
 
     /**
