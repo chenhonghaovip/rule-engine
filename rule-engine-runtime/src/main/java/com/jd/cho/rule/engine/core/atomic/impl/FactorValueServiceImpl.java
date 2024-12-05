@@ -4,8 +4,8 @@ import com.jd.cho.rule.engine.common.cache.ContextHolder;
 import com.jd.cho.rule.engine.common.dict.Dict;
 import com.jd.cho.rule.engine.common.exceptions.BizErrorEnum;
 import com.jd.cho.rule.engine.common.exceptions.BusinessException;
-import com.jd.cho.rule.engine.common.util.QlExpressUtil;
 import com.jd.cho.rule.engine.core.atomic.FactorValueService;
+import com.jd.cho.rule.engine.core.runner.CoreExpressionRunner;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import com.jd.cho.rule.engine.domain.model.RuleFactor;
 import lombok.AllArgsConstructor;
@@ -26,6 +26,7 @@ import java.util.Objects;
 @AllArgsConstructor
 public class FactorValueServiceImpl implements FactorValueService {
     private RuleConfigGateway ruleConfigGateway;
+    private CoreExpressionRunner coreExpressionRunner;
 
     @Override
     public Object getFieldValue(Object fieldName, Map<String, Object> context, Map<String, String> fieldMapping) {
@@ -40,7 +41,7 @@ public class FactorValueServiceImpl implements FactorValueService {
         RuleFactor ruleFactor = ruleFactors.stream().filter(each -> each.getFactorCode().equals(realFactorCode)).findFirst().orElse(null);
 
         if (Objects.nonNull(ruleFactor) && StringUtils.isNotBlank(ruleFactor.getFactorScript())) {
-            Object execute = QlExpressUtil.execute(ruleFactor.getFactorScript(), context);
+            Object execute = coreExpressionRunner.execute(ruleFactor.getFactorScript(), context);
             log.info("FactorValueService::getFieldValue,fieldName:{},value:{}", fieldName, execute);
             return execute;
         }

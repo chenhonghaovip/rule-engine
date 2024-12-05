@@ -3,7 +3,6 @@ package com.jd.cho.rule.engine.core.executer;
 import com.jd.cho.rule.engine.common.anno.ApiMethod;
 import com.jd.cho.rule.engine.common.enums.ExpressOperationEnum;
 import com.jd.cho.rule.engine.common.enums.VarTypeEnum;
-import com.jd.cho.rule.engine.common.util.QlExpressUtil;
 import com.jd.cho.rule.engine.domain.model.BasicVar;
 import com.jd.cho.rule.engine.domain.model.RuleCondition;
 import com.jd.cho.rule.engine.domain.model.RuleDef;
@@ -21,10 +20,11 @@ class CoreDecisionSetRuleExecutor_MethodTest extends AbstractCoreDecisionSetRule
     @DisplayName("condition(single expr): methodOne = 1")
     @Test
     void test_method_eq_const() throws Exception {
-        QlExpressUtil.addFunctionOfClassMethod(new ArrayList<Method>() {{
+        coreExpressionRunner.addFunctionOfClassMethod(new ArrayList<Method>() {{
             Method methodOne = Methods.class.getMethod("methodOne", Integer.class);
             this.add(methodOne);
         }});
+
         final String methodOne = "methodOne";
         final Integer constOne = 1;
         final RuleDef ruleDef = new RuleDef() {{

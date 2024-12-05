@@ -2,6 +2,7 @@ package com.jd.cho.rule.engine.domain.atomic.impl;
 
 import com.jd.cho.rule.engine.common.exceptions.BusinessException;
 import com.jd.cho.rule.engine.core.atomic.impl.FactorValueServiceImpl;
+import com.jd.cho.rule.engine.core.runner.CoreExpressionRunner;
 import com.jd.cho.rule.engine.domain.gateway.RuleConfigGateway;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
@@ -17,13 +18,15 @@ import java.util.Map;
 class FactorValueServiceImpl_SideTest {
 
     private RuleConfigGateway ruleConfigGateway;
+    private CoreExpressionRunner coreExpressionRunner;
 
-    FactorValueServiceImpl tester;
+    private FactorValueServiceImpl tester;
 
     @BeforeEach
     void setUp() {
         ruleConfigGateway = Mockito.mock(RuleConfigGateway.class);
-        tester = new FactorValueServiceImpl(ruleConfigGateway);
+        coreExpressionRunner = Mockito.mock(CoreExpressionRunner.class);
+        tester = new FactorValueServiceImpl(ruleConfigGateway, coreExpressionRunner);
     }
 
     @Test

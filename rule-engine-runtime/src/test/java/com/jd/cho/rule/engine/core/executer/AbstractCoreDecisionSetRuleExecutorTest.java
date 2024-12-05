@@ -40,10 +40,11 @@ public abstract class AbstractCoreDecisionSetRuleExecutorTest {
         ruleFactorTypeLoader = new RuleFactorTypeLoader(Arrays.asList(new BooleanFactorTypeService(), new DateFactorTypeService(), new ListFactorTypeService(), new NumFactorTypeService(), new TextFactorTypeService()));
         ruleFactorTypeLoader.afterPropertiesSet();
 
-        executor = new CoreDecisionSetRuleExecutor(ruleDefsExecutorFactory, new RuleDefConditionExpressionBuilder(ruleFactorTypeLoader), coreExpressionRunner);
+        executor = new CoreDecisionSetRuleExecutor(ruleDefsExecutorFactory,
+                new RuleDefConditionExpressionBuilder(ruleFactorTypeLoader, coreExpressionRunner), coreExpressionRunner);
 
         ruleConfigGateway = Mockito.mock(RuleConfigGateway.class);
-        factorValueService = new FactorValueServiceImpl(ruleConfigGateway);
+        factorValueService = new FactorValueServiceImpl(ruleConfigGateway, coreExpressionRunner);
 
         staticApplicationUtils = Mockito.mockStatic(ApplicationUtils.class);
         staticApplicationUtils.when(() -> ApplicationUtils.getBeans(FactorValueService.class)).thenReturn(factorValueService);
