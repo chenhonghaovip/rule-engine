@@ -20,35 +20,35 @@ import javax.annotation.Generated;
 public class RuleSceneDO extends BaseEntity {
     /**
      * Database Column Remarks:
-     *   主键
+     * 主键
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_scene.id")
     private Long id;
 
     /**
      * Database Column Remarks:
-     *   场景编码
+     * 场景编码
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_scene.scene_code")
     private String sceneCode;
 
     /**
      * Database Column Remarks:
-     *   场景名称
+     * 场景名称
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_scene.scene_name")
     private String sceneName;
 
     /**
      * Database Column Remarks:
-     *   场景描述
+     * 场景描述
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_scene.scene_desc")
     private String sceneDesc;
 
     /**
      * Database Column Remarks:
-     *   分组编码
+     * 分组编码
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_scene.group_code")
     private String groupCode;

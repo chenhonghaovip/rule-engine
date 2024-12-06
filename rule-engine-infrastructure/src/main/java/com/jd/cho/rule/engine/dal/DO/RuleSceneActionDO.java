@@ -20,21 +20,21 @@ import javax.annotation.Generated;
 public class RuleSceneActionDO extends BaseEntity {
     /**
      * Database Column Remarks:
-     *   主键
+     * 主键
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_scene_action.id")
     private Long id;
 
     /**
      * Database Column Remarks:
-     *   场景编码
+     * 场景编码
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_scene_action.scene_code")
     private String sceneCode;
 
     /**
      * Database Column Remarks:
-     *   行为编码
+     * 行为编码
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_scene_action.action_code")
     private String actionCode;

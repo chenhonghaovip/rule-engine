@@ -20,63 +20,63 @@ public final class RuleDefDynamicSqlSupport {
 
     /**
      * Database Column Remarks:
-     *   优先级
+     * 优先级
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_def.priority")
     public static final SqlColumn<Integer> priority = ruleDef.priority;
 
     /**
      * Database Column Remarks:
-     *   是否删除 1-否，0-是
+     * 是否删除 1-否，0-是
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_def.yn")
     public static final SqlColumn<Boolean> yn = ruleDef.yn;
 
     /**
      * Database Column Remarks:
-     *   创建时间
+     * 创建时间
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_def.create_time")
     public static final SqlColumn<Date> createTime = ruleDef.createTime;
 
     /**
      * Database Column Remarks:
-     *   更新时间
+     * 更新时间
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_def.modify_time")
     public static final SqlColumn<Date> modifyTime = ruleDef.modifyTime;
 
     /**
      * Database Column Remarks:
-     *   创建人
+     * 创建人
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_def.creator")
     public static final SqlColumn<String> creator = ruleDef.creator;
 
     /**
      * Database Column Remarks:
-     *   修改人
+     * 修改人
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_def.modifier")
     public static final SqlColumn<String> modifier = ruleDef.modifier;
 
     /**
      * Database Column Remarks:
-     *   租户
+     * 租户
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_def.tenant")
     public static final SqlColumn<String> tenant = ruleDef.tenant;
 
     /**
      * Database Column Remarks:
-     *   规则条件
+     * 规则条件
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_def.rule_condition")
     public static final SqlColumn<String> ruleCondition = ruleDef.ruleCondition;
 
     /**
      * Database Column Remarks:
-     *   规则行为
+     * 规则行为
      */
     @Generated(value = "org.mybatis.generator.api.MyBatisGenerator", comments = "Source field: rule_def.rule_action")
     public static final SqlColumn<String> ruleAction = ruleDef.ruleAction;

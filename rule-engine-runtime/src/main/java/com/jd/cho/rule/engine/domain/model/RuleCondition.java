@@ -10,7 +10,7 @@ import java.util.List;
  */
 @Data
 public class RuleCondition {
-     /**
+    /**
      * 逻辑运算
      */
     private String logicOperation;

@@ -1,9 +1,9 @@
 package com.jd.cho.rule.engine.adapter.convert;
 
+import com.jd.cho.rule.engine.adapter.dto.RuleActionDTO;
 import com.jd.cho.rule.engine.controller.VO.req.RuleActionReq;
 import com.jd.cho.rule.engine.dal.DO.RuleSceneActionDO;
 import com.jd.cho.rule.engine.domain.model.RuleSceneAction;
-import com.jd.cho.rule.engine.adapter.dto.RuleActionDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
